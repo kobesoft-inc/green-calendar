@@ -1,0 +1,1 @@
+{{ $this->getCalendar()->getCalendarView()->render() }}

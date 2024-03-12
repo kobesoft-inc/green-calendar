@@ -1,0 +1,194 @@
+@tailwind base;
+
+.gc-day-grid {
+  .gc-day {
+    @apply aspect-[5/3];
+    .gc-all-day-events {
+      .gc-all-day-event-container.gc-start {
+        .gc-all-day-event .gc-head {
+          @apply absolute left-0 h-4 w-2 cursor-w-resize;
+        }
+      }
+
+      .gc-all-day-event-container.gc-end {
+        .gc-all-day-event .gc-tail {
+          @apply absolute right-0 h-full w-2 cursor-e-resize;
+        }
+      }
+    }
+  }
+}
+
+.gc-yearly-day-grid {
+  .gc-body {
+    @apply grid grid-cols-1 gap-4 lg:grid-cols-2;
+  }
+}
+
+.gc-day-grid-popup {
+  @apply absolute z-50 bg-white shadow-lg dark:bg-gray-900;
+  .gc-day-top {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  .gc-all-day-events {
+    position: relative !important;
+
+    .gc-all-day-event-container {
+      width: 100% !important;
+    }
+  }
+}
+
+.gc-day-grid,
+.gc-day-grid-popup {
+  @apply select-none divide-y overflow-hidden rounded-lg border bg-white text-sm dark:bg-gray-900;
+  .gc-days-of-week {
+    @apply grid grid-cols-7 divide-x bg-gray-100 dark:bg-gray-800;
+    .gc-day-of-week {
+      @apply py-1 text-center;
+    }
+  }
+
+  .gc-days {
+    @apply divide-y;
+    .gc-week {
+      @apply grid grid-cols-7 divide-x;
+    }
+  }
+
+  .gc-day {
+    .gc-day-top {
+      @apply flex h-7 items-center;
+      .gc-date {
+        @apply grow px-1;
+      }
+
+      .gc-label {
+      }
+    }
+
+    .gc-day-body {
+      @apply relative text-xs;
+
+      .gc-all-day-events {
+        .gc-all-day-event-container.gc-dragging {
+          @apply invisible;
+        }
+
+        .gc-all-day-event-container.gc-hover {
+          .gc-all-day-event {
+            @apply bg-primary-500 dark:bg-primary-300;
+          }
+        }
+      }
+
+      .gc-all-day-events,
+      .gc-all-day-event-preview {
+        @apply absolute top-0 w-full;
+        .gc-all-day-event-container {
+          @apply h-5;
+        }
+
+        .gc-all-day-event-container {
+          @apply flex items-center;
+          .gc-all-day-event {
+            @apply relative z-10 w-full overflow-hidden whitespace-nowrap bg-primary-600 px-2 text-white shadow dark:bg-primary-400;
+          }
+        }
+
+        .gc-start {
+          @apply pl-1;
+          .gc-all-day-event {
+            @apply rounded-l-lg pl-1;
+          }
+        }
+
+        .gc-end {
+          @apply pr-1;
+          .gc-all-day-event {
+            @apply rounded-r-lg pl-1;
+          }
+        }
+
+        .gc-1days {
+          width: 100%;
+        }
+
+        .gc-2days {
+          width: calc(200% + 1px);
+        }
+
+        .gc-3days {
+          width: calc(300% + 2px);
+        }
+
+        .gc-4days {
+          width: calc(400% + 3px);
+        }
+
+        .gc-5days {
+          width: calc(500% + 4px);
+        }
+
+        .gc-6days {
+          width: calc(600% + 5px);
+        }
+
+        .gc-7days {
+          width: calc(700% + 6px);
+        }
+      }
+
+      .gc-all-day-event-preview {
+        .gc-all-day-event-container {
+          .gc-all-day-event {
+            @apply z-20 bg-primary-500 shadow-lg ring-2 ring-gray-300 dark:bg-primary-300 dark:ring-gray-700;
+          }
+        }
+      }
+
+      .gc-timed-events {
+        @apply w-full overflow-y-hidden;
+        .gc-all-day-event-container {
+          @apply h-5 w-0;
+        }
+
+        .gc-timed-event-container {
+          @apply flex h-5 w-full items-center px-1;
+          .gc-timed-event {
+            @apply w-full overflow-hidden overflow-x-hidden whitespace-nowrap rounded px-1 hover:bg-gray-100 hover:dark:bg-gray-800;
+          }
+        }
+
+        .gc-timed-event-container.gc-dragging {
+          .gc-timed-event {
+            @apply invisible;
+          }
+        }
+      }
+
+      .gc-remaining-container {
+        @apply flex h-5 w-full items-center px-1;
+        .gc-remaining {
+          @apply w-full overflow-x-hidden rounded px-1 hover:bg-gray-100 hover:dark:bg-gray-800;
+        }
+      }
+    }
+  }
+
+  .gc-day.gc-selected {
+    @apply bg-amber-50 dark:bg-amber-900;
+  }
+
+  .gc-day:first-child {
+    padding-left: 1px;
+
+    .gc-all-day-events,
+    .gc-all-day-event-preview {
+      .gc-all-day-event-container {
+        margin-left: -1px;
+      }
+    }
+  }
+}

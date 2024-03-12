@@ -1,0 +1,80 @@
+@tailwind base;
+
+.gc-time-grid {
+  .gc-body {
+    @apply divide-y rounded-lg border bg-white text-sm dark:bg-gray-900;
+
+    .gc-time-slots-column {
+      width: 5em;
+    }
+
+    .gc-days {
+      @apply flex flex-grow divide-x;
+      width: calc(100% - 5em);
+
+      .gc-day {
+        @apply flex-1 text-center;
+      }
+    }
+
+    .gc-column-headings {
+      @apply flex divide-x bg-gray-100 dark:bg-gray-800;
+
+      .gc-day {
+        @apply py-1;
+      }
+    }
+
+    .gc-all-day-section {
+      @apply flex min-h-8 divide-x;
+
+      .gc-time-slots-column {
+        @apply bg-gray-100 dark:bg-gray-800;
+      }
+    }
+
+    .gc-timed-section {
+      @apply flex divide-x;
+
+      .gc-time-slots {
+        @apply bg-gray-100 dark:bg-gray-800;
+        width: 5em;
+
+        .gc-hour {
+          margin-bottom: 1px;
+
+          .gc-slot {
+            @apply relative h-8 pr-1 text-right;
+            top: -0.5lh;
+          }
+        }
+      }
+
+      .gc-days {
+        .gc-day {
+          @apply divide-y;
+          .gc-hour {
+            @apply divide-y divide-dotted;
+            .gc-slot {
+              @apply h-8;
+            }
+          }
+        }
+      }
+    }
+
+    .gc-empty {
+      @apply px-6 py-12;
+      .gc-empty-content {
+        @apply mx-auto grid max-w-lg justify-items-center text-center;
+        .gc-empty-icon {
+          @apply mb-4 rounded-full bg-gray-100 p-3 dark:bg-gray-500/20;
+        }
+
+        .gc-empty-text {
+          @apply text-base font-semibold leading-6 text-gray-950 dark:text-white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,182 @@
+<?php
+
+namespace Kobesoft\GreenCalendar\ViewModel;
+
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
+use Illuminate\Support\Collection;
+
+class EventCollection
+{
+    /**
+     * 予定のコレクションを初期化する
+     *
+     * @param Collection $timedEvents
+     * @param Collection $allDayEvents
+     */
+    protected function __construct(
+        protected Collection $timedEvents,
+        protected Collection $allDayEvents
+    )
+    {
+    }
+
+    /**
+     * 配列から予定のコレクションを取得する
+     *
+     * @param Collection $events 予定の配列(event, modelのキーを持つ連想配列のコレクション)
+     * @return EventCollection 予定のコレクション
+     */
+    public static function fromArray(Collection $events): static
+    {
+        $eventsGroupByType = $events->sortBy('start')->groupBy('type');
+        return new static(
+            $eventsGroupByType->get(EventType::TimedEvent->value, collect()),
+            $eventsGroupByType->get(EventType::AllDayEvent->value, collect())
+        );
+    }
+
+    /**
+     * 指定した期間内の予定のコレクションを取得する
+     *
+     * @param CarbonPeriod $period 期間
+     * @return EventCollection 予定のコレクション
+     */
+    public function between(CarbonPeriod $period): EventCollection
+    {
+        return new static(
+            $this->timedEvents->filter(fn(Event $event) => $event->between($period)),
+            $this->allDayEvents->filter(fn(Event $event) => $event->between($period))
+        );
+    }
+
+    /**
+     * 指定した日付の予定のコレクションを取得する
+     *
+     * @param Carbon $date 日付
+     * @return EventCollection 予定のコレクション
+     */
+    public function on(Carbon $date): EventCollection
+    {
+        return new static(
+            $this->timedEvents->filter(fn(Event $event) => $event->on($date)),
+            $this->allDayEvents->filter(fn(Event $event) => $event->on($date))
+        );
+    }
+
+    /**
+     * 指定した日付の時間指定の予定を取得する
+     *
+     * @param Carbon $date 日付
+     * @return Collection<Event> Eventの配列
+     */
+    public function getTimedEventsOn(Carbon $date): Collection
+    {
+        return $this->timedEvents->filter(fn(Event $event) => $event->on($date));
+    }
+
+    /**
+     * 指定した日付の終日の予定を取得する
+     *
+     * @param Carbon $date 日付
+     * @return Collection<Event> Eventの配列
+     */
+    public function getAllDayEventsOn(Carbon $date): Collection
+    {
+        return $this->allDayEvents->filter(fn(Event $event) => $event->on($date));
+    }
+
+    /**
+     * 指定した期間の時間指定の予定を取得する
+     *
+     * @param CarbonPeriod $period 期間
+     * @return Collection<Event> Eventの配列
+     */
+    public function getTimedEventsBetween(CarbonPeriod $period): Collection
+    {
+        return $this->timedEvents->filter(fn(Event $event) => $event->between($period));
+    }
+
+    /**
+     * 指定した期間の終日の予定を取得する
+     *
+     * @param CarbonPeriod $period 期間
+     * @return Collection<Event> Eventの配列
+     */
+    public function getAllDayEventsBetween(CarbonPeriod $period): Collection
+    {
+        return $this->allDayEvents->filter(fn(Event $event) => $event->between($period));
+    }
+
+    /**
+     * 開始時間でグループ化した時間指定の予定を取得する
+     *
+     * @param CarbonInterval $precision グループ化する際に、時間を丸める間隔
+     * @return Collection<array-key, Collection<array-key, Event>> 日時の文字列でグループ化したEventの配列
+     */
+    public function getTimedEventsGroupByStart(CarbonInterval $precision): Collection
+    {
+        return $this->timedEvents->groupBy(fn(Event $event) => $event->getRoundedStart($precision)->toDateTimeString());
+    }
+
+    /**
+     * リソースIDで絞り込んだ予定のコレクションを取得する
+     *
+     * @param string $resourceId リソースID
+     * @return EventCollection リソースIDで絞り込んだ予定のコレクション
+     */
+    public function whereResource(string $resourceId): EventCollection
+    {
+        return new static(
+            $this->timedEvents->filter(fn(Event $event) => $event->resourceId === $resourceId),
+            $this->allDayEvents->filter(fn(Event $event) => $event->resourceId === $resourceId)
+        );
+    }
+
+    /**
+     * 時間指定の予定に、配置情報を含める
+     *
+     * @param CarbonPeriod $period
+     * @param CarbonInterval $precision
+     * @return $this
+     */
+    public function withTimedEventPositions(CarbonPeriod $period, CarbonInterval $precision): static
+    {
+        $this->timedEvents = $this->assignPosition($this->getTimedEventsBetween($period), $period, $precision);
+        return $this;
+    }
+
+    /**
+     * 終日予定に、配置情報を含める
+     *
+     * @param CarbonPeriod $period
+     * @return $this
+     */
+    public function withAllDayEventPositions(CarbonPeriod $period): static
+    {
+        $this->allDayEvents = $this->assignPosition($this->getAllDayEventsBetween($period), $period);
+        return $this;
+    }
+
+    /**
+     * 予定の配列に、配置情報を含める
+     *
+     * @param Collection $events 予定の配列
+     * @param CarbonPeriod $period
+     * @param CarbonInterval|null $precision
+     * @return Collection
+     */
+    protected function assignPosition(Collection $events, CarbonPeriod $period, ?CarbonInterval $precision = null): Collection
+    {
+        return $events->reduce(function (Collection $carry, Event $event) use ($period, $precision) {
+            $start = max($event->getRoundedStart($precision), $period->start);
+            $usedPositions = $carry
+                ->filter(fn(Event $e) => $e->getRoundedEnd($precision) > $start)
+                ->pluck('position');
+            $freePositions = collect(range(0, $usedPositions->max() + 1))->diff($usedPositions);
+            $event->position = $freePositions->first();
+            return $carry->push($event);
+        }, collect());
+    }
+}

@@ -1,0 +1,5 @@
+.gc-yearly-day-grid {
+  .gc-body {
+    @apply grid grid-cols-1 gap-4 lg:grid-cols-2;
+  }
+}

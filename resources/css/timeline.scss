@@ -1,0 +1,104 @@
+.gc-timeline {
+  .gc-body {
+    @apply flex divide-x overflow-hidden rounded-lg border bg-white text-sm dark:bg-gray-900;
+    .gc-resources {
+      width: 20em;
+
+      .gc-spacers {
+        @apply bg-gray-50 dark:bg-gray-900;
+        .gc-spacer {
+          @apply h-8;
+        }
+
+        .gc-spacer:last-child {
+          @apply border-b;
+        }
+      }
+
+      .gc-resource {
+        @apply flex items-center px-2 py-1;
+      }
+    }
+
+    .gc-main {
+      @apply relative overflow-x-scroll;
+
+      .gc-time-slot-lines {
+        @apply flex h-full divide-x;
+
+        .gc-month {
+          @apply flex h-full divide-x;
+        }
+
+        .gc-day {
+          @apply flex h-full divide-x;
+        }
+
+        .gc-hour {
+          @apply flex h-full divide-x divide-dotted;
+        }
+
+        .gc-time-slot {
+          @apply h-full w-6;
+        }
+      }
+
+      .gc-time-slot-heading {
+        .gc-months {
+          @apply flex h-full;
+          .gc-month {
+            @apply h-full bg-gray-50 dark:bg-gray-900;
+            .gc-month-text {
+              @apply flex h-8 items-center justify-center border-b;
+            }
+          }
+        }
+
+        .gc-days {
+          @apply flex h-full divide-x;
+          .gc-day {
+            @apply h-full;
+            .gc-day-text {
+              @apply flex h-8 items-center justify-center border-b;
+            }
+          }
+        }
+
+        .gc-hours {
+          @apply flex h-full;
+          .gc-hour {
+            @apply h-full;
+            .gc-hour-text-container {
+              @apply flex h-8 items-end border-b;
+              margin-left: -1em;
+
+              .gc-hour-text {
+                @apply flex justify-center;
+                width: 2em;
+              }
+            }
+          }
+        }
+
+        .gc-slots {
+          @apply flex h-full divide-x divide-dotted border-l bg-white dark:bg-gray-900;
+          .gc-slot {
+            @apply h-full w-6;
+          }
+        }
+
+        .gc-hour:first-child .gc-hour-text-container {
+          margin-left: 0;
+        }
+
+        .gc-hour:first-child .gc-slots {
+          @apply border-l-0;
+        }
+      }
+
+      .gc-events {
+        @apply divide-y;
+      }
+    }
+  }
+}

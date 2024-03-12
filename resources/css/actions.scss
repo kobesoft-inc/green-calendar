@@ -1,0 +1,14 @@
+.gc-actions {
+  @apply relative mb-1 flex;
+  .gc-actions-left {
+    @apply flex flex-grow items-center gap-1;
+  }
+
+  .gc-actions-right {
+    @apply flex items-center gap-1;
+  }
+
+  .gc-actions-center {
+    @apply absolute mx-auto flex items-center;
+  }
+}
