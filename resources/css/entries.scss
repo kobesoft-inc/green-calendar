@@ -5,3 +5,12 @@
     @apply flex gap-1;
   }
 }
+
+.gc-entries {
+  .gc-color-entry {
+    @apply flex items-center h-4;
+    .gc-dot {
+      @apply flex-shrink-0 w-2 h-2 bg-custom-400 dark:bg-custom-500 rounded-full;
+    }
+  }
+}

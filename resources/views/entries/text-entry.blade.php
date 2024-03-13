@@ -1,3 +1,0 @@
-<div>
-    {{ $formatState($getState()) }}
-</div>

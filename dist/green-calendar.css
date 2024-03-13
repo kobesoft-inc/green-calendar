@@ -1551,6 +1551,26 @@ select{
   gap: 0.25rem;
 }
 
+.gc-entries .gc-color-entry{
+  display: flex;
+  height: 1rem;
+  align-items: center;
+}
+
+.gc-entries .gc-color-entry .gc-dot{
+  height: 0.5rem;
+  width: 0.5rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--c-400), var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-entries .gc-color-entry .gc-dot){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--c-500), var(--tw-bg-opacity));
+}
+
 .gc-hidden {
   display: none !important;
 }

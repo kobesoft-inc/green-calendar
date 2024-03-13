@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Kobesoft\GreenCalendar\Calendar;
+use Kobesoft\GreenCalendar\Entries\ColorEntry;
 use Kobesoft\GreenCalendar\Entries\Entry;
 use Kobesoft\GreenCalendar\Entries\IconEntry;
 use Kobesoft\GreenCalendar\Entries\TextEntry;
@@ -62,6 +63,9 @@ trait HasEntries
     public function getDefaultEntries(): Closure
     {
         return fn(Calendar $component) => [
+            ColorEntry::make('color')
+                ->color('primary')
+                ->visible(fn(Event $event) => $event->type === EventType::TimedEvent),
             TextEntry::make($component->getRecordStartAttribute() ?? 'start')
                 ->time()
                 ->visible(fn(Event $event) => $event->type === EventType::TimedEvent),

@@ -3,12 +3,14 @@
 namespace Kobesoft\GreenCalendar\Entries;
 
 use Filament\Support\Components\ViewComponent;
+use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Database\Eloquent\Model;
 
 class Entry extends ViewComponent
 {
     use Concerns\CanBeHidden;
     use Concerns\HasState;
+    use HasExtraAttributes;
 
     /**
      * コンポーネントを初期化する
