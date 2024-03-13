@@ -7,13 +7,9 @@
         ></div>
     @endfor
     @foreach ($timedEvents as $event)
-        <div class="gc-timed-event-container"
-             data-key="{{$event->model->getKey()}}"
-        >
-            <div class="gc-timed-event"
-                 draggable="true"
-            >
-                {{$event->model->title}}
+        <div class="gc-timed-event-container" data-key="{{$event->model->getKey()}}">
+            <div class="gc-timed-event" draggable="true">
+                <x-green-calendar::entries :calendar="$calendar" :event="$event"/>
             </div>
         </div>
     @endforeach

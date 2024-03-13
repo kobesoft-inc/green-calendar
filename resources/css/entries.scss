@@ -1,0 +1,7 @@
+@tailwind base;
+
+.gc-day-grid, .gc-day-grid-popup {
+  .gc-entries {
+    @apply flex gap-1;
+  }
+}

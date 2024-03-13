@@ -11,8 +11,9 @@ class Calendar extends ViewComponent
 {
     use Calendar\Concerns\BelongsToLivewire;
     use Calendar\Concerns\HasActions;
+    use Calendar\Concerns\HasColor;
     use Calendar\Concerns\HasCurrentDate;
-    use Calendar\Concerns\HasEntities;
+    use Calendar\Concerns\HasEntries;
     use Calendar\Concerns\HasQuery;
     use Calendar\Concerns\HasRecords;
     use Calendar\Concerns\HasResources;
@@ -57,15 +58,16 @@ class Calendar extends ViewComponent
         $this
             ->recordStartAttribute('start')
             ->recordEndAttribute('end')
-            ->firstDayOfWeek(Carbon::SUNDAY)
-            ->actions($this->getDefaultActions(), Alignment::Left)
             ->resourceIdAttribute('id')
             ->resourceTitleAttribute('name')
+            ->actions($this->getDefaultActions(), Alignment::Left)
+            ->entries($this->getDefaultEntries())
+            ->firstDayOfWeek(Carbon::SUNDAY)
             ->monthlyDayGrid();
     }
 
     /**
-     * デフォルトのクロージャ依存関係を解決する
+     * 引数名から依存関係を解決する
      *
      * @param string $parameterName パラメータ名
      * @return array 解決された依存関係

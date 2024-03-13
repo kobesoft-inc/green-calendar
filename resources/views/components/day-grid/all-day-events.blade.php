@@ -18,7 +18,7 @@
                 <div class="gc-all-day-event">
                     <div class="gc-head"></div>
                     <div class="gc-tail"></div>
-                    <div>{{ $event->model->title }}</div>
+                    <x-green-calendar::entries :calendar="$calendar" :event="$event"/>
                 </div>
             </div>
         @else

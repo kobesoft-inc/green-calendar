@@ -369,6 +369,442 @@
   margin-left: -1px;
 }
 
+@tailwind base;
+
+.gc-time-grid .gc-body > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.gc-time-grid .gc-body{
+  border-radius: 0.5rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+:is(.dark .gc-time-grid .gc-body){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
+}
+
+.gc-time-grid .gc-body .gc-time-slots-column {
+  width: 5em;
+}
+
+.gc-time-grid .gc-body .gc-days{
+  display: flex;
+  flex-grow: 1;
+}
+
+.gc-time-grid .gc-body .gc-days > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-time-grid .gc-body .gc-days {
+  width: calc(100% - 5em);
+}
+
+.gc-time-grid .gc-body .gc-days .gc-day{
+  flex: 1 1 0%;
+  text-align: center;
+}
+
+.gc-time-grid .gc-body .gc-column-headings{
+  display: flex;
+}
+
+.gc-time-grid .gc-body .gc-column-headings > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-time-grid .gc-body .gc-column-headings{
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-time-grid .gc-body .gc-column-headings){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-800), var(--tw-bg-opacity));
+}
+
+.gc-time-grid .gc-body .gc-column-headings .gc-day{
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.gc-time-grid .gc-body .gc-all-day-section{
+  display: flex;
+  min-height: 2rem;
+}
+
+.gc-time-grid .gc-body .gc-all-day-section > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-time-grid .gc-body .gc-all-day-section .gc-time-slots-column{
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-time-grid .gc-body .gc-all-day-section .gc-time-slots-column){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-800), var(--tw-bg-opacity));
+}
+
+.gc-time-grid .gc-body .gc-timed-section{
+  display: flex;
+}
+
+.gc-time-grid .gc-body .gc-timed-section > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-time-slots{
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-time-grid .gc-body .gc-timed-section .gc-time-slots){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-800), var(--tw-bg-opacity));
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-time-slots {
+  width: 5em;
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-time-slots .gc-hour {
+  margin-bottom: 1px;
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-time-slots .gc-hour .gc-slot{
+  position: relative;
+  height: 2rem;
+  padding-right: 0.25rem;
+  text-align: right;
+  top: -0.5lh;
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-days .gc-day > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-days .gc-day .gc-hour > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+  border-style: dotted;
+}
+
+.gc-time-grid .gc-body .gc-timed-section .gc-days .gc-day .gc-hour .gc-slot{
+  height: 2rem;
+}
+
+.gc-time-grid .gc-body .gc-empty{
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.gc-time-grid .gc-body .gc-empty .gc-empty-content{
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  max-width: 32rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-icon{
+  margin-bottom: 1rem;
+  border-radius: 9999px;
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
+  padding: 0.75rem;
+}
+
+:is(.dark .gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-icon){
+  background-color: rgba(var(--gray-500), 0.2);
+}
+
+.gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-text{
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+  --tw-text-opacity: 1;
+  color: rgba(var(--gray-950), var(--tw-text-opacity));
+}
+
+:is(.dark .gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-text){
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.gc-timeline .gc-body{
+  display: flex;
+}
+
+.gc-timeline .gc-body > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-timeline .gc-body{
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+:is(.dark .gc-timeline .gc-body){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
+}
+
+.gc-timeline .gc-body .gc-resources {
+  width: 20em;
+}
+
+.gc-timeline .gc-body .gc-resources .gc-spacers{
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-50), var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-timeline .gc-body .gc-resources .gc-spacers){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
+}
+
+.gc-timeline .gc-body .gc-resources .gc-spacers .gc-spacer{
+  height: 2rem;
+}
+
+.gc-timeline .gc-body .gc-resources .gc-spacers .gc-spacer:last-child{
+  border-bottom-width: 1px;
+}
+
+.gc-timeline .gc-body .gc-resources .gc-resource{
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.gc-timeline .gc-body .gc-main{
+  position: relative;
+  overflow-x: scroll;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-month{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-month > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-day{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-day > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-hour{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-hour > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+  border-style: dotted;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-time-slot{
+  height: 100%;
+  width: 1.5rem;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months .gc-month{
+  height: 100%;
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-50), var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months .gc-month){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months .gc-month .gc-month-text{
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 1px;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days .gc-day{
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days .gc-day .gc-day-text{
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-bottom-width: 1px;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours .gc-hour{
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours .gc-hour .gc-hour-text-container{
+  display: flex;
+  height: 2rem;
+  align-items: flex-end;
+  border-bottom-width: 1px;
+  margin-left: -1em;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours .gc-hour .gc-hour-text-container .gc-hour-text{
+  display: flex;
+  justify-content: center;
+  width: 2em;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots{
+  display: flex;
+  height: 100%;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-x-reverse: 0;
+  border-right-width: calc(1px * var(--tw-divide-x-reverse));
+  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+  border-style: dotted;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots{
+  border-left-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+:is(.dark .gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots){
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots .gc-slot{
+  height: 100%;
+  width: 1.5rem;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hour:first-child .gc-hour-text-container {
+  margin-left: 0;
+}
+
+.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hour:first-child .gc-slots{
+  border-left-width: 0px;
+}
+
+.gc-timeline .gc-body .gc-main .gc-events > :not([hidden]) ~ :not([hidden]){
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.gc-actions{
+  position: relative;
+  margin-bottom: 0.25rem;
+  display: flex;
+}
+
+.gc-actions .gc-actions-left{
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gc-actions .gc-actions-right{
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.gc-actions .gc-actions-center{
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+}
+
 /*
 ! tailwindcss v3.4.1 | MIT License | https://tailwindcss.com
 */
@@ -1110,438 +1546,9 @@ select{
   --tw-backdrop-sepia:  ;
 }
 
-.gc-time-grid .gc-body > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-}
-
-.gc-time-grid .gc-body{
-  border-radius: 0.5rem;
-  border-width: 1px;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-:is(.dark .gc-time-grid .gc-body){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
-}
-
-.gc-time-grid .gc-body .gc-time-slots-column {
-  width: 5em;
-}
-
-.gc-time-grid .gc-body .gc-days{
+.gc-day-grid .gc-entries, .gc-day-grid-popup .gc-entries{
   display: flex;
-  flex-grow: 1;
-}
-
-.gc-time-grid .gc-body .gc-days > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-time-grid .gc-body .gc-days {
-  width: calc(100% - 5em);
-}
-
-.gc-time-grid .gc-body .gc-days .gc-day{
-  flex: 1 1 0%;
-  text-align: center;
-}
-
-.gc-time-grid .gc-body .gc-column-headings{
-  display: flex;
-}
-
-.gc-time-grid .gc-body .gc-column-headings > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-time-grid .gc-body .gc-column-headings{
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
-}
-
-:is(.dark .gc-time-grid .gc-body .gc-column-headings){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-800), var(--tw-bg-opacity));
-}
-
-.gc-time-grid .gc-body .gc-column-headings .gc-day{
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-
-.gc-time-grid .gc-body .gc-all-day-section{
-  display: flex;
-  min-height: 2rem;
-}
-
-.gc-time-grid .gc-body .gc-all-day-section > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-time-grid .gc-body .gc-all-day-section .gc-time-slots-column{
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
-}
-
-:is(.dark .gc-time-grid .gc-body .gc-all-day-section .gc-time-slots-column){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-800), var(--tw-bg-opacity));
-}
-
-.gc-time-grid .gc-body .gc-timed-section{
-  display: flex;
-}
-
-.gc-time-grid .gc-body .gc-timed-section > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-time-slots{
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
-}
-
-:is(.dark .gc-time-grid .gc-body .gc-timed-section .gc-time-slots){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-800), var(--tw-bg-opacity));
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-time-slots {
-  width: 5em;
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-time-slots .gc-hour {
-  margin-bottom: 1px;
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-time-slots .gc-hour .gc-slot{
-  position: relative;
-  height: 2rem;
-  padding-right: 0.25rem;
-  text-align: right;
-  top: -0.5lh;
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-days .gc-day > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-days .gc-day .gc-hour > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-  border-style: dotted;
-}
-
-.gc-time-grid .gc-body .gc-timed-section .gc-days .gc-day .gc-hour .gc-slot{
-  height: 2rem;
-}
-
-.gc-time-grid .gc-body .gc-empty{
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
-.gc-time-grid .gc-body .gc-empty .gc-empty-content{
-  margin-left: auto;
-  margin-right: auto;
-  display: grid;
-  max-width: 32rem;
-  justify-items: center;
-  text-align: center;
-}
-
-.gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-icon{
-  margin-bottom: 1rem;
-  border-radius: 9999px;
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-100), var(--tw-bg-opacity));
-  padding: 0.75rem;
-}
-
-:is(.dark .gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-icon){
-  background-color: rgba(var(--gray-500), 0.2);
-}
-
-.gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-text{
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.5rem;
-  --tw-text-opacity: 1;
-  color: rgba(var(--gray-950), var(--tw-text-opacity));
-}
-
-:is(.dark .gc-time-grid .gc-body .gc-empty .gc-empty-content .gc-empty-text){
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.gc-timeline .gc-body{
-  display: flex;
-}
-
-.gc-timeline .gc-body > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-timeline .gc-body{
-  overflow: hidden;
-  border-radius: 0.5rem;
-  border-width: 1px;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-:is(.dark .gc-timeline .gc-body){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
-}
-
-.gc-timeline .gc-body .gc-resources {
-  width: 20em;
-}
-
-.gc-timeline .gc-body .gc-resources .gc-spacers{
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-50), var(--tw-bg-opacity));
-}
-
-:is(.dark .gc-timeline .gc-body .gc-resources .gc-spacers){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
-}
-
-.gc-timeline .gc-body .gc-resources .gc-spacers .gc-spacer{
-  height: 2rem;
-}
-
-.gc-timeline .gc-body .gc-resources .gc-spacers .gc-spacer:last-child{
-  border-bottom-width: 1px;
-}
-
-.gc-timeline .gc-body .gc-resources .gc-resource{
-  display: flex;
-  align-items: center;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
-}
-
-.gc-timeline .gc-body .gc-main{
-  position: relative;
-  overflow-x: scroll;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-month{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-month > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-day{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-day > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-hour{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-hour > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-  border-style: dotted;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-lines .gc-time-slot{
-  height: 100%;
-  width: 1.5rem;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months .gc-month{
-  height: 100%;
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-50), var(--tw-bg-opacity));
-}
-
-:is(.dark .gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months .gc-month){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-months .gc-month .gc-month-text{
-  display: flex;
-  height: 2rem;
-  align-items: center;
-  justify-content: center;
-  border-bottom-width: 1px;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days .gc-day{
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-days .gc-day .gc-day-text{
-  display: flex;
-  height: 2rem;
-  align-items: center;
-  justify-content: center;
-  border-bottom-width: 1px;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours .gc-hour{
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours .gc-hour .gc-hour-text-container{
-  display: flex;
-  height: 2rem;
-  align-items: flex-end;
-  border-bottom-width: 1px;
-  margin-left: -1em;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hours .gc-hour .gc-hour-text-container .gc-hour-text{
-  display: flex;
-  justify-content: center;
-  width: 2em;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots{
-  display: flex;
-  height: 100%;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
-  border-style: dotted;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots{
-  border-left-width: 1px;
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-:is(.dark .gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots){
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--gray-900), var(--tw-bg-opacity));
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-slots .gc-slot{
-  height: 100%;
-  width: 1.5rem;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hour:first-child .gc-hour-text-container {
-  margin-left: 0;
-}
-
-.gc-timeline .gc-body .gc-main .gc-time-slot-heading .gc-hour:first-child .gc-slots{
-  border-left-width: 0px;
-}
-
-.gc-timeline .gc-body .gc-main .gc-events > :not([hidden]) ~ :not([hidden]){
-  --tw-divide-y-reverse: 0;
-  border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-  border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-}
-
-.gc-actions{
-  position: relative;
-  margin-bottom: 0.25rem;
-  display: flex;
-}
-
-.gc-actions .gc-actions-left{
-  display: flex;
-  flex-grow: 1;
-  align-items: center;
   gap: 0.25rem;
-}
-
-.gc-actions .gc-actions-right{
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.gc-actions .gc-actions-center{
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  align-items: center;
 }
 
 .gc-hidden {

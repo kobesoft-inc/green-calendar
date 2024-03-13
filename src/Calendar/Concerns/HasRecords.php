@@ -17,9 +17,9 @@ trait HasRecords
     protected Collection|Closure|null $records = null;
     protected Collection|null $cachedRecords = null;
     protected Closure|null $recordStartUsing = null;
-    protected string|Closure|null $recordStartAttribute = null;
+    protected string|null $recordStartAttribute = null;
     protected Closure|null $recordEndUsing = null;
-    protected string|Closure|null $recordEndAttribute = null;
+    protected string|null $recordEndAttribute = null;
     protected Closure|null $recordTypeUsing = null;
     protected Closure|null $recordBackgroundUsing = null;
     protected Closure|null $recordResourceUsing = null;
@@ -41,10 +41,10 @@ trait HasRecords
     /**
      * レコードの開始日時に使用する属性を設定する
      *
-     * @param string|Closure|null $attribute 属性
+     * @param string $attribute 属性
      * @return $this
      */
-    public function recordStartAttribute(string|Closure|null $attribute): static
+    public function recordStartAttribute(string $attribute): static
     {
         $this->recordStartAttribute = $attribute;
         $this->recordStartUsing = fn(Model $record) => $record->getAttribute($attribute);
@@ -67,6 +67,16 @@ trait HasRecords
     }
 
     /**
+     * レコードの開始日時の属性名を取得する
+     *
+     * @return string|null 属性
+     */
+    public function getRecordStartAttribute(): string|null
+    {
+        return $this->recordStartAttribute;
+    }
+
+    /**
      * レコードの終了日時を取得するクロージャを設定する
      *
      * @param Closure|null $closure クロージャ
@@ -82,10 +92,10 @@ trait HasRecords
     /**
      * レコードの終了日時に使用する属性を設定する
      *
-     * @param string|Closure|null $attribute 属性
+     * @param string $attribute 属性
      * @return $this
      */
-    public function recordEndAttribute(string|Closure|null $attribute): static
+    public function recordEndAttribute(string $attribute): static
     {
         $this->recordEndAttribute = $attribute;
         $this->recordEndUsing = fn(Model $record) => $record->getAttribute($attribute);
@@ -105,6 +115,16 @@ trait HasRecords
             namedInjections: ['record' => $record],
             typedInjections: [Model::class => $record, $record::class => $record]
         ));
+    }
+
+    /**
+     * レコードの終了日時の属性名を取得する
+     *
+     * @return string|null 属性
+     */
+    public function getRecordEndAttribute(): string|null
+    {
+        return $this->recordEndAttribute;
     }
 
     /**
