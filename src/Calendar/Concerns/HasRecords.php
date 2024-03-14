@@ -237,8 +237,7 @@ trait HasRecords
     /**
      * カレンダーのレコードを取得する
      *
-     * @param CarbonPeriod|null $period 取得期間
-     * @return Collection
+     * @return Collection カレンダーのレコード
      * @throws Exception
      */
     public function getRecords(): Collection
@@ -257,6 +256,29 @@ trait HasRecords
         }
         $livewireClass = $this->getLivewire()::class;
         throw new Exception("Calendar [{$livewireClass}] does not have a [records()] or [query()].");
+    }
+
+    /**
+     * レコードの主キーを取得する
+     *
+     * @return string 主キー
+     * @throws Exception
+     */
+    public function getRecordKey(): string
+    {
+        return (new ($this->getModel()))->getKeyName();
+    }
+
+    /**
+     * IDを指定して、レコードを取得する
+     *
+     * @param string $id ID
+     * @return Model|null レコード
+     * @throws Exception
+     */
+    public function resolveRecord(string $id): ?Model
+    {
+        return $this->getRecords()->firstOrFail($this->getRecordKey(), $id);
     }
 
     /**

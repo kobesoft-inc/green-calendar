@@ -148,6 +148,37 @@ class Event
     }
 
     /**
+     * 引数名からの依存関係を取得する
+     *
+     * @return array 依存関係
+     */
+    public function getNamedInjections(): array
+    {
+        return [
+            'event' => $this,
+            'record' => $this->model,
+            'start' => $this->start,
+            'end' => $this->end,
+            'type' => $this->type,
+            'isAllDayEvent' => $this->type === EventType::AllDayEvent,
+            'isTimedEvent' => $this->type === EventType::TimedEvent,
+            'resource', 'resourceId' => $this->resourceId,
+        ];
+    }
+
+    /**
+     * 引数名から依存関係を解決する
+     *
+     * @param string $parameterName パラメータ名
+     * @return array|null 解決された依存関係
+     */
+    public function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): ?array
+    {
+        $namedInjections = $this->getNamedInjections();
+        return isset($namedInjections[$parameterName]) ? [$namedInjections[$parameterName]] : null;
+    }
+
+    /**
      * 日時を丸める(実用上、年・月には未対応)
      *
      * @param Carbon $carbon 日時

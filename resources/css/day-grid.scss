@@ -1,5 +1,17 @@
 @tailwind base;
 
+.gc-day-grid-cursor-w-resize {
+  * {
+    cursor: w-resize !important;
+  }
+}
+
+.gc-day-grid-cursor-e-resize {
+  * {
+    cursor: e-resize !important;
+  }
+}
+
 .gc-day-grid {
   .gc-day {
     @apply aspect-[5/3];
@@ -21,14 +33,18 @@
 
 .gc-yearly-day-grid {
   .gc-body {
-    @apply grid grid-cols-1 gap-4 lg:grid-cols-2;
+    @apply grid grid-cols-1 gap-6 lg:grid-cols-2;
+
+    .gc-month-name {
+      @apply flex h-10 items-center justify-center text-xl font-semibold;
+    }
   }
 }
 
 .gc-day-grid-popup {
   @apply absolute z-50 bg-white shadow-lg dark:bg-gray-900;
   .gc-day-top {
-    @apply bg-gray-100 dark:bg-gray-800;
+    @apply bg-gray-100 dark:bg-gray-600;
   }
 
   .gc-all-day-events {
@@ -58,6 +74,7 @@
   }
 
   .gc-day {
+    @apply cursor-pointer;
     .gc-day-top {
       @apply flex h-7 items-center;
       .gc-date {
@@ -78,7 +95,7 @@
 
         .gc-all-day-event-container.gc-hover {
           .gc-all-day-event {
-            @apply bg-primary-500 dark:bg-primary-300;
+            @apply bg-custom-500;
           }
         }
       }
@@ -93,7 +110,7 @@
         .gc-all-day-event-container {
           @apply flex items-center;
           .gc-all-day-event {
-            @apply relative z-10 w-full overflow-hidden whitespace-nowrap bg-primary-600 px-2 text-white shadow dark:bg-primary-400;
+            @apply relative z-10 w-full cursor-pointer overflow-hidden whitespace-nowrap bg-custom-600 px-2 text-white shadow dark:bg-custom-600;
           }
         }
 
@@ -143,7 +160,7 @@
       .gc-all-day-event-preview {
         .gc-all-day-event-container {
           .gc-all-day-event {
-            @apply z-20 bg-primary-500 shadow-lg ring-2 ring-gray-300 dark:bg-primary-300 dark:ring-gray-700;
+            @apply z-20 bg-custom-500 shadow-lg ring-2 ring-gray-300 dark:ring-gray-600;
           }
         }
       }
@@ -157,7 +174,11 @@
         .gc-timed-event-container {
           @apply flex h-5 w-full items-center px-1;
           .gc-timed-event {
-            @apply w-full overflow-hidden overflow-x-hidden whitespace-nowrap rounded px-1 hover:bg-gray-100 hover:dark:bg-gray-800;
+            @apply w-full cursor-pointer overflow-hidden overflow-x-hidden whitespace-nowrap rounded px-1 hover:bg-gray-50 hover:dark:bg-gray-800;
+          }
+
+          .gc-timed-event-bg {
+            @apply bg-custom-100 hover:bg-custom-50 dark:bg-custom-900 hover:dark:bg-custom-800;
           }
         }
 
@@ -177,8 +198,12 @@
     }
   }
 
+  .gc-day.gc-today {
+    @apply bg-sky-50 dark:bg-gray-950;
+  }
+
   .gc-day.gc-selected {
-    @apply bg-amber-50 dark:bg-amber-900;
+    @apply bg-amber-50 dark:bg-amber-800;
   }
 
   .gc-day:first-child {

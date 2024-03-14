@@ -5,15 +5,22 @@ namespace Kobesoft\GreenCalendar;
 use Carbon\Carbon;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Enums\Alignment;
+use GuzzleHttp\Promise\Create;
+use Kobesoft\GreenCalendar\Actions\CreateAction;
+use Kobesoft\GreenCalendar\Actions\EditAction;
+use Kobesoft\GreenCalendar\Actions\MoveAction;
 use Kobesoft\GreenCalendar\Contracts\HasCalendar;
 
 class Calendar extends ViewComponent
 {
     use Calendar\Concerns\BelongsToLivewire;
+    use Calendar\Concerns\CanFormatDate;
+    use Calendar\Concerns\HasHeaderActions;
     use Calendar\Concerns\HasActions;
     use Calendar\Concerns\HasColor;
     use Calendar\Concerns\HasCurrentDate;
     use Calendar\Concerns\HasEntries;
+    use Calendar\Concerns\HasHeading;
     use Calendar\Concerns\HasQuery;
     use Calendar\Concerns\HasRecords;
     use Calendar\Concerns\HasResources;
@@ -60,9 +67,12 @@ class Calendar extends ViewComponent
             ->recordEndAttribute('end')
             ->resourceIdAttribute('id')
             ->resourceTitleAttribute('name')
-            ->actions($this->getDefaultActions(), Alignment::Left)
+            ->headerActions($this->getDefaultHeaderActions(), Alignment::Left)
             ->entries($this->getDefaultEntries())
             ->firstDayOfWeek(Carbon::SUNDAY)
+            ->eventAction(EditAction::make())
+            ->dateAction(CreateAction::make())
+            ->moveAction(MoveAction::make())
             ->monthlyDayGrid();
     }
 

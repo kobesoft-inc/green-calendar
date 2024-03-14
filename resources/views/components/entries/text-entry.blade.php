@@ -9,6 +9,7 @@
     }}
     @class([
         match($color) {
+            null => '',
             'gray' => 'text-gray-500 dark:text-gray-400',
             default => "text-custom-600 dark:text-custom-400",
         }

@@ -1,6 +1,7 @@
 @tailwind base;
 
-.gc-day-grid, .gc-day-grid-popup {
+.gc-day-grid,
+.gc-day-grid-popup {
   .gc-entries {
     @apply flex gap-1;
   }
@@ -8,9 +9,9 @@
 
 .gc-entries {
   .gc-color-entry {
-    @apply flex items-center h-4;
+    @apply flex h-4 items-center;
     .gc-dot {
-      @apply flex-shrink-0 w-2 h-2 bg-custom-400 dark:bg-custom-500 rounded-full;
+      @apply h-2 w-2 flex-shrink-0 rounded-full bg-custom-400 dark:bg-custom-500;
     }
   }
 }

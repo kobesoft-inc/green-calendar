@@ -3,77 +3,102 @@
 namespace Kobesoft\GreenCalendar\Calendar\Concerns;
 
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
-use Filament\Support\Enums\Alignment;
-use Illuminate\Support\Arr;
-use Kobesoft\GreenCalendar\Actions\NextAction;
-use Kobesoft\GreenCalendar\Actions\PreviousAction;
-use Kobesoft\GreenCalendar\Actions\TodayAction;
 
 trait HasActions
 {
-    protected array $actions = ['left' => [], 'center' => [], 'right' => []];
+    protected Action|string|null $eventAction = null;
+    protected Action|string|null $moveAction = null;
+    protected Action|string|null $dateAction = null;
 
     /**
-     * カレンダーにアクションを設定する
+     * 予定をクリックしたときのアクションを設定する
      *
-     * @param array|ActionGroup $actions アクション
-     * @param Alignment $position 配置場所
-     * @return $this
+     * @param Action|string $action アクション
+     * @return HasActions
      */
-    public function actions(array|ActionGroup $actions, Alignment $position = Alignment::Right): static
+    public function eventAction(Action|string $action): static
     {
-        $this->actions[$position->value] = [];
-        $this->pushActions($actions, $position);
-        return $this;
-    }
-
-    /**
-     * カレンダーにアクションを追加する
-     *
-     * @param array|ActionGroup $actions アクション
-     * @param Alignment $position 配置場所
-     * @return $this
-     */
-    public function pushActions(array|ActionGroup $actions, Alignment $position = Alignment::Right): static
-    {
-        foreach (Arr::wrap($actions) as $action) {
-            if ($action instanceof ActionGroup) {
-                foreach ($action->getFlatActions() as $flatAction) {
-                    $this->getLivewire()->cacheAction($flatAction);
-                }
-            } elseif ($action instanceof Action) {
-                $this->getLivewire()->cacheAction($action);
-            } else {
-                throw new \InvalidArgumentException('Actions must be an instance of ' . Action::class . ' or ' . ActionGroup::class);
-            }
-            $this->actions[$position->value][] = $action;
+        $this->eventAction = $action;
+        if ($action instanceof Action) {
+            $this->getLivewire()->cacheAction($action);
         }
         return $this;
     }
 
     /**
-     * カレンダーにアクションを取得する
+     * 予定をクリックしたときのアクションを取得する
      *
-     * @param Alignment $position 配置場所
-     * @return array
+     * @return Action|null
      */
-    public function getActions(Alignment $position): array
+    public function getEventAction(): ?Action
     {
-        return $this->actions[$position->value];
+        return $this->getAction($this->eventAction);
     }
 
     /**
-     * デフォルトのアクションを取得する
+     * 予定を移動したときのアクションを設定する
      *
-     * @return array
+     * @param Action|string $action アクション
+     * @return HasActions
      */
-    public function getDefaultActions(): array
+    public function moveAction(Action|string $action): static
     {
-        return [
-            PreviousAction::make(),
-            NextAction::make(),
-            TodayAction::make(),
-        ];
+        $this->moveAction = $action;
+        if ($action instanceof Action) {
+            $this->getLivewire()->cacheAction($action);
+        }
+        return $this;
+    }
+
+    /**
+     * 予定を移動したときのアクションを取得する
+     *
+     * @return Action|null
+     */
+    public function getMoveAction(): ?Action
+    {
+        return $this->getAction($this->moveAction);
+    }
+
+    /**
+     * 日付を選択したときのアクションを設定する
+     *
+     * @param Action|string $action アクション
+     * @return HasActions
+     */
+    public function dateAction(Action|string $action): static
+    {
+        $this->dateAction = $action;
+        if ($action instanceof Action) {
+            $this->getLivewire()->cacheAction($action);
+        }
+        return $this;
+    }
+
+    /**
+     * 日付を選択したときのアクションを取得する
+     *
+     * @return Action|null
+     */
+    public function getDateAction(): ?Action
+    {
+        return $this->getAction($this->dateAction);
+    }
+
+    /**
+     * アクションを取得する
+     *
+     * @param Action|string|null $action アクション
+     * @return Action|null
+     */
+    protected function getAction(Action|string|null $action): ?Action
+    {
+        if ($action instanceof Action) {
+            return $action;
+        }
+        if (is_string($action)) {
+            return $this->getLivewire()->getAction($action);
+        }
+        return null;
     }
 }

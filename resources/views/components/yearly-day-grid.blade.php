@@ -8,8 +8,8 @@
      @mousedown="onMouseDown"
      @mouseup="onMouseUp"
      @mouseup.away="onMouseUp"
-     @mousemove.throttle="onMouseMove"
-     @mousemove.away.throttle="onMouseMove"
+     @mousemove.throttle.100ms="onMouseMove"
+     @mousemove.away.throttle.100ms="onMouseMove"
      @mouseover="onMouseOver"
      @mouseover.away="onMouseOver"
      @dragstart="onDragStart"
@@ -31,11 +31,13 @@
                 $monthEvents = $events->between($monthPeriod);
             @endphp
             <div class="gc-month">
-                <div>{{$startOfMonth}}</div>
+                <div class="gc-month-name">
+                    {{$calendar->formatShortMonth($startOfMonth)}}
+                </div>
                 <x-green-calendar::day-grid
-                        :calendar="$calendar"
-                        :month="$startOfMonth"
-                        :events="$monthEvents"/>
+                    :calendar="$calendar"
+                    :month="$startOfMonth"
+                    :events="$monthEvents"/>
             </div>
         @endforeach
     </div>

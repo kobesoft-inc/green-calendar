@@ -1,14 +1,17 @@
-.gc-actions {
+.gc-header-actions {
   @apply relative mb-1 flex;
-  .gc-actions-left {
+  .gc-header-actions-left {
     @apply flex flex-grow items-center gap-1;
   }
 
-  .gc-actions-right {
+  .gc-header-actions-right {
     @apply flex items-center gap-1;
   }
 
-  .gc-actions-center {
-    @apply absolute mx-auto flex items-center;
+  .gc-header-actions-center {
+    @apply flex w-full items-center justify-center gap-1;
+  }
+  .gc-heading {
+    @apply flex h-10 items-center text-xl font-bold;
   }
 }

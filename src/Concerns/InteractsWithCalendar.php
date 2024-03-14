@@ -7,6 +7,8 @@ use Kobesoft\GreenCalendar\Calendar;
 trait InteractsWithCalendar
 {
     use HasCurrentDate;
+    use InteractsWithEvents;
+    use InteractsWithRecord;
 
     protected Calendar $calendar;
 

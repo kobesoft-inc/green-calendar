@@ -3,7 +3,7 @@
 namespace Kobesoft\GreenCalendar\Calendar\Concerns;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
+use Kobesoft\GreenCalendar\ViewModel\Event;
 
 trait HasColor
 {
@@ -24,12 +24,12 @@ trait HasColor
     /**
      * 色を取得する
      *
-     * @param Model|null $record
+     * @param Event|null $event 予定
      * @return string|array|null 色
      */
-    public function getColor(?Model $record): string|array|null
+    public function getColor(?Event $event): string|array|null
     {
-        $color = $this->evaluate($this->color, ['record' => $record]);
+        $color = $this->evaluate($this->color, $event?->getNamedInjections() ?? []);
         if ($color === false) {
             return null;
         }

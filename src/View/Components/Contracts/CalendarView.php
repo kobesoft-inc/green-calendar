@@ -12,4 +12,6 @@ interface CalendarView
     public function nextDate(Carbon $date): Carbon;
 
     public function getPeriod(): CarbonPeriod;
+
+    public function getDefaultHeading(): string;
 }

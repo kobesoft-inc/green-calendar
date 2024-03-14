@@ -15,7 +15,13 @@
                  data-start="{{$event->start->toDateString()}}"
                  data-end="{{$event->end->toDateString()}}"
             >
-                <div class="gc-all-day-event">
+                @php($color = $calendar->getColor($event) ?? 'primary')
+                <div class="gc-all-day-event" @style([
+                    \Filament\Support\get_color_css_variables(
+                        $color,
+                        shades: [300, 400, 500, 600, 700],
+                    ),
+                ])>
                     <div class="gc-head"></div>
                     <div class="gc-tail"></div>
                     <x-green-calendar::entries :calendar="$calendar" :event="$event"/>

@@ -5,9 +5,14 @@ namespace Kobesoft\GreenCalendar\Entries;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Concerns\HasExtraAttributes;
 use Illuminate\Database\Eloquent\Model;
+use Kobesoft\GreenCalendar\Contracts\HasCalendar;
+use Kobesoft\GreenCalendar\ViewModel\EventType;
+use Livewire\Component;
 
 class Entry extends ViewComponent
 {
+    use Concerns\BelongsToLivewire;
+    use Concerns\BelongsToCalendar;
     use Concerns\CanBeHidden;
     use Concerns\HasState;
     use HasExtraAttributes;
@@ -43,10 +48,11 @@ class Entry extends ViewComponent
      */
     protected function resolveDefaultClosureDependencyForEvaluationByName(string $parameterName): array
     {
-        return match ($parameterName) {
-            'event' => [$this->getEvent()],
+        return $this->getEvent()->resolveDefaultClosureDependencyForEvaluationByName($parameterName) ?? match ($parameterName) {
             'record' => [$this->getRecord()],
             'state' => [$this->getState()],
+            'livewire' => [$this->getLivewire()],
+            'calendar', 'component' => [$this->getCalendar()],
             default => parent::resolveDefaultClosureDependencyForEvaluationByName($parameterName),
         };
     }
@@ -60,11 +66,9 @@ class Entry extends ViewComponent
     protected function resolveDefaultClosureDependencyForEvaluationByType(string $parameterType): array
     {
         $record = $this->getRecord();
-        if (!$record) {
-            return parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType);
-        }
+        $recordClass = $record ? $record::class : null;
         return match ($parameterType) {
-            Model::class, $record::class => [$record],
+            Model::class, $recordClass => [$record],
             default => parent::resolveDefaultClosureDependencyForEvaluationByType($parameterType),
         };
     }

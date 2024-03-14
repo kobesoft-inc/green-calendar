@@ -19,9 +19,11 @@ class PreviousAction extends Action
         $this->name('previous');
         $this->hiddenLabel();
         $this->icon('heroicon-o-chevron-left');
-
         $this->action(
             fn(HasCalendar $livewire) => $livewire->previous()
+        );
+        $this->after(
+            fn(HasCalendar $livewire) => $livewire->refreshCalendar()
         );
     }
 }

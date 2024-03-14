@@ -73,6 +73,6 @@ trait HasQuery
      */
     public function getModel(): string
     {
-        return $this->getQuery()->getModel();
+        return $this->getLivewire()->getModel();
     }
 }

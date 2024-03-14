@@ -23,7 +23,7 @@ export default function dayGrid(componentParameters) {
         /**
          * 選択開始日
          */
-        selectionBegin: null,
+        selectionStart: null,
 
         /**
          * 選択終了日
@@ -41,6 +41,16 @@ export default function dayGrid(componentParameters) {
         draggingAllDayEvent: null,
 
         /**
+         * 終日予定をドラッグ中に、前回ホバーした日付
+         */
+        draggingAllDayEventPrevDate: null,
+
+        /**
+         * 終日予定のドラッグ中の移動量
+         */
+        draggingAllDayEventCount: 0,
+
+        /**
          * ドラッグ中の終日予定の掴んだ日付
          */
         grabbedDate: null,
@@ -56,10 +66,18 @@ export default function dayGrid(componentParameters) {
         grabbedEnd: false,
 
         /**
+         * 1日のミリ秒数
+         */
+        millisecondsPerDay: (24 * 60 * 60 * 1000),
+
+        /**
          * カレンダーの初期化
          */
         init() {
             this.updateLayout()
+            Livewire.on('refreshCalendar', () => {
+                this.$nextTick(() => this.updateLayout(true))
+            })
         },
 
         /**
@@ -203,6 +221,11 @@ export default function dayGrid(componentParameters) {
             if (this.hitRemaining($event.target)) {
                 this.openPopup(elDay)
             } else {
+                const key = this.findEventKeyAtElement($event.target)
+                if (key) {
+                    // 予定をクリックした場合
+                    this.$wire.onEvent(key)
+                }
                 this.closePopup()
             }
         },
@@ -308,7 +331,7 @@ export default function dayGrid(componentParameters) {
             const rectDay = elDay.getBoundingClientRect()
             let x = rectDay.left - 1 + window.scrollX
             let y = rectDay.top - 1 + window.scrollY
-            let w = Math.max(rectDay.width + 2, rectPopup.width)
+            let w = Math.max(rectDay.width * 1.1, rectPopup.width)
             let h = Math.max(rectDay.height, rectPopup.height)
             if (x + w > window.innerWidth) {
                 x = window.innerWidth - w
@@ -327,12 +350,14 @@ export default function dayGrid(componentParameters) {
          * @param $event {MouseEvent} イベント
          */
         onMouseDown($event) {
-            if (this.findTimedEventAtElement($event.target)) {
+            if (this.hitRemaining($event.target)) {
+                // 残りの予定をクリックした場合は何もしない
+            } else if (this.findTimedEventAtElement($event.target)) {
                 // 時間指定の予定で、マウスダウンした場合は何もしない。onDragStartで処理する。
-            } else if (this.updateAllDayEventBegin($event)) {
+            } else if (this.updateAllDayEventStart($event)) {
                 // 終日予定の移動を開始
             } else {
-                this.updateSelectionBegin($event)
+                this.updateSelectionStart($event)
             }
         },
 
@@ -373,7 +398,7 @@ export default function dayGrid(componentParameters) {
          * @param $event {Event} イベント
          */
         updateHoverAllDayEvent($event) {
-            if (this.draggingAllDayEvent || this.selectionBegin) {
+            if (this.draggingAllDayEvent || this.selectionStart) {
                 // 終日イベントをドラッグ中、日付の選択処理中は、ホバーしない
                 return
             }
@@ -387,8 +412,8 @@ export default function dayGrid(componentParameters) {
 
         /**
          * 時間指定の予定を取得
-         * @param el {HTMLElement} 要素
-         * @returns {null|string} 終日予定のキー
+         * @param el {HTMLElement} DOM要素
+         * @returns {null|HTMLElement} 予定のDOM要素またはnull
          */
         findTimedEventAtElement(el) {
             if (this.$el.contains(el)) {
@@ -401,13 +426,30 @@ export default function dayGrid(componentParameters) {
 
         /**
          * 終日予定を取得
-         * @param el {HTMLElement} 要素
-         * @returns {null|string} 終日予定のキー
+         * @param el {HTMLElement} DOM要素
+         * @returns {null|HTMLElement} 予定のDOM要素またはnull
          */
         findAllDayEventAtElement(el) {
             if (this.$el.contains(el)) {
                 if (el.closest('.gc-day-grid')) {
                     return el.closest('.gc-all-day-event-container')
+                }
+            }
+            return null
+        },
+
+        /**
+         * 指定したDOM要素の近くの予定のキーを取得
+         * @param el {HTMLElement} DOM要素
+         * @returns {null|string} 予定のDOM要素またはnull
+         */
+        findEventKeyAtElement(el) {
+            if (this.$el.contains(el)) {
+                if (el.closest('.gc-day-grid')) {
+                    const elEvent = el.closest('.gc-timed-event-container, .gc-all-day-event-container')
+                    if (elEvent) {
+                        return elEvent.dataset.key
+                    }
                 }
             }
             return null
@@ -462,14 +504,6 @@ export default function dayGrid(componentParameters) {
         },
 
         /**
-         * 日付の選択範囲を取得する
-         * @returns {Array} 日付の選択範囲
-         */
-        getSelection() {
-            return [this.selectionBegin, this.selectionEnd].sort()
-        },
-
-        /**
          * 日付の選択範囲を設定
          */
         updateSelection(begin, end) {
@@ -490,10 +524,10 @@ export default function dayGrid(componentParameters) {
          * 選択を開始
          * @param $event {Event} イベント
          */
-        updateSelectionBegin($event) {
+        updateSelectionStart($event) {
             const date = this.findDateAtElement($event.target)
             if (date) {
-                this.selectionBegin = this.selectionEnd = date
+                this.selectionStart = this.selectionEnd = date
             }
         },
 
@@ -503,9 +537,9 @@ export default function dayGrid(componentParameters) {
          */
         updateSelectionMove($event) {
             const date = this.findDateAtPoint($event.x, $event.y)
-            if (this.selectionBegin) {
+            if (this.selectionStart) {
                 this.selectionEnd = date
-                this.updateSelection(this.selectionBegin, this.selectionEnd)
+                this.updateSelection(this.selectionStart, this.selectionEnd)
             }
         },
 
@@ -515,8 +549,10 @@ export default function dayGrid(componentParameters) {
          */
         updateSelectionEnd($event) {
             const date = this.findDateAtPoint($event.x, $event.y)
-            if (this.selectionBegin) {
-                this.selectionBegin = this.selectionEnd = null
+            if (this.selectionStart) {
+                const [start, end] = [this.selectionStart, date].sort()
+                this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59')
+                this.selectionStart = this.selectionEnd = null
                 this.updateSelection(null, null)
             }
         },
@@ -558,6 +594,13 @@ export default function dayGrid(componentParameters) {
             const date = this.findDateAtPoint($event.x, $event.y)
             const key = $event.dataTransfer.getData('text/plain')
             if (date) {
+                const diffDays = this.diffDays(this.draggingTimedEvent.dataset.start, date)
+                if (diffDays !== 0) {
+                    const start = this.toDateTimeString(this.addDays(this.draggingTimedEvent.dataset.start, diffDays))
+                    const end = this.toDateTimeString(this.addDays(this.draggingTimedEvent.dataset.end, diffDays))
+                    this.$wire.onMove(key, start, end)
+                    this.draggingTimedEvent = null
+                }
             }
         },
 
@@ -594,7 +637,7 @@ export default function dayGrid(componentParameters) {
          * @param $event {MouseEvent} イベント
          * @returns {boolean} 移動を開始したかどうか
          */
-        updateAllDayEventBegin($event) {
+        updateAllDayEventStart($event) {
             const el = this.findAllDayEventAtElement($event.target)
             if (el) {
                 // 終日予定の変形を設定
@@ -615,8 +658,17 @@ export default function dayGrid(componentParameters) {
                 // ドラッグ中の終日予定のクラスを設定（表示を消す）
                 this.setAllDayEventDragging(this.draggingAllDayEvent.dataset.key, true)
 
+                // 現在の日付を記録
+                this.draggingAllDayEventPrevDate = null
+
                 // ドラッグ中の終日予定のプレビューを表示
                 this.updateAllDayEventPreview(this.grabbedDate)
+
+                // カーソルを設定
+                this.updateAllDayEventCursor()
+
+                // ドラッグ中の終日予定の移動量を初期化
+                this.draggingAllDayEventCount = 0
 
                 return true
             }
@@ -651,6 +703,7 @@ export default function dayGrid(componentParameters) {
                 if (date) {
                     this.updateAllDayEventPreview(date)
                 }
+                this.draggingAllDayEventCount++
                 return true
             }
             return false
@@ -662,12 +715,20 @@ export default function dayGrid(componentParameters) {
          */
         updateAllDayEventEnd($event) {
             if (this.draggingAllDayEvent) {
+                const key = this.draggingAllDayEvent.dataset.key
                 const date = this.findDateAtPoint($event.x, $event.y)
-                if (date) {
+                if (date && this.grabbedDate !== date) {
+                    const [start, end] = this.getChangedAllDayEventPeriod(date)
+                    this.$wire.onMove(key, start, end)
+                } else if (this.draggingAllDayEventCount < 2) {
+                    this.$wire.onEvent(key)
+                } else {
+                    this.removeAllDayEventPreview()
+                    this.setAllDayEventDragging(key, false)
                 }
-                this.setAllDayEventDragging(this.draggingAllDayEvent.dataset.key, false)
-                this.removeAllDayEventPreview()
                 this.draggingAllDayEvent = null
+                this.grabbedStart = this.grabbedEnd = null
+                this.updateAllDayEventCursor()
                 return true
             }
             return false
@@ -678,11 +739,44 @@ export default function dayGrid(componentParameters) {
          * @param date {string} マウスの位置の日付
          */
         updateAllDayEventPreview(date) {
+            if (this.draggingAllDayEventPrevDate !== date) {
+                const [start, end] = this.getChangedAllDayEventPeriod(date)
+                this.removeAllDayEventPreview()
+                this.createAllDayEventPreview(this.draggingAllDayEvent, start, end)
+                this.draggingAllDayEventPrevDate = date
+            }
+        },
+
+        /**
+         * 終日予定をドラッグ中のカーソルを更新する
+         */
+        updateAllDayEventCursor() {
+            this.$el.classList.remove('gc-day-grid-cursor-w-resize', 'gc-day-grid-cursor-e-resize')
+            if (this.grabbedStart) {
+                this.$el.classList.add('gc-day-grid-cursor-w-resize')
+            }
+            if (this.grabbedEnd) {
+                this.$el.classList.add('gc-day-grid-cursor-e-resize')
+            }
+        },
+
+        /**
+         * 変更後の終日予定の期間を取得する
+         * @param date {string} マウスの位置の日付
+         */
+        getChangedAllDayEventPeriod(date) {
             const diffDays = this.diffDays(this.grabbedDate, date)
-            const eventStart = this.addDays(this.draggingAllDayEvent.dataset.start, this.grabbedStart ? diffDays : 0)
-            const eventEnd = this.addDays(this.draggingAllDayEvent.dataset.end, this.grabbedEnd ? diffDays : 0)
-            this.removeAllDayEventPreview()
-            this.createAllDayEventPreview(this.draggingAllDayEvent, eventStart, eventEnd)
+            let start = this.toDateString(this.addDays(this.draggingAllDayEvent.dataset.start, this.grabbedStart ? diffDays : 0))
+            let end = this.toDateString(this.addDays(this.draggingAllDayEvent.dataset.end, this.grabbedEnd ? diffDays : 0))
+            if (start > end) {
+                if (this.grabbedStart) {
+                    start = end
+                }
+                if (this.grabbedEnd) {
+                    end = start
+                }
+            }
+            return [start, end]
         },
 
         /**
@@ -756,13 +850,31 @@ export default function dayGrid(componentParameters) {
         },
 
         /**
+         * ミリ秒を日付文字列に変換する
+         * @param d {number} ミリ秒
+         * @returns {string} 日付文字列
+         */
+        toDateString(d) {
+            return (new Date(d)).toLocaleDateString('sv-SE')
+        },
+
+        /**
+         * ミリ秒を日時文字列に変換する
+         * @param d {number} ミリ秒
+         * @returns {string} 日付文字列
+         */
+        toDateTimeString(d) {
+            return this.toDateString(d) + ' ' + (new Date(d)).toLocaleTimeString("en-GB")
+        },
+
+        /**
          * 日付に日数を加算
          * @param date {string} 日付
          * @param days {number} 日数
-         * @returns {string} 加算後の日付
+         * @returns {number} 加算後の日付(ミリ秒)
          */
         addDays(date, days) {
-            return (new Date(Date.parse(date) + days * 24 * 60 * 60 * 1000)).toLocaleDateString('sv-SE')
+            return Date.parse(date) + days * this.millisecondsPerDay
         },
 
         /**
@@ -772,7 +884,11 @@ export default function dayGrid(componentParameters) {
          * @returns {number} 日数
          */
         diffDays(date1, date2) {
-            return (Date.parse(date2) - Date.parse(date1)) / (24 * 60 * 60 * 1000)
+            let d1 = new Date(date1)
+            let d2 = new Date(date2)
+            d1.setHours(0, 0, 0, 0)
+            d2.setHours(0, 0, 0, 0)
+            return Math.floor((d2.getTime() - d1.getTime()) / this.millisecondsPerDay)
         },
 
         /**

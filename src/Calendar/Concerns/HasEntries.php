@@ -64,11 +64,10 @@ trait HasEntries
     {
         return fn(Calendar $component) => [
             ColorEntry::make('color')
-                ->color('primary')
-                ->visible(fn(Event $event) => $event->type === EventType::TimedEvent),
+                ->visible(fn(bool $isTimedEvent) => $isTimedEvent),
             TextEntry::make($component->getRecordStartAttribute() ?? 'start')
                 ->time()
-                ->visible(fn(Event $event) => $event->type === EventType::TimedEvent),
+                ->visible(fn(bool $isTimedEvent) => $isTimedEvent),
             TextEntry::make('title'),
         ];
     }

@@ -1,6 +1,6 @@
 @php
     $state = $getState();
-    $color = $getColor($state);
+    $color = $getColor($state) ?? 'primary';
 @endphp
 <div
     {{
@@ -16,7 +16,7 @@
             \Filament\Support\get_color_css_variables(
                 $color,
                 shades: [400, 500],
-            ) => $color !== 'gray',
+            ),
         ]
     )
     ></div>

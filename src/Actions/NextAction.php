@@ -19,9 +19,11 @@ class NextAction extends Action
         $this->name('next');
         $this->hiddenLabel();
         $this->icon('heroicon-o-chevron-right');
-
         $this->action(
             fn(HasCalendar $livewire) => $livewire->next()
+        );
+        $this->after(
+            fn(HasCalendar $livewire) => $livewire->refreshCalendar()
         );
     }
 }

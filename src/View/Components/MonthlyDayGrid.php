@@ -9,7 +9,6 @@ use Illuminate\View\Component;
 use Illuminate\View\View;
 use Kobesoft\GreenCalendar\Calendar;
 use Kobesoft\GreenCalendar\View\Components\Contracts\CalendarView;
-use Kobesoft\GreenCalendar\ViewModel\EventCollection;
 
 class MonthlyDayGrid extends Component implements CalendarView
 {
@@ -71,6 +70,16 @@ class MonthlyDayGrid extends Component implements CalendarView
             ->endOfWeek($this->calendar->getLastDayOfWeek())
             ->endOfDay();
         return CarbonPeriod::between($start, $end);
+    }
+
+    /**
+     * カレンダーの見出しを取得する
+     *
+     * @return string
+     */
+    public function getDefaultHeading(): string
+    {
+        return $this->calendar->formatMonth($this->getMonth());
     }
 
     /**

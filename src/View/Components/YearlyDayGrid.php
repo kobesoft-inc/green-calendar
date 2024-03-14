@@ -47,14 +47,23 @@ class YearlyDayGrid extends Component implements CalendarView
     }
 
     /**
+     * カレンダーに表示する年の初日を取得する
+     *
+     * @return Carbon
+     */
+    protected function getYear(): Carbon
+    {
+        return $this->calendar->getLivewire()->getCurrentDate()->copy()->startOfYear();
+    }
+
+    /**
      * カレンダーの表示範囲を取得する
      *
      * @return CarbonPeriod
      */
     public function getPeriod(): CarbonPeriod
     {
-        $start = $this->calendar->getLivewire()->getCurrentDate()
-            ->startOfYear();
+        $start = $this->getYear();
         $end = $start->copy()
             ->endOfYear()
             ->endOfDay();
@@ -62,14 +71,13 @@ class YearlyDayGrid extends Component implements CalendarView
     }
 
     /**
-     * イベントを取得する
+     * カレンダーの見出しを取得する
      *
-     * @return EventCollection
-     * @throws Exception
+     * @return string
      */
-    protected function getEvents(): EventCollection
+    public function getDefaultHeading(): string
     {
-        return $this->calendar->getEvents($this->getPeriod());
+        return $this->calendar->formatYear($this->getYear());
     }
 
     /**
@@ -96,7 +104,7 @@ class YearlyDayGrid extends Component implements CalendarView
         return view($this->view, [
             'calendar' => $this->calendar,
             'period' => $period,
-            'events' => $this->calendar->getEvents($period),
+            'events' => $this->calendar->getEvents(),
             'componentParameters' => $this->componentParameters(),
         ]);
     }

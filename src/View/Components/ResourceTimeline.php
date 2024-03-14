@@ -64,6 +64,16 @@ class ResourceTimeline extends Component implements CalendarView
     }
 
     /**
+     * カレンダーの見出しを取得する
+     *
+     * @return string
+     */
+    public function getDefaultHeading(): string
+    {
+        return 'Daily Time Grid';
+    }
+
+    /**
      * コンポーネントを描画する
      *
      * @return View

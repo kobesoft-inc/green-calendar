@@ -14,9 +14,11 @@ class TodayAction extends Action
 
         $this->name('today');
         $this->label(Carbon::getTranslator()->trans('diff_today'));
-
         $this->action(
             fn(HasCalendar $livewire) => $livewire->currentDate(today())
+        );
+        $this->after(
+            fn(HasCalendar $livewire) => $livewire->refreshCalendar()
         );
     }
 }
