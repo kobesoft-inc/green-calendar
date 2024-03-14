@@ -202,6 +202,10 @@
     @apply bg-sky-50 dark:bg-gray-950;
   }
 
+  .gc-day.gc-disabled {
+    @apply cursor-default bg-gray-100 dark:bg-gray-900;
+  }
+
   .gc-day.gc-selected {
     @apply bg-amber-50 dark:bg-amber-800;
   }

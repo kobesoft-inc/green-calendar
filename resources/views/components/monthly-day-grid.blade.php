@@ -23,9 +23,10 @@
     </div>
     <div class="gc-body">
         <x-green-calendar::day-grid
-                :calendar="$calendar"
-                :month="$month"
-                :events="$events"
+            :calendar="$calendar"
+            :month="$month"
+            :events="$events"
+            :showNonCurrentDates="true"
         />
     </div>
     <x-green-calendar::day-grid.popup/>

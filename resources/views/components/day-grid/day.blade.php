@@ -1,8 +1,9 @@
-@props(['calendar', 'date', 'weekPeriod', 'timedEvents', 'allDayEvents', 'maxPosition'])
+@props(['calendar', 'date', 'period', 'timedEvents', 'allDayEvents', 'maxPosition'])
 <div
     @class([
         'gc-day',
         'gc-today' => $date->isToday(),
+        'gc-disabled' => !$period->contains($date),
     ])
     data-date="{{$date->toDateString()}}"
 >
@@ -14,7 +15,7 @@
         <x-green-calendar::day-grid.all-day-events
             :calendar="$calendar"
             :date="$date"
-            :weekPeriod="$weekPeriod"
+            :period="$period"
             :allDayEvents="$allDayEvents"
             :maxPosition="$maxPosition"
         />

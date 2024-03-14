@@ -220,6 +220,8 @@ export default function dayGrid(componentParameters) {
             const elDay = $event.target.closest('.gc-day')
             if (this.hitRemaining($event.target)) {
                 this.openPopup(elDay)
+            } else if (elDay.classList.contains('gc-disabled')) {
+                // 無効な日をクリックした場合
             } else {
                 const key = this.findEventKeyAtElement($event.target)
                 if (key) {
@@ -296,6 +298,7 @@ export default function dayGrid(componentParameters) {
             keys.forEach(key => {
                 const el = this.$el.querySelector('.gc-all-day-events .gc-all-day-event-container[data-key="' + key + '"]').cloneNode(true)
                 el.classList.add('gc-start', 'gc-end')
+                el.classList.remove('gc-hidden')
                 elAllDayEvents.appendChild(el)
             })
         },
@@ -481,7 +484,7 @@ export default function dayGrid(componentParameters) {
             if (this.$el.contains(el)) {
                 if (el.closest('.gc-day-grid')) {
                     const elDay = el.closest('.gc-day')
-                    if (elDay) {
+                    if (elDay && !elDay.classList.contains('gc-disabled')) {
                         return elDay.dataset.date
                     }
                 }
@@ -789,17 +792,19 @@ export default function dayGrid(componentParameters) {
             // 各週ごとに処理
             Array.from(this.$el.querySelectorAll('.gc-week')).forEach(elWeek => {
                 const [weekStart, weekEnd] = this.getWeekPeriod(elWeek)
-                const [periodStart, periodEnd] = this.overlapPeriod(eventStart, eventEnd, weekStart, weekEnd)
-                if (periodStart && periodEnd) {
-                    const elPreview = elWeek.querySelector('.gc-day[data-date="' + periodStart + '"] .gc-all-day-event-preview')
-                    if (weekStart <= this.grabbedDate && this.grabbedDate <= weekEnd) {
-                        // ドラッグを開始した週では、ドラッグ位置を考慮して空の終日予定を追加する
-                        this.addEmptyAllDayEvents(elPreview, this.getIndexInParent(elEvent))
+                if (weekStart && weekEnd) {
+                    const [periodStart, periodEnd] = this.overlapPeriod(eventStart, eventEnd, weekStart, weekEnd)
+                    if (periodStart && periodEnd) {
+                        const elPreview = elWeek.querySelector('.gc-day[data-date="' + periodStart + '"] .gc-all-day-event-preview')
+                        if (weekStart <= this.grabbedDate && this.grabbedDate <= weekEnd) {
+                            // ドラッグを開始した週では、ドラッグ位置を考慮して空の終日予定を追加する
+                            this.addEmptyAllDayEvents(elPreview, this.getIndexInParent(elEvent))
+                        }
+                        const el = elEvent.cloneNode(true)
+                        const days = this.diffDays(periodStart, periodEnd) + 1
+                        this.adjustAllDayEventForPreview(el, days, periodStart === eventStart, periodEnd === eventEnd)
+                        elPreview.appendChild(el)
                     }
-                    const el = elEvent.cloneNode(true)
-                    const days = this.diffDays(periodStart, periodEnd) + 1
-                    this.adjustAllDayEventForPreview(el, days, periodStart === eventStart, periodEnd === eventEnd)
-                    elPreview.appendChild(el)
                 }
             })
         },
@@ -810,7 +815,12 @@ export default function dayGrid(componentParameters) {
          * @returns {Array} 週の開始日・終了日
          */
         getWeekPeriod(elWeek) {
-            return [elWeek.querySelector('.gc-day:first-child').dataset.date, elWeek.querySelector('.gc-day:last-child').dataset.date]
+            const elDays = elWeek.querySelectorAll('.gc-day:not(.gc-disabled)')
+            if (elDays.length > 0) {
+                return [elDays[0].dataset.date, elDays[elDays.length - 1].dataset.date]
+            } else {
+                return [null, null]
+            }
         },
 
         /**

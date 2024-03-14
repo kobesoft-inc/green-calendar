@@ -4,6 +4,7 @@ namespace Kobesoft\GreenCalendar\View\Components;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Exception;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 use Kobesoft\GreenCalendar\Calendar;
@@ -20,7 +21,8 @@ class DayGrid extends Component
     public function __construct(
         protected Calendar        $calendar,
         protected Carbon          $month,
-        protected EventCollection $events
+        protected EventCollection $events,
+        protected bool            $showNonCurrentDates,
     )
     {
     }
@@ -32,6 +34,20 @@ class DayGrid extends Component
      */
     protected function getPeriod(): CarbonPeriod
     {
+        if ($this->showNonCurrentDates) {
+            return $this->getCalendarPeriod();
+        } else {
+            return $this->getMonthPeriod();
+        }
+    }
+
+    /**
+     * カレンダーの日付として表示する期間を取得する
+     *
+     * @return CarbonPeriod
+     */
+    protected function getCalendarPeriod(): CarbonPeriod
+    {
         $start = $this->month->copy()
             ->startOfWeek($this->calendar->getFirstDayOfWeek());
         $end = $start->copy()
@@ -41,15 +57,30 @@ class DayGrid extends Component
     }
 
     /**
+     * 月の期間を取得する
+     *
+     * @return CarbonPeriod
+     */
+    protected function getMonthPeriod(): CarbonPeriod
+    {
+        return CarbonPeriod::create(
+            $this->month->copy()->startOfMonth(),
+            $this->month->copy()->endOfMonth()
+        );
+    }
+
+    /**
      * コンポーネントを描画する
      *
      * @return View
+     * @throws Exception
      */
     public function render(): View
     {
         return view($this->view, [
             'calendar' => $this->calendar,
             'period' => $this->getPeriod(),
+            'calendarPeriod' => $this->getCalendarPeriod(),
             'events' => $this->calendar->getEvents(),
         ]);
     }

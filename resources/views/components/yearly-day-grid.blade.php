@@ -37,7 +37,9 @@
                 <x-green-calendar::day-grid
                     :calendar="$calendar"
                     :month="$startOfMonth"
-                    :events="$monthEvents"/>
+                    :events="$monthEvents"
+                    :showNonCurrentDates="false"
+                />
             </div>
         @endforeach
     </div>
