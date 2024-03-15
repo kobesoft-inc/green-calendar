@@ -1,12 +1,12 @@
 @props(['calendar', 'timeSlots'])
 <div class="gc-time-slots">
-    @foreach($timeSlots as $hourIndex => $hour)
+    @foreach($timeSlots->getHours() as $hourIndex => $hour)
         <div class="gc-time-slots-column">
             <div class="gc-hour">
-                @foreach($hour['minutes'] as $minuteIndex => $time)
+                @foreach($hour['minutes'] as $minuteIndex => $timeSlot)
                     <div class="gc-slot">
                         @if ($hourIndex && !$minuteIndex)
-                            {{$time->hour}}
+                            {{$timeSlot->start->hour}}
                         @endif
                     </div>
                 @endforeach

@@ -15,6 +15,21 @@ class Event
     public int $position;
 
     /**
+     * @var int 時間帯の分割数
+     */
+    public int $division;
+
+    /**
+     * @var int 時間帯のインデックス
+     */
+    public int $timeSlotIndex;
+
+    /**
+     * @var int 時間帯の表示コマ数
+     */
+    public int $timeSlotSpan;
+
+    /**
      * 予定を初期化する
      *
      * @param Carbon $start 開始日時
@@ -145,6 +160,20 @@ class Event
     public function endsBetween(CarbonPeriod $period): bool
     {
         return $period->contains($this->end);
+    }
+
+    /**
+     * 時間帯のレイアウトを求め、この予定に設定する
+     *
+     * @param TimeSlots $timeSlots 時間帯
+     * @return $this
+     */
+    public function withTimeSlotLayout(TimeSlots $timeSlots): static
+    {
+        $end = min($timeSlots->indexOf($this->end->copy()->subSecond()), $timeSlots->count() - 1);
+        $this->timeSlotIndex = max(0, $timeSlots->indexOf($this->start));
+        $this->timeSlotSpan = $end - $this->timeSlotIndex + 1;
+        return $this;
     }
 
     /**

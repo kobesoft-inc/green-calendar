@@ -4,9 +4,9 @@
             <div class="gc-date"></div>
             <div class="gc-label">
                 <x-filament::icon
-                        icon="heroicon-m-x-mark"
-                        class="h-5 w-5 text-gray-500 dark:text-gray-400"
-                        @click="this.closePopup"
+                    icon="heroicon-m-x-mark"
+                    class="h-5 w-5 text-gray-500 dark:text-gray-400"
+                    @click="this.closePopup"
                 />
             </div>
         </div>

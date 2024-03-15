@@ -1,9 +1,15 @@
-@props(['calendar', 'columns', 'events'])
+@props(['calendar', 'period', 'columns', 'events'])
+@php($events = $events->between($period)->withAllDayEventPositions($period))
 <div class="gc-all-day-section">
-    <div class="gc-time-slots-column">&nbsp;</div>
+    <div class="gc-time-slots-column"></div>
     <div class="gc-days">
         @foreach($columns as $column)
-            <div class="gc-day"></div>
+            <x-green-calendar::time-grid.all-day-section.day
+                :calendar="$calendar"
+                :period="$period"
+                :column="$column"
+                :events="$events"
+            />
         @endforeach
     </div>
 </div>

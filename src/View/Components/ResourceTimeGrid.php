@@ -5,15 +5,14 @@ namespace Kobesoft\GreenCalendar\View\Components;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
-use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 use Iterator;
 use Kobesoft\GreenCalendar\Calendar;
 use Kobesoft\GreenCalendar\View\Components\Contracts\CalendarView;
-use Kobesoft\GreenCalendar\ViewModel\EventCollection;
 use Kobesoft\GreenCalendar\ViewModel\Resource;
 use Kobesoft\GreenCalendar\ViewModel\TimeGridColumn;
+use Kobesoft\GreenCalendar\ViewModel\TimeSlots;
 
 class ResourceTimeGrid extends Component implements CalendarView
 {
@@ -98,8 +97,12 @@ class ResourceTimeGrid extends Component implements CalendarView
      */
     public function render(): View
     {
+        if ($this->timeSlots->interval->gt('1 day')) {
+            throw new Exception('The interval must be less than or equal to 1 day.');
+        }
         return view($this->view, [
             'calendar' => $this->calendar,
+            'period' => $this->getPeriod(),
             'columns' => $this->getColumns(),
             'timeSlots' => $this->getTimeSlots(),
             'events' => $this->calendar->getEvents(),

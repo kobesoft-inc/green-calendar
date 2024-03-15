@@ -1,0 +1,78 @@
+@tailwind base;
+
+.gc-all-day-events {
+  .gc-all-day-event-container.gc-dragging {
+    @apply invisible;
+  }
+
+  .gc-all-day-event-container.gc-hover {
+    .gc-all-day-event {
+      @apply bg-custom-500;
+    }
+  }
+}
+
+.gc-all-day-events,
+.gc-all-day-event-preview {
+  @apply w-full;
+  .gc-all-day-event-container {
+    @apply h-5;
+  }
+
+  .gc-all-day-event-container {
+    @apply flex items-center;
+    .gc-all-day-event {
+      @apply relative z-10 w-full cursor-pointer overflow-hidden whitespace-nowrap bg-custom-600 px-2 text-white shadow dark:bg-custom-600;
+    }
+  }
+
+  .gc-start {
+    @apply pl-1;
+    .gc-all-day-event {
+      @apply rounded-l-lg pl-1;
+    }
+  }
+
+  .gc-end {
+    @apply pr-1;
+    .gc-all-day-event {
+      @apply rounded-r-lg pl-1;
+    }
+  }
+
+  .gc-1days {
+    width: 100%;
+  }
+
+  .gc-2days {
+    width: calc(200% + 1px);
+  }
+
+  .gc-3days {
+    width: calc(300% + 2px);
+  }
+
+  .gc-4days {
+    width: calc(400% + 3px);
+  }
+
+  .gc-5days {
+    width: calc(500% + 4px);
+  }
+
+  .gc-6days {
+    width: calc(600% + 5px);
+  }
+
+  .gc-7days {
+    width: calc(700% + 6px);
+  }
+}
+
+.gc-all-day-event-preview {
+  .gc-all-day-event-container {
+    .gc-all-day-event {
+      @apply z-20 bg-custom-500 shadow-lg ring-2 ring-gray-300 dark:ring-gray-600;
+    }
+  }
+}

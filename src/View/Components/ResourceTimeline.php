@@ -5,8 +5,6 @@ namespace Kobesoft\GreenCalendar\View\Components;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Exception;
-use Generator;
-use Illuminate\Support\Collection;
 use Illuminate\View\Component;
 use Illuminate\View\View;
 use Kobesoft\GreenCalendar\Calendar;
@@ -83,8 +81,8 @@ class ResourceTimeline extends Component implements CalendarView
     {
         return view($this->view, [
             'calendar' => $this->calendar,
-            'timeSlots' => $this->getMonths($this->calendar->getPeriod()),
-            'interval' => $this->interval,
+            'timeSlots' => $this->getTimeSlots(),
+            'period' => $this->getPeriod(),
             'events' => $this->calendar->getEvents(),
             'resources' => $this->calendar->getResources(),
         ]);

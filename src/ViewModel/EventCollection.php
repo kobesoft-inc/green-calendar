@@ -38,6 +38,26 @@ class EventCollection
     }
 
     /**
+     * 時間指定の予定を取得する
+     *
+     * @return Collection<Event> Eventの配列
+     */
+    public function getTimedEvents(): Collection
+    {
+        return $this->timedEvents;
+    }
+
+    /**
+     * 終日予定を取得する
+     *
+     * @return Collection<Event> Eventの配列
+     */
+    public function getAllDayEvents(): Collection
+    {
+        return $this->allDayEvents;
+    }
+
+    /**
      * 指定した期間内の予定のコレクションを取得する
      *
      * @param CarbonPeriod $period 期間
@@ -150,7 +170,7 @@ class EventCollection
     /**
      * 終日予定に、配置情報を含める
      *
-     * @param CarbonPeriod $period
+     * @param CarbonPeriod $period 期間
      * @return $this
      */
     public function withAllDayEventPositions(CarbonPeriod $period): static
@@ -163,7 +183,7 @@ class EventCollection
      * 予定の配列に、配置情報を含める
      *
      * @param Collection $events 予定の配列
-     * @param CarbonPeriod $period
+     * @param CarbonPeriod $period 期間
      * @param CarbonInterval|null $precision
      * @return Collection
      */
@@ -178,5 +198,56 @@ class EventCollection
             $event->position = $freePositions->first();
             return $carry->push($event);
         }, collect());
+    }
+
+    /**
+     * 予定の配列に、分割数を含める
+     *
+     * @param Collection $events 予定の配列
+     * @return Collection
+     */
+    protected function assignDivision(Collection $events): Collection
+    {
+        // 時間帯にグループ番号を振る
+        $groupIndex = 0;
+        $groups = [];
+        $events = $events->sortBy('timeSlotIndex');
+        foreach ($events as $event) {
+            $group = $groups[$event->timeSlotIndex] ?? $groupIndex++;
+            for ($i = 0; $i < $event->timeSlotSpan; $i++) {
+                $groups[$event->timeSlotIndex + $i] = $group;
+            }
+        }
+
+        // グループ毎に最大の分割数を求める
+        $divisions = [];
+        foreach ($events as $event) {
+            $divisions[$groups[$event->timeSlotIndex]] = max(
+                $divisions[$groups[$event->timeSlotIndex]] ?? 0,
+                $event->position + 1
+            );
+        }
+
+        // グループ毎に分割数を振り直す
+        foreach ($events as $event) {
+            $event->division = $divisions[$groups[$event->timeSlotIndex]];
+        }
+
+        return $events;
+    }
+
+    /**
+     * 時間帯のレイアウトを設定する
+     *
+     * @param TimeSlots $timeSlots 時間帯
+     * @param CarbonPeriod $period 期間
+     * @return $this
+     */
+    public function withTimeSlotLayout(TimeSlots $timeSlots, CarbonPeriod $period): static
+    {
+        $this->timedEvents = $this->timedEvents->map(fn(Event $event) => $event->withTimeSlotLayout($timeSlots));
+        $this->timedEvents = $this->assignPosition($this->timedEvents, $period, $timeSlots->interval);
+        $this->timedEvents = $this->assignDivision($this->timedEvents);
+        return $this;
     }
 }

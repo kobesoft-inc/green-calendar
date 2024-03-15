@@ -13,7 +13,7 @@
             @endphp
             <x-green-calendar::day-grid.week
                 :weekPeriod="$weekPeriod"
-                :showPeriod="$showPeriod"
+                :period="$showPeriod"
                 :events="$weekEvents"
                 :calendar="$calendar"
             />

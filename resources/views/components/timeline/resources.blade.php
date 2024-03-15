@@ -1,4 +1,4 @@
-@props(['resources', 'timeSlots', 'interval'])
+@props(['resources', 'timeSlots', 'period'])
 <div class="gc-resources">
     <div class="gc-spacers">
         @if(count($timeSlots)> 1)

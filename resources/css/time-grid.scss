@@ -2,7 +2,7 @@
 
 .gc-time-grid {
   .gc-body {
-    @apply divide-y rounded-lg border bg-white text-sm dark:bg-gray-900;
+    @apply select-none divide-y rounded-lg border bg-white text-sm dark:bg-gray-900;
 
     .gc-time-slots-column {
       width: 5em;
@@ -13,7 +13,7 @@
       width: calc(100% - 5em);
 
       .gc-day {
-        @apply flex-1 text-center;
+        @apply flex-1;
       }
     }
 
@@ -21,15 +21,24 @@
       @apply flex divide-x bg-gray-100 dark:bg-gray-800;
 
       .gc-day {
-        @apply py-1;
+        @apply py-1 text-center;
       }
     }
 
     .gc-all-day-section {
-      @apply flex min-h-8 divide-x;
+      @apply flex divide-x;
 
       .gc-time-slots-column {
         @apply bg-gray-100 dark:bg-gray-800;
+      }
+
+      .gc-day {
+        @apply relative text-xs;
+
+        .gc-all-day-events,
+        .gc-all-day-event-preview {
+          @apply min-h-6 py-0.5;
+        }
       }
     }
 
@@ -52,12 +61,26 @@
 
       .gc-days {
         .gc-day {
-          @apply divide-y;
+          @apply divide-y text-xs;
           .gc-hour {
             @apply divide-y divide-dotted;
             .gc-slot {
               @apply h-8;
             }
+          }
+        }
+      }
+
+      .gc-timed-events {
+        @apply relative h-full;
+        .gc-timed-event-container {
+          @apply absolute top-0 p-0.5;
+          left: var(--gc-timed-event-left);
+          width: var(--gc-timed-event-width);
+          height: var(--gc-timed-event-height);
+
+          .gc-timed-event {
+            @apply bg-primary-200 h-full p-1 border-primary-400 rounded overflow-hidden;
           }
         }
       }

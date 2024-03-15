@@ -1,4 +1,4 @@
-@props(['calendar', 'columns', 'timeSlots', 'events'])
+@props(['calendar', 'period', 'columns', 'timeSlots', 'events'])
 <div ax-load
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('time-grid', 'kobesoft/green-calendar') }}"
      x-data="timeGrid()"
@@ -10,19 +10,20 @@
     <div class="gc-body">
         @if($columns->count()> 0)
             <x-green-calendar::time-grid.column-headings
-                    :calendar="$calendar"
-                    :columns="$columns"
+                :calendar="$calendar"
+                :columns="$columns"
             />
             <x-green-calendar::time-grid.all-day-section
-                    :calendar="$calendar"
-                    :columns="$columns"
-                    :events="$events"
+                :calendar="$calendar"
+                :period="$period"
+                :columns="$columns"
+                :events="$events"
             />
             <x-green-calendar::time-grid.timed-section
-                    :calendar="$calendar"
-                    :columns="$columns"
-                    :timeSlots="$timeSlots"
-                    :events="$events"
+                :calendar="$calendar"
+                :columns="$columns"
+                :timeSlots="$timeSlots"
+                :events="$events"
             />
         @else
             <x-green-calendar::time-grid.empty/>

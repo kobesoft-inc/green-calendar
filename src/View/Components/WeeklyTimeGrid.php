@@ -9,7 +9,6 @@ use Illuminate\View\Component;
 use Illuminate\View\View;
 use Kobesoft\GreenCalendar\Calendar;
 use Kobesoft\GreenCalendar\View\Components\Contracts\CalendarView;
-use Kobesoft\GreenCalendar\ViewModel\EventCollection;
 use Kobesoft\GreenCalendar\ViewModel\TimeGridColumn;
 
 class WeeklyTimeGrid extends Component implements CalendarView
@@ -95,14 +94,15 @@ class WeeklyTimeGrid extends Component implements CalendarView
      */
     public function render(): View
     {
-        if ($this->interval->gt('1 day')) {
+        if ($this->timeSlots->interval->gt('1 day')) {
             throw new Exception('The interval must be less than or equal to 1 day.');
         }
         return view($this->view, [
             'calendar' => $this->calendar,
+            'period' => $this->getPeriod(),
             'columns' => $this->getColumns(),
-            'events' => $this->calendar->getEvents(),
             'timeSlots' => $this->getTimeSlots(),
+            'events' => $this->calendar->getEvents(),
         ]);
     }
 }
