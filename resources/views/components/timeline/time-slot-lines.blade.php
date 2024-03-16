@@ -1,6 +1,7 @@
-@props(['timeSlots'])
+@props(['timeSlots', 'period'])
+@php($months = $timeSlots->getMonths($period))
 <div class="gc-time-slot-lines">
-    @foreach ($timeSlots as $month)
+    @foreach ($months as $month)
         <div class="gc-month">
             @foreach ($month['days'] as $day)
                 <div class="gc-day">

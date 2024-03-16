@@ -1,13 +1,14 @@
 @props(['resources', 'timeSlots', 'period'])
+@php($months = $timeSlots->getMonths($period))
 <div class="gc-resources">
     <div class="gc-spacers">
-        @if(count($timeSlots)> 1)
+        @if(count($months)> 1)
             <div class="gc-spacer"></div>
         @endif
-        @if(count($timeSlots[0]['days']) > 1)
+        @if(count($months[0]['days']) > 1)
             <div class="gc-spacer"></div>
         @endif
-        @if(count($timeSlots[0]['days'][0]['hours']) > 1)
+        @if(count($months[0]['days'][0]['hours']) > 1)
             <div class="gc-spacer"></div>
         @endif
     </div>

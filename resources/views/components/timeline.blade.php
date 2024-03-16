@@ -16,10 +16,12 @@
         <div style="width:calc(100% - 20em);" class="gc-main">
             <x-green-calendar::timeline.time-slot-lines
                 :timeSlots="$timeSlots"
+                :period="$period"
             />
             <div class="absolute top-0">
                 <x-green-calendar::timeline.time-slot-heading
                     :timeSlots="$timeSlots"
+                    :period="$period"
                 />
                 <x-green-calendar::timeline.events
                     :events="$events"
