@@ -143,15 +143,19 @@ class EventCollection
     /**
      * リソースIDで絞り込んだ予定のコレクションを取得する
      *
-     * @param string $resourceId リソースID
+     * @param string|null $resourceId リソースID
      * @return EventCollection リソースIDで絞り込んだ予定のコレクション
      */
-    public function whereResource(string $resourceId): EventCollection
+    public function whereResource(?string $resourceId): EventCollection
     {
-        return new static(
-            $this->timedEvents->filter(fn(Event $event) => $event->resourceId === $resourceId),
-            $this->allDayEvents->filter(fn(Event $event) => $event->resourceId === $resourceId)
-        );
+        if ($resourceId === null) {
+            return $this;
+        } else {
+            return new static(
+                $this->timedEvents->filter(fn(Event $event) => $event->resourceId === $resourceId),
+                $this->allDayEvents->filter(fn(Event $event) => $event->resourceId === $resourceId)
+            );
+        }
     }
 
     /**

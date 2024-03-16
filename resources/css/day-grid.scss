@@ -1,33 +1,8 @@
 @tailwind base;
 
-.gc-day-grid-cursor-w-resize {
-  * {
-    cursor: w-resize !important;
-  }
-}
-
-.gc-day-grid-cursor-e-resize {
-  * {
-    cursor: e-resize !important;
-  }
-}
-
 .gc-day-grid {
   .gc-day {
     @apply aspect-[5/3];
-    .gc-all-day-events {
-      .gc-all-day-event-container.gc-start {
-        .gc-all-day-event .gc-head {
-          @apply absolute left-0 h-4 w-2 cursor-w-resize;
-        }
-      }
-
-      .gc-all-day-event-container.gc-end {
-        .gc-all-day-event .gc-tail {
-          @apply absolute right-0 h-full w-2 cursor-e-resize;
-        }
-      }
-    }
   }
 }
 
@@ -52,6 +27,14 @@
 
     .gc-all-day-event-container {
       width: 100% !important;
+
+      .gc-all-day-event .gc-head {
+        @apply hidden;
+      }
+
+      .gc-all-day-event .gc-tail {
+        @apply hidden;
+      }
     }
   }
 }
@@ -80,16 +63,12 @@
       .gc-date {
         @apply grow px-1;
       }
-
-      .gc-label {
-      }
     }
 
     .gc-day-body {
       @apply relative text-xs;
 
-      .gc-all-day-events,
-      .gc-all-day-event-preview {
+      .gc-all-day-events {
         @apply absolute top-0;
       }
 
@@ -124,18 +103,6 @@
         }
       }
     }
-  }
-
-  .gc-day.gc-today {
-    @apply bg-sky-50 dark:bg-gray-950;
-  }
-
-  .gc-day.gc-disabled {
-    @apply cursor-default bg-gray-100 dark:bg-gray-900;
-  }
-
-  .gc-day.gc-selected {
-    @apply bg-amber-50 dark:bg-amber-800;
   }
 
   .gc-day:first-child {

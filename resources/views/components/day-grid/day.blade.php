@@ -12,7 +12,7 @@
         <div class="gc-label"></div>
     </div>
     <div class="gc-day-body">
-        <x-green-calendar::day-grid.all-day-events
+        <x-green-calendar::all-day-events
             :calendar="$calendar"
             :date="$date"
             :period="$period"

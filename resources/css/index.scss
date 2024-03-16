@@ -8,3 +8,28 @@
 .gc-hidden {
   display: none !important;
 }
+
+.gc-day.gc-today {
+  @apply bg-sky-50 dark:bg-gray-950;
+}
+
+.gc-day.gc-disabled {
+  @apply cursor-default bg-gray-100 dark:bg-gray-900;
+}
+
+.gc-day.gc-selected,
+.gc-slot.gc-selected {
+  @apply bg-amber-50 dark:bg-amber-800;
+}
+
+.gc-cursor-w-resize {
+  * {
+    cursor: w-resize !important;
+  }
+}
+
+.gc-cursor-e-resize {
+  * {
+    cursor: e-resize !important;
+  }
+}

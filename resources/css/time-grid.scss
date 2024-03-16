@@ -39,6 +39,10 @@
         .gc-all-day-event-preview {
           @apply min-h-6 py-0.5;
         }
+
+        .gc-all-day-event-preview {
+          @apply absolute top-0;
+        }
       }
     }
 
@@ -65,23 +69,49 @@
           .gc-hour {
             @apply divide-y divide-dotted;
             .gc-slot {
-              @apply h-8;
+              @apply relative h-8;
             }
           }
         }
       }
 
-      .gc-timed-events {
+      .gc-timed-events,
+      .gc-timed-event-preview {
         @apply relative h-full;
         .gc-timed-event-container {
-          @apply absolute top-0 p-0.5;
+          @apply absolute top-0 p-0.5 z-10;
           left: var(--gc-timed-event-left);
           width: var(--gc-timed-event-width);
           height: var(--gc-timed-event-height);
 
           .gc-timed-event {
-            @apply bg-primary-200 h-full p-1 border-primary-400 rounded overflow-hidden;
+            @apply h-full overflow-hidden rounded border-primary-400 bg-primary-200 p-1 cursor-pointer;
+            .gc-head {
+              @apply absolute top-0 h-2 w-full cursor-n-resize;
+            }
+
+            .gc-tail {
+              @apply absolute bottom-0 w-full h-2 cursor-s-resize;
+            }
           }
+        }
+
+        .gc-timed-event-container.gc-dragging {
+          @apply invisible;
+        }
+
+        .gc-timed-event-container.gc-hover {
+          .gc-all-day-event {
+            @apply bg-custom-500;
+          }
+        }
+      }
+
+      .gc-timed-event-preview {
+        @apply absolute top-0 w-full h-full;
+        .gc-timed-event-container {
+          @apply left-0 w-full;
+          height: var(--gc-timed-event-height);
         }
       }
     }

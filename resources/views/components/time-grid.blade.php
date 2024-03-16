@@ -2,6 +2,14 @@
 <div ax-load
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('time-grid', 'kobesoft/green-calendar') }}"
      x-data="timeGrid()"
+     @click="onClick"
+     @mousedown="onMouseDown"
+     @mouseup="onMouseUp"
+     @mouseup.away="onMouseUp"
+     @mousemove.throttle.100ms="onMouseMove"
+     @mousemove.away.throttle.100ms="onMouseMove"
+     @mouseover="onMouseOver"
+     @mouseover.away="onMouseOver"
      class="gc-time-grid"
 >
     <div class="gc-header">

@@ -1,6 +1,18 @@
 @tailwind base;
 
 .gc-all-day-events {
+  .gc-all-day-event-container.gc-start {
+    .gc-all-day-event .gc-head {
+      @apply absolute left-0 h-4 w-2 cursor-w-resize;
+    }
+  }
+
+  .gc-all-day-event-container.gc-end {
+    .gc-all-day-event .gc-tail {
+      @apply absolute right-0 h-full w-2 cursor-e-resize;
+    }
+  }
+
   .gc-all-day-event-container.gc-dragging {
     @apply invisible;
   }
@@ -70,6 +82,7 @@
 }
 
 .gc-all-day-event-preview {
+  @apply absolute top-0;
   .gc-all-day-event-container {
     .gc-all-day-event {
       @apply z-20 bg-custom-500 shadow-lg ring-2 ring-gray-300 dark:ring-gray-600;

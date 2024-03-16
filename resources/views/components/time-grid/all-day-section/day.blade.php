@@ -1,15 +1,20 @@
-@props(['calendar', 'period', 'column', 'events'])
+@props(['calendar', 'period', 'date', 'resourceId', 'events'])
 @php
-    $allDayEvents = $events->getAllDayEventsOn($column->date)->keyBy('position');
+    $allDayEvents = $events
+        ->getAllDayEventsOn($date)
+        ->when($resourceId, function ($timedEvents) use ($resourceId) {
+            return $timedEvents->where('resourceId', $resourceId);
+        })
+        ->keyBy('position');
     $maxPosition = $allDayEvents->max('position') ?? -1;
 @endphp
 <div
     class="gc-day"
-    data-date="{{$column->date->toDateString()}}"
+    data-date="{{$date->toDateString()}}"
 >
-    <x-green-calendar::time-grid.all-day-section.all-day-events
+    <x-green-calendar::all-day-events
         :calendar="$calendar"
-        :date="$column->date"
+        :date="$date"
         :period="$period"
         :allDayEvents="$allDayEvents"
         :maxPosition="$maxPosition"

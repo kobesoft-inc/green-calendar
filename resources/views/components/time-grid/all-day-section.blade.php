@@ -7,7 +7,8 @@
             <x-green-calendar::time-grid.all-day-section.day
                 :calendar="$calendar"
                 :period="$period"
-                :column="$column"
+                :date="$column->date"
+                :resourceId="$column->resourceId"
                 :events="$events"
             />
         @endforeach
