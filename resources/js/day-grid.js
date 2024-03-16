@@ -1,164 +1,86 @@
-import popup from './modules/day-grid-popup'
-import selector from './modules/selector'
-import timedEvent from './modules/day-grid-timed-event'
-import allDayEvent from './modules/all-day-event'
+import DayGridLimit from "./modules/DayGridLimit";
+import DateTimeSelector from './modules/DateTimeSelector'
+import DayGridPopup from './modules/DayGridPopup'
+import AllDayEvent from "./modules/AllDayEvent.js";
+import DayGridTimedEvent from "./modules/DayGridTimedEvent.js";
 
 export default function dayGrid(componentParameters) {
     return {
         /**
-         * ポップアップに関する処理
+         * 表示件数を制限するコンポーネント
          */
-        popup: popup(this.$el, componentParameters),
+        dayGridLimit: DayGridLimit,
+
+        /**
+         * ポップアップに関するコンポーネント
+         */
+        dayGridPopup: DayGridPopup,
 
         /**
          * 日付のセレクター
          */
-        dateSelector: selector(this.$el, '.gc-day-grid', '.gc-day', 'date'),
+        dateSelector: DateTimeSelector,
 
         /**
          * 時間指定の予定に関する処理
          */
-        timedEvent: timedEvent(this.$el, '.gc-day-grid'),
+        timedEvent: DayGridTimedEvent,
 
         /**
          * 終日の予定に関する処理
          */
-        allDayEvent: allDayEvent(this.$el, '.gc-day-grid'),
+        allDayEvent: AllDayEvent,
 
         /**
          * カレンダーの初期化
          */
         init() {
-            this.popup.updateLayout()
-            this.dateSelector.onSelect = (start, end) => {
-                this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59')
-            }
+            // ポップアップに関する処理
+            this.dayGridPopup = new DayGridPopup(this.$el);
 
-            // 時間指定の初期化
-            //this.timedEvent.init()
-            this.timedEvent.onEvent = (key) => {
-                this.$wire.onEvent(key)
-            }
-            this.timedEvent.onMove = (key, start, end) => {
-                this.$wire.onMove(key, start, end)
-            }
+            // 表示数を制限するコンポーネントに関する処理
+            this.dayGridLimit = new DayGridLimit(this.$el)
+                .setLocalizedRemainingText(componentParameters.remaining)
+                .onRemainingTextClick((elDay) => this.dayGridPopup.open(elDay));
 
-            // 終日予定の初期化
-            this.allDayEvent.init()
-            this.allDayEvent.onEvent = (key) => {
-                this.$wire.onEvent(key)
-            }
-            this.allDayEvent.onMove = (key, start, end) => {
-                this.$wire.onMove(key, start, end)
-            }
+            // 日付のセレクターに関する処理
+            this.dateSelector = new DateTimeSelector(this.$el)
+                .setContainerSelector('.gc-day-grid')
+                .setElementSelector('.gc-day')
+                .setPropertyName('date')
+                .onSelect((start, end) => {
+                    this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59')
+                });
 
-            // ウィンドウのリサイズイベント
+            // 終日の予定に関する処理
+            this.allDayEvent = new AllDayEvent(this.$el, this.dateSelector)
+                .setContainerSelector('.gc-day-grid')
+                .onMove((key, start, end) => {
+                    this.$wire.onMove(key, start, end)
+                })
+                .onEvent((key) => {
+                    this.$wire.onEvent(key)
+                });
+
+            // 時間指定の予定に関する処理
+            this.timedEvent = new DayGridTimedEvent(this.$el, this.dateSelector, this)
+                .onEvent((key) => {
+                    this.$wire.onEvent(key)
+                })
+                .onMove((key, start, end) => {
+                    this.$wire.onMove(key, start, end)
+                });
+
+            // コールバックの登録
+            this.dayGridPopup.registerCallbacks();
+            this.allDayEvent.registerCallbacks();
+            this.timedEvent.registerCallbacks();
+            this.dateSelector.registerCallbacks();
+
+            // Livewireからの強制更新イベントの処理
             Livewire.on('refreshCalendar', () => {
-                this.$nextTick(() => this.popup.updateLayout(true))
+                this.$nextTick(() => this.dayGridLimit.updateLayout(true))
             })
-        },
-
-        /**
-         * ウィンドウのリサイズイベント
-         * @param $event {Event} イベント
-         */
-        onResize($event) {
-            this.popup.updateLayout()
-        },
-
-        /**
-         * クリックイベント
-         * @param $event {Event} クリックイベント
-         */
-        onClick($event) {
-            const elDay = $event.target.closest('.gc-day')
-            if (this.popup.hitRemaining($event.target)) {
-                this.popup.openPopup(elDay)
-            } else if (elDay && elDay.classList.contains('gc-disabled')) {
-                // 無効な日をクリックした場合
-            } else if (this.timedEvent.onClick($event)) {
-                // 予定をクリックした場合
-            } else {
-                // その他の場合
-                this.popup.closePopup()
-            }
-        },
-
-        /**
-         * マウスが押された時のイベント
-         * @param $event {MouseEvent} イベント
-         */
-        onMouseDown($event) {
-            if (this.popup.hitRemaining($event.target)) {
-            } else if (this.timedEvent.findEventKeyAtElement($event.target)) {
-            } else if (this.allDayEvent.onMouseDown($event)) {
-            } else {
-                this.dateSelector.onMouseDown($event)
-            }
-        },
-
-        /**
-         * マウスが移動した時のイベント
-         * @param $event {MouseEvent} イベント
-         */
-        onMouseMove($event) {
-            if (this.allDayEvent.onMouseMove($event)) {
-            } else if (this.dateSelector.onMouseMove($event)) {
-            }
-        },
-
-        /**
-         * マウスが離された時のイベント
-         * @param $event {MouseEvent} イベント
-         */
-        onMouseUp($event) {
-            if (this.allDayEvent.onMouseUp($event)) {
-            } else if (this.dateSelector.onMouseUp($event)) {
-            }
-        },
-
-        /**
-         * マウスが要素に乗った時のイベント
-         * @param $event {MouseEvent} イベント
-         */
-        onMouseOver($event) {
-            if (!this.dateSelector.selectionStart) {
-                this.allDayEvent.onMouseOver($event)
-            }
-        },
-
-        /**
-         * ドラッグイベント
-         * @param $event {DragEvent} イベント
-         */
-        onDragStart($event) {
-            if (this.timedEvent.onDragStart($event)) {
-                this.$nextTick(() => this.timedEvent.addDraggingClass())
-            }
-        },
-
-        /**
-         * ドラッグ中の要素が要素に乗った時のイベント
-         * @param $event
-         */
-        onDragOver($event) {
-            this.timedEvent.onDragOver($event)
-        },
-
-        /**
-         * ドロップイベント
-         * @param $event {DragEvent} イベント
-         */
-        onDrop($event) {
-            this.timedEvent.onDrop($event)
-        },
-
-        /**
-         * ドラッグ中の要素が要素から外れた時のイベント
-         * @param $event
-         */
-        onDragEnd($event) {
-            this.timedEvent.onDragEnd($event)
         },
     }
 }
