@@ -1,4 +1,4 @@
-import DateTimeSelector from './DateTimeSelector'
+import Selector from './Selector'
 import DateUtils from "./DateUtils";
 
 export default class DayGridTimedEvent {
@@ -11,7 +11,7 @@ export default class DayGridTimedEvent {
     /**
      * 日付のセレクター
      */
-    private _dateSelector: DateTimeSelector;
+    private _dateSelector: Selector;
 
     /**
      * Alpine.jsのインスタンス
@@ -39,7 +39,7 @@ export default class DayGridTimedEvent {
      * @param dateSelector
      * @param alpine
      */
-    constructor(root: HTMLElement, dateSelector: DateTimeSelector, alpine: any) {
+    constructor(root: HTMLElement, dateSelector: Selector, alpine: any) {
         this._root = root;
         this._dateSelector = dateSelector;
         this._alpine = alpine;
@@ -129,7 +129,7 @@ export default class DayGridTimedEvent {
      * @returns {boolean} イベントが処理されたかどうか
      */
     private _onDragOver(e: DragEvent): void {
-        const date = this._dateSelector.pickDateTimeByPosition(e.x, e.y)
+        const date = this._dateSelector.pickValueByPosition(e.x, e.y)
         if (date) {
             this._dateSelector.select(date);
             e.preventDefault();
@@ -143,7 +143,7 @@ export default class DayGridTimedEvent {
      */
     private _onDrop(e: DragEvent): void {
         // ドロップ処理を実行
-        const date = this._dateSelector.pickDateTimeByPosition(e.x, e.y);
+        const date = this._dateSelector.pickValueByPosition(e.x, e.y);
         const key = e.dataTransfer.getData('text/plain');
         if (date) {
             const days = DateUtils.diffDays(this._dragging.dataset.start, date);

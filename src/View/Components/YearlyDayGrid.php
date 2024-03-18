@@ -100,10 +100,9 @@ class YearlyDayGrid extends Component implements CalendarView
      */
     public function render(): View
     {
-        $period = $this->getPeriod();
         return view($this->view, [
             'calendar' => $this->calendar,
-            'period' => $period,
+            'period' => $this->calendar->getPeriod(),
             'events' => $this->calendar->getEvents(),
             'componentParameters' => $this->componentParameters(),
         ]);

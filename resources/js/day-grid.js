@@ -1,5 +1,5 @@
 import DayGridLimit from "./modules/DayGridLimit";
-import DateTimeSelector from './modules/DateTimeSelector'
+import Selector from './modules/Selector.js'
 import DayGridPopup from './modules/DayGridPopup'
 import AllDayEvent from "./modules/AllDayEvent.js";
 import DayGridTimedEvent from "./modules/DayGridTimedEvent.js";
@@ -19,7 +19,7 @@ export default function dayGrid(componentParameters) {
         /**
          * 日付のセレクター
          */
-        dateSelector: DateTimeSelector,
+        dateSelector: Selector,
 
         /**
          * 時間指定の予定に関する処理
@@ -44,12 +44,12 @@ export default function dayGrid(componentParameters) {
                 .onRemainingTextClick((elDay) => this.dayGridPopup.open(elDay));
 
             // 日付のセレクターに関する処理
-            this.dateSelector = new DateTimeSelector(this.$el)
+            this.dateSelector = new Selector(this.$el)
                 .setContainerSelector('.gc-day-grid')
                 .setElementSelector('.gc-day')
                 .setPropertyName('date')
-                .onSelect((start, end) => {
-                    this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59')
+                .onSelect((start, end, resourceId) => {
+                    this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59', resourceId)
                 });
 
             // 終日の予定に関する処理

@@ -1,4 +1,4 @@
-import DateTimeSelector from "./DateTimeSelector";
+import Selector from "./Selector";
 import Resizer from "./Resizer";
 import DateUtils from "./DateUtils";
 
@@ -18,7 +18,7 @@ export default class AllDayEvent {
     /**
      * 日付セレクター
      */
-    protected _dateSelector: DateTimeSelector = null;
+    protected _dateSelector: Selector = null;
 
     /**
      * リサイザー
@@ -45,7 +45,7 @@ export default class AllDayEvent {
      * @param root ルート要素。イベントを登録するための要素。
      * @param dateSelector
      */
-    constructor(root: HTMLElement, dateSelector: DateTimeSelector) {
+    constructor(root: HTMLElement, dateSelector: Selector) {
         this._root = root;
         this._dateSelector = dateSelector;
         this.init();

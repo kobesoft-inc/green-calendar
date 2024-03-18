@@ -82,7 +82,7 @@ class ResourceTimeline extends Component implements CalendarView
         return view($this->view, [
             'calendar' => $this->calendar,
             'timeSlots' => $this->getTimeSlots(),
-            'period' => $this->getPeriod(),
+            'period' => $this->calendar->getPeriod(),
             'events' => $this->calendar->getEvents(),
             'resources' => $this->calendar->getResources(),
         ]);

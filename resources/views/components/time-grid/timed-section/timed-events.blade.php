@@ -4,17 +4,14 @@
     @foreach($timedEvents as $event)
         @php
             // 時間指定の予定のCSS変数
-            $w = 1.0 / $event->division;
-            $x = $event->position * $w;
-            $h = $event->timeSlotSpan;
-            $timedEventVariables =
-                '--gc-timed-event-left: ' . (100 * $x) . '%;' .
-                '--gc-timed-event-width: ' . (100 * $w) . '%;' .
-                '--gc-timed-event-height: ' . (100 * $h) . '%;';
+            $variables =
+                '--gc-position: ' . (100 * $event->position/ $event->division) . '%;' .
+                '--gc-width: ' . (100 / $event->division) . '%;' .
+                '--gc-span: calc(' . (100 * $event->timeSlotSpan) . '% + ' . ($event->timeSlotSpan - 1) . 'px);';
         @endphp
         <div
             class="gc-timed-event-container"
-            @style([$timedEventVariables])
+            @style([$variables])
             data-key="{{$event->model->getKey()}}"
             data-start="{{$event->start->toDateTimeString()}}"
             data-end="{{$event->end->toDateTimeString()}}"

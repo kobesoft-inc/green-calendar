@@ -5,15 +5,16 @@
     $timedEvents = $events
         ->between($period)
         ->whereResource($resourceId)
-        ->withTimeSlotLayout($timeSlots, $period)
+        ->withTimeGrid($timeSlots, $period)
         ->getTimedEvents()
-        ->groupBy('timeSlotIndex');
+        ->groupBy('timeSlot');
 @endphp
 <div
     class="gc-day"
     data-date="{{$date->toDateString()}}"
-    data-start-time="{{$period->start->format('Y-m-d H:i')}}"
-    data-end-time="{{$period->end->format('Y-m-d H:i')}}"
+    data-start="{{$period->start->format('Y-m-d H:i')}}"
+    data-end="{{$period->end->format('Y-m-d H:i')}}"
+    data-interval="{{$timeSlots->getIntervalSeconds()}}"
     data-resource-id="{{$resourceId}}"
 >
     @foreach($timeSlots->getHours() as $hourIndex => $hour)
@@ -24,11 +25,13 @@
                     data-time="{{$timeSlot->start->setDateFrom($date)->format('Y-m-d H:i')}}"
                     data-time-end="{{$timeSlot->end->setDateFrom($date)->format('Y-m-d H:i')}}"
                 >
-                    <x-green-calendar::time-grid.timed-section.timed-events
-                        :calendar="$calendar"
-                        :timedEvents="$timedEvents->get($timeSlotIndex, collect())"
-                    />
-                    @php($timeSlotIndex++)
+                    <div class="gc-slot-content">
+                        <x-green-calendar::time-grid.timed-section.timed-events
+                            :calendar="$calendar"
+                            :timedEvents="$timedEvents->get($timeSlotIndex, collect())"
+                        />
+                        @php($timeSlotIndex++)
+                    </div>
                 </div>
             @endforeach
         </div>

@@ -1,6 +1,7 @@
 .gc-timeline {
+  @apply select-none;
   .gc-body {
-    @apply flex divide-x overflow-hidden rounded-lg border bg-white text-sm dark:bg-gray-900;
+    @apply flex divide-x overflow-hidden rounded-lg border text-xs;
     .gc-resources {
       width: 20em;
 
@@ -16,15 +17,15 @@
       }
 
       .gc-resource {
-        @apply flex items-center px-2 py-1;
+        @apply flex items-center px-2 py-1 min-h-8;
       }
     }
 
     .gc-main {
-      @apply relative overflow-x-scroll;
+      @apply relative overflow-x-scroll bg-white dark:bg-gray-900;
 
       .gc-time-slot-lines {
-        @apply flex h-full divide-x;
+        @apply absolute flex h-full divide-x z-10;
 
         .gc-month {
           @apply flex h-full divide-x;
@@ -45,7 +46,7 @@
 
       .gc-time-slot-heading {
         .gc-months {
-          @apply flex h-full;
+          @apply flex h-full divide-x;
           .gc-month {
             @apply h-full bg-gray-50 dark:bg-gray-900;
             .gc-month-text {
@@ -70,11 +71,11 @@
             @apply h-full;
             .gc-hour-text-container {
               @apply flex h-8 items-end border-b;
-              margin-left: -1em;
+              margin-left: -0.5em;
 
               .gc-hour-text {
                 @apply flex justify-center;
-                width: 2em;
+                width: 1em;
               }
             }
           }
@@ -98,6 +99,24 @@
 
       .gc-events {
         @apply divide-y;
+        .gc-resource {
+          @apply min-h-8 relative z-30;
+          .gc-spacer {
+            @apply h-5;
+          }
+
+          .gc-all-day-event-container {
+            @apply absolute;
+          }
+        }
+      }
+
+      .gc-selection-container {
+        @apply absolute top-0 left-0 w-full h-full;
+
+        .gc-selection {
+          @apply relative h-full bg-amber-50 dark:bg-amber-800 top-0;
+        }
       }
     }
   }

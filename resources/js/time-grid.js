@@ -1,4 +1,4 @@
-import DateTimeSelector from "./modules/DateTimeSelector.js";
+import Selector from "./modules/Selector.ts";
 import AllDayEvent from "./modules/AllDayEvent.js";
 import TimedGridTimedEvent from "./modules/TimedGridTimedEvent.js";
 
@@ -7,12 +7,12 @@ export default function TimeGrid() {
         /**
          * 日付のセレクター
          */
-        dateSelector: DateTimeSelector,//selector(this.$el, '.gc-time-grid', '.gc-day', 'date'),
+        dateSelector: Selector,//selector(this.$el, '.gc-time-grid', '.gc-day', 'date'),
 
         /**
          * 時間のセレクター
          */
-        timeSelector: DateTimeSelector,//selector(this.$el, '.gc-time-grid', '.gc-slot', 'time'),
+        timeSelector: Selector,//selector(this.$el, '.gc-time-grid', '.gc-slot', 'time'),
 
         /**
          * 終日予定
@@ -28,19 +28,19 @@ export default function TimeGrid() {
          * カレンダーの初期化
          */
         init() {
-            this.dateSelector = new DateTimeSelector(this.$el)
+            this.dateSelector = new Selector(this.$el)
                 .setContainerSelector('.gc-all-day-section')
                 .setElementSelector('.gc-day')
                 .setPropertyName('date')
-                .onSelect((start, end) => {
-                    this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59')
+                .onSelect((start, end, resourceId) => {
+                    this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59', resourceId)
                 });
-            this.timeSelector = new DateTimeSelector(this.$el)
+            this.timeSelector = new Selector(this.$el)
                 .setContainerSelector('.gc-timed-section')
                 .setElementSelector('.gc-slot')
                 .setPropertyName('time')
-                .onSelect((start, end) => {
-                    this.$wire.onDate(start, this.timeSelector.getElementByDateTime(end).dataset.timeEnd)
+                .onSelect((start, end, resourceId) => {
+                    this.$wire.onDate(start, this.timeSelector.getElementByValue(end).dataset.timeEnd, resourceId)
                 });
             this.allDayEvent = new AllDayEvent(this.$el, this.dateSelector)
                 .setContainerSelector('.gc-all-day-section')

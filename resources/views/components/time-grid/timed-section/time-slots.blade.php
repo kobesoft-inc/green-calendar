@@ -5,9 +5,11 @@
             <div class="gc-hour">
                 @foreach($hour['minutes'] as $minuteIndex => $timeSlot)
                     <div class="gc-slot">
-                        @if ($hourIndex && !$minuteIndex)
-                            {{$timeSlot->start->hour}}
-                        @endif
+                        <div class="gc-slot-content">
+                            @if ($hourIndex && !$minuteIndex)
+                                {{$timeSlot->start->hour}}
+                            @endif
+                        </div>
                     </div>
                 @endforeach
             </div>

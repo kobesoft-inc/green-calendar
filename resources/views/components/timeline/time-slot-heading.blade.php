@@ -16,7 +16,7 @@
                             <div class="gc-hours">
                                 @foreach ($day['hours'] as $hourIndex => $hour)
                                     <div class="gc-hour">
-                                        @if(count($day['hours'])> 1)
+                                        @if(count($day['hours'])> 2)
                                             <div class="gc-hour-text-container">
                                                 <div class="gc-hour-text">
                                                     @if($hourIndex !== 0)

@@ -69,4 +69,11 @@ export default class DateUtils {
         const end = end1 <= end2 ? end1 : end2
         return start <= end ? [start, end] : [null, null]
     }
+
+    /**
+     * 開始時間、時間、時間間隔を渡し、何番目かを返す
+     */
+    public static timeSlot(start: string, end: string, interval: string, time: string): number {
+        return Math.floor((Date.parse(time > end ? end : time) - Date.parse(start)) / parseInt(interval) / 1000);
+    }
 }

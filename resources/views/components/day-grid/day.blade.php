@@ -1,9 +1,16 @@
 @props(['calendar', 'date', 'period', 'timedEvents', 'allDayEvents', 'maxPosition'])
+@php
+    $disabled = !$period->contains($date);
+    if ($disabled) { // 期間外の日付の場合は、予定を表示しない
+        $maxPosition = -1;
+        $timedEvents = $allDayEvents = collect();
+    }
+@endphp
 <div
     @class([
         'gc-day',
         'gc-today' => $date->isToday(),
-        'gc-disabled' => !$period->contains($date),
+        'gc-disabled' => $disabled,
     ])
     data-date="{{$date->toDateString()}}"
 >

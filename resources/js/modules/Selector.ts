@@ -3,7 +3,7 @@
  *
  * カレンダーの日付・時間の選択機能を提供するために、マウスの操作による選択範囲の指定を行う。
  */
-export default class DateTimeSelector {
+export default class Selector {
     /**
      * ルート要素
      * @private
@@ -41,10 +41,21 @@ export default class DateTimeSelector {
     private _selectionEnd: string = null;
 
     /**
+     * 選択対象の要素のリソースID
+     * @private
+     */
+    private _resourceId: string = null;
+
+    /**
+     * 選択範囲を描画するコールバック
+     */
+    private _onDraw: (begin: string, end: string, resourceId: string) => void = null;
+
+    /**
      * 選択範囲が変更された時のコールバック
      * @private
      */
-    private _onSelect: (begin: string, end: string) => void = null;
+    private _onSelect: (begin: string, end: string, resourceId: string) => void = null;
 
     /**
      * コンストラクタ
@@ -67,7 +78,7 @@ export default class DateTimeSelector {
      * 選択対象の要素を全て含むセレクタを設定する。
      * @param containerSelector
      */
-    public setContainerSelector(containerSelector: string): DateTimeSelector {
+    public setContainerSelector(containerSelector: string): Selector {
         this._containerSelector = containerSelector;
         return this;
     }
@@ -76,7 +87,7 @@ export default class DateTimeSelector {
      * 選択対象の要素のセレクタを設定する。
      * @param elementSelector
      */
-    public setElementSelector(elementSelector: string): DateTimeSelector {
+    public setElementSelector(elementSelector: string): Selector {
         this._elementSelector = elementSelector;
         return this;
     }
@@ -85,8 +96,17 @@ export default class DateTimeSelector {
      * 選択対象の要素の日付・時間を持つプロパティ名を設定する。(data-dateなら、date)
      * @param propertyName
      */
-    public setPropertyName(propertyName: string): DateTimeSelector {
+    public setPropertyName(propertyName: string): Selector {
         this._propertyName = propertyName;
+        return this;
+    }
+
+    /**
+     * 選択範囲を描画するコールバックを設定する。
+     * @param onDraw
+     */
+    public onDraw(onDraw: (begin: string, end: string, resourceId: string) => void): Selector {
+        this._onDraw = onDraw;
         return this;
     }
 
@@ -94,27 +114,27 @@ export default class DateTimeSelector {
      * 選択範囲が変更された時のコールバックを設定する。
      * @param onSelect
      */
-    public onSelect(onSelect: (begin: string, end: string) => void): DateTimeSelector {
+    public onSelect(onSelect: (begin: string, end: string) => void): Selector {
         this._onSelect = onSelect;
         return this;
     }
 
     /**
      * 選択範囲の開始位置を設定する。
-     * @param dateTime 日付・時間
+     * @param value 日付・時間
      */
-    public select(dateTime: string): DateTimeSelector {
-        this._selectionStart = this._selectionEnd = dateTime;
+    public select(value: string): Selector {
+        this._selectionStart = this._selectionEnd = value;
         this.update();
         return this;
     }
 
     /**
      * 選択範囲の終了位置を設定する。
-     * @param dateTime 日付・時間
+     * @param value 日付・時間
      */
-    public selectEnd(dateTime: string): DateTimeSelector {
-        this._selectionEnd = dateTime;
+    public selectEnd(value: string): Selector {
+        this._selectionEnd = value;
         this.update();
         return this;
     }
@@ -147,9 +167,10 @@ export default class DateTimeSelector {
      * @param e
      */
     private _mouseDown(e: MouseEvent): void {
-        const dateTime = this.pickDateTime(e.target as HTMLElement);
-        if (dateTime) {
-            this.select(dateTime);
+        const value = this.pickValueByPosition(e.x, e.y);
+        if (value) {
+            this._resourceId = this.pickResourceId(e.target as HTMLElement);
+            this.select(value);
             e.stopImmediatePropagation();
         }
     }
@@ -159,9 +180,9 @@ export default class DateTimeSelector {
      * @param e
      */
     private _mouseMove(e: MouseEvent): void {
-        const dateTime = this.pickDateTimeByPosition(e.x, e.y);
-        if (dateTime) {
-            this.selectEnd(dateTime);
+        const value = this.pickValueByPosition(e.x, e.y);
+        if (value) {
+            this.selectEnd(value);
             e.stopImmediatePropagation();
         }
     }
@@ -172,11 +193,11 @@ export default class DateTimeSelector {
      */
     private _mouseUp(e: MouseEvent): void {
         if (this.isSelected()) {
-            const dateTime = this.pickDateTimeByPosition(e.x, e.y);
-            if (dateTime) {
+            const value = this.pickValueByPosition(e.x, e.y);
+            if (value) {
                 if (this._onSelect) {
                     const [start, end] = this.getSelection();
-                    this._onSelect(start, end);
+                    this._onSelect(start, end, this._resourceId);
                 }
                 this.deselect();
             }
@@ -189,10 +210,22 @@ export default class DateTimeSelector {
      * @param el 要素
      * @returns {string} 日付・時間
      */
-    public pickDateTime(el: Element): string {
+    public pickValue(el: Element): string {
         return this._root.contains(el) && el.closest(this._containerSelector)
             ? el.closest(this._elementSelector + ':not(.disabled)') // @ts-ignore
                 ?.dataset[this._propertyName]
+            : null;
+    }
+
+    /**
+     * 指定された要素から、リソースIDの要素を探す。
+     * @param el 要素
+     * @returns {string} リソースID
+     */
+    public pickResourceId(el: Element): string {
+        return this._root.contains(el) && el.closest(this._containerSelector)
+            // @ts-ignore
+            ? el.closest('[data-resource-id]')?.dataset['resourceId'] ?? null
             : null;
     }
 
@@ -202,7 +235,7 @@ export default class DateTimeSelector {
      * @param y Y座標
      * @returns {string} 日付・時間
      */
-    public pickDateTimeByPosition(x: number, y: number): string {
+    public pickValueByPosition(x: number, y: number): string {
         // @ts-ignore
         return Array.from(this._root.querySelectorAll(this._containerSelector + ' ' + this._elementSelector))
             .filter((el: HTMLElement) => {
@@ -214,12 +247,12 @@ export default class DateTimeSelector {
 
     /**
      * 指定された日付・時間の要素を探す。
-     * @param dateTime 日付・時間
+     * @param value 日付・時間
      * @returns {HTMLElement} 要素
      */
-    public getElementByDateTime(dateTime: string): HTMLElement {
+    public getElementByValue(value: string): HTMLElement {
         return this._root.querySelector(this._containerSelector + ' ' + this._elementSelector +
-            '[data-' + this._propertyName + '="' + dateTime + '"]'
+            '[data-' + this._propertyName + '="' + value + '"]'
         );
     }
 
@@ -227,16 +260,23 @@ export default class DateTimeSelector {
      * 日時の選択範囲の表示を更新する。
      */
     private update() {
-        let [begin, end] = [this._selectionStart, this._selectionEnd].sort();
-        this._root.querySelectorAll(this._containerSelector + ' ' + this._elementSelector)
-            .forEach(el => {
-                // @ts-ignore
-                const dateTime = el.dataset[this._propertyName]
-                if (begin <= dateTime && dateTime <= end) {
-                    el.classList.add('gc-selected')
-                } else {
-                    el.classList.remove('gc-selected')
-                }
-            });
+        if (this._onDraw) { // 描画をコールバックで行う
+            const [begin, end] = this.getSelection();
+            return this._onDraw(begin, end, this._resourceId);
+        }
+        let [begin, end] = this.getSelection();
+        this._root.querySelectorAll(
+            this._containerSelector +
+            (this._resourceId !== null ? ' [data-resource-id="' + this._resourceId + '"] ' : ' ') +
+            this._elementSelector
+        ).forEach(el => {
+            // @ts-ignore
+            const value = el.dataset[this._propertyName]
+            if (begin <= value && value <= end) {
+                el.classList.add('gc-selected')
+            } else {
+                el.classList.remove('gc-selected')
+            }
+        });
     }
 }

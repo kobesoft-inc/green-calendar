@@ -1,4 +1,4 @@
-import DateTimeSelector from "./DateTimeSelector";
+import Selector from "./Selector";
 import Resizer from "./Resizer";
 import DateUtils from "./DateUtils";
 
@@ -17,7 +17,7 @@ export default class TimedGridTimedEvent {
     /**
      * 時間のセレクター
      */
-    private _timeSelector: DateTimeSelector = null;
+    private _timeSelector: Selector = null;
 
     /**
      * 時間のリサイザー
@@ -44,7 +44,7 @@ export default class TimedGridTimedEvent {
      * @param root ルート要素。イベントを登録するための要素。
      * @param timeSelector
      */
-    constructor(root: HTMLElement, timeSelector: DateTimeSelector) {
+    constructor(root: HTMLElement, timeSelector: Selector) {
         this._root = root;
         this._timeSelector = timeSelector;
         this.init();
@@ -169,13 +169,13 @@ export default class TimedGridTimedEvent {
         // @ts-ignore
         Array.from(this._root.querySelectorAll(this._containerSelector + ' .gc-day[data-resource-id="' + resourceId + '"]'))
             .forEach((elDay: HTMLElement) => {
-                const [dayStart, dayEnd] = [elDay.dataset.startTime, elDay.dataset.endTime];
+                const [dayStart, dayEnd] = this.getPeriodOfDay(elDay);
                 if (dayStart && dayEnd) {
                     const [periodStart, periodEnd] = DateUtils.overlapPeriod(eventStart, eventEnd, dayStart, dayEnd);
                     if (periodStart && periodEnd) {
-                        const [slot, height] = this.getSlotAndHeight(elDay, periodStart, periodEnd);
+                        const [slot, span] = this.getSlotPosition(elDay, periodStart, periodEnd);
                         const el = elEvent.cloneNode(true) as HTMLElement;
-                        this.adjustPreview(el, height);
+                        this.adjustPreview(el, span);
                         slot.querySelector('.gc-timed-event-preview').appendChild(el);
                     }
                 }
@@ -186,23 +186,25 @@ export default class TimedGridTimedEvent {
      * 開始スロットと高さを取得
      *
      * @param elDay {HTMLElement} 日付のDOM要素
-     * @param startTime {string} 開始時間
-     * @param endTime {string} 終了時間
+     * @param eventStart {string} 開始時間
+     * @param eventEnd {string} 終了時間
      * @returns {[HTMLElement, number]} 開始スロットと高さ
      */
-    private getSlotAndHeight(elDay: HTMLElement, startTime: string, endTime: string): [HTMLElement, number] {
+    private getSlotPosition(elDay: HTMLElement, eventStart: string, eventEnd: string): [HTMLElement, number] {
+        const [dayStart, dayEnd] = this.getPeriodOfDay(elDay);
+        const start = DateUtils.timeSlot(dayStart, dayEnd, elDay.dataset.interval, eventStart);
+        const end = DateUtils.timeSlot(dayStart, dayEnd, elDay.dataset.interval, eventEnd);
         const slots = elDay.querySelectorAll('.gc-slot') as NodeListOf<HTMLElement>;
-        let startIndex = 0;
-        let endIndex = slots.length;
-        for (let i = 0; i < slots.length; i++) {
-            if (slots[i].dataset.time <= startTime) {
-                startIndex = i;
-            }
-            if (slots[i].dataset.time <= endTime) {
-                endIndex = i;
-            }
-        }
-        return [slots[startIndex], endIndex - startIndex];
+        return [slots[start], end - start];
+    }
+
+    /**
+     * １日の開始日時と終了日時を取得
+     * @param elDay {HTMLElement} 日付のDOM要素
+     * @private
+     */
+    private getPeriodOfDay(elDay: HTMLElement) {
+        return [elDay.dataset.start, elDay.dataset.end];
     }
 
     /**
@@ -212,7 +214,7 @@ export default class TimedGridTimedEvent {
      */
     private adjustPreview(el: HTMLElement, timeSlotHeight: number) {
         el.classList.remove('gc-dragging');
-        el.style.setProperty('--gc-timed-event-height', (timeSlotHeight * 100) + '%');
+        el.style.setProperty('--gc-span', 'calc(' + (timeSlotHeight * 100) + '% + ' + (timeSlotHeight - 1) + 'px)');
         return el
     }
 

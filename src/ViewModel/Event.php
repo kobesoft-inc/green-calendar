@@ -22,7 +22,7 @@ class Event
     /**
      * @var int 時間帯のインデックス
      */
-    public int $timeSlotIndex;
+    public int $timeSlot;
 
     /**
      * @var int 時間帯の表示コマ数
@@ -166,13 +166,17 @@ class Event
      * 時間帯のレイアウトを求め、この予定に設定する
      *
      * @param TimeSlots $timeSlots 時間帯
+     * @param CarbonPeriod $period 期間
      * @return $this
      */
-    public function withTimeSlotLayout(TimeSlots $timeSlots): static
+    public function withTimeSlotLayout(TimeSlots $timeSlots, CarbonPeriod $period): static
     {
-        $end = min($timeSlots->indexOf($this->end->copy()->subSecond()), $timeSlots->count() - 1);
-        $this->timeSlotIndex = max(0, $timeSlots->indexOf($this->start));
-        $this->timeSlotSpan = $end - $this->timeSlotIndex + 1;
+        $this->timeSlot = max(0, $timeSlots->indexOf(max($this->start, $period->start), $period));
+        $end = $timeSlots->indexOf(min($this->end, $period->end), $period);
+        $this->timeSlotSpan = max($end - $this->timeSlot, 1);
+        if ($timeSlots->interval->d == 1) {
+            $this->timeSlotSpan++;
+        }
         return $this;
     }
 

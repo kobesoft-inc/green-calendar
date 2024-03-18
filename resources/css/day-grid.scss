@@ -70,6 +70,10 @@
 
       .gc-all-day-events {
         @apply absolute top-0;
+
+        .gc-all-day-event-container.gc-dragging {
+          @apply invisible;
+        }
       }
 
       .gc-timed-events {

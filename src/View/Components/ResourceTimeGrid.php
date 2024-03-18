@@ -102,7 +102,7 @@ class ResourceTimeGrid extends Component implements CalendarView
         }
         return view($this->view, [
             'calendar' => $this->calendar,
-            'period' => $this->getPeriod(),
+            'period' => $this->calendar->getPeriod(),
             'columns' => $this->getColumns(),
             'timeSlots' => $this->getTimeSlots(),
             'events' => $this->calendar->getEvents(),

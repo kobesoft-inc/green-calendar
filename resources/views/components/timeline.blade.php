@@ -3,6 +3,7 @@
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('timeline', 'kobesoft/green-calendar') }}"
      x-data="timeline()"
      class="gc-timeline"
+     x-cloak
 >
     <div class="gc-header">
         <x-green-calendar::actions :calendar="$calendar"/>
@@ -14,6 +15,7 @@
             :resources="$resources"
         />
         <div style="width:calc(100% - 20em);" class="gc-main">
+            <div class="gc-selection-container"></div>
             <x-green-calendar::timeline.time-slot-lines
                 :timeSlots="$timeSlots"
                 :period="$period"
@@ -24,8 +26,11 @@
                     :period="$period"
                 />
                 <x-green-calendar::timeline.events
-                    :events="$events"
+                    :calendar="$calendar"
                     :resources="$resources"
+                    :timeSlots="$timeSlots"
+                    :period="$period"
+                    :events="$events"
                 />
             </div>
         </div>

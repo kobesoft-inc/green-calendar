@@ -36,7 +36,7 @@ class TimeSlots
         );
         $this->interval = CarbonInterval::make($interval);
         if (!self::isValidInterval($this->interval)) {
-            throw new Exception('Invalid interval');
+            throw new Exception('Invalid interval ' . $this->interval->forHumans());
         }
         return $this;
     }
@@ -143,11 +143,21 @@ class TimeSlots
         while ($time->lt($end)) {
             $minutes->push(CarbonPeriod::between(
                 $time,
-                $time->copy()->addMinutes($intervalMinutes)->min($this->timeRange->end)
+                $time->copy()->addMinutes($intervalMinutes)->min($this->timeRange->end->copy()->setDateFrom($time))
             ));
             $time->addMinutes($intervalMinutes);
         }
         return $minutes->getIterator();
+    }
+
+    /**
+     * 時間帯の分を取得する
+     *
+     * @return int 分
+     */
+    public function getIntervalSeconds(): int
+    {
+        return self::intervalToMinutes($this->interval) * 60;
     }
 
     /**
@@ -158,16 +168,16 @@ class TimeSlots
      */
     protected static function isValidInterval(CarbonInterval $interval): bool
     {
-        if ($interval->years > 0 || $interval->months > 1 || $interval->seconds) {
+        if ($interval->y > 0 || $interval->m > 0 || $interval->d > 1 || $interval->s) {
             return false; // 1ヶ月以上の間隔、秒単位の間隔は無効
         }
-        if ($interval->days > 0 && ($interval->hours > 0 || $interval->minutes > 0)) {
+        if ($interval->d > 0 && ($interval->h > 0 || $interval->i > 0)) {
             return false; // 1日以上の間隔の場合、時間または分単位の間隔は無効
         }
-        if ($interval->hours > 0 && $interval->minutes > 0) {
+        if ($interval->h > 0 && $interval->i > 0) {
             return false; // 1時間以上の間隔の場合、分単位の間隔は無効
         }
-        if ($interval->minutes > 0 && 60 % $interval->minutes !== 0) {
+        if ($interval->i > 0 && 60 % $interval->i !== 0) {
             return false; // 60分で割り切れない場合は無効
         }
         return true;
@@ -200,27 +210,35 @@ class TimeSlots
     }
 
     /**
-     * 指定した日時の時間帯のインデックスを取得する
+     * 指定した日時の日付・時間帯含めたインデックスを取得する
      *
      * @param Carbon $time 日時
-     * @return int 時間帯のインデックス
+     * @return int インデックス
      */
-    public function indexOf(Carbon $time): int
+    public function indexOf(Carbon $time, CarbonPeriod $period): int
     {
-        $minutes = $time->hour * 60 + $time->minute;
-        $minutes -= $this->timeRange->start->hour * 60 + $this->timeRange->start->minute;
-        $minutes /= $this->interval->totalMinutes;
-        return (int)$minutes;
+        if ($this->interval->h > 0 || $this->interval->i > 0) {
+            // 1日の開始時間、終了時間の分を取得
+            $start = $this->timeRange->start->hour * 60 + $this->timeRange->start->minute;
+            $end = $this->timeRange->end->hour * 60 + $this->timeRange->end->minute;
+            // 時間帯のインデックスを求める
+            $min = $time->hour * 60 + $time->minute;
+            $min = max($start, min($end, $min)) - $start;
+            $timeIndex = (int)($min / ($this->interval->h * 60 + $this->interval->i));
+        } else {
+            $timeIndex = 0;
+        }
+        return $timeIndex + $this->timeSlotsPerDay() * $time->diffInDays($period->start);
     }
 
     /**
-     * 時間帯の数を取得する
+     * 1日の時間帯の数を取得する
      *
      * @return int 時間帯の数
      */
-    public function count(): int
+    public function timeSlotsPerDay(): int
     {
-        return (int)ceil($this->timeRange->interval->totalMinutes / $this->interval->totalMinutes);
+        return ceil($this->timeRange->end->diffInMinutes($this->timeRange->start) / $this->interval->totalMinutes);
     }
 
     /**

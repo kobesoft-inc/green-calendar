@@ -1,4 +1,4 @@
-import DateTimeSelector from "./DateTimeSelector";
+import Selector from "./Selector";
 import DateUtils from "./DateUtils";
 
 export default class Resizer {
@@ -22,7 +22,7 @@ export default class Resizer {
     /**
      * 日付セレクター・時間セレクター
      */
-    protected _selector: DateTimeSelector = null;
+    protected _selector: Selector = null;
 
     /**
      * ヘッダーカーソル
@@ -35,42 +35,52 @@ export default class Resizer {
     protected _tailCursor: string = 'gc-cursor-e-resize';
 
     /**
-     * ドラッグ中の終日予定のDOM要素
+     * ドラッグ中のDOM要素
      */
     protected _dragging: HTMLElement = null;
 
     /**
-     * 終日予定をドラッグ中に、前回ホバーした日付
+     * ドラッグ中の初期の開始位置
      */
-    protected _draggingPrevDate: string = null;
+    protected _draggingStart: string = null;
 
     /**
-     * 終日予定のドラッグ中の移動量
+     * ドラッグ中の初期の終了位置
+     */
+    protected _draggingEnd: string = null;
+
+    /**
+     * ドラッグ中に、前回ホバーした値
+     */
+    protected _draggingValue: string = null;
+
+    /**
+     * ドラッグ中の移動量。移動量が少ないと、クリックと判断する
      */
     protected _draggingCount: number = 0;
 
     /**
-     * ドラッグ中の終日予定の掴んだ日付
+     * ドラッグ中の掴んだ位置（日付）
      */
-    protected _grabbedDate: string;
+    protected _grabbed: string;
 
     /**
-     * 終日予定の開始位置を掴んでいるかどうか
+     * 開始位置を掴んでいるかどうか
      */
-    protected _grabbedStart: boolean = false;
+    protected _isGrabbingHead: boolean = false;
 
     /**
-     * 終日予定の終了位置を掴んでいるかどうか
+     * 終了位置を掴んでいるかどうか
      */
-    protected _grabbedEnd: boolean = false;
+    protected _isGrabbingTail: boolean = false;
 
     /**
-     * 終日予定をクリックした時の処理
+     * クリックした時の処理
      */
     protected _onEvent: (key: string) => void = null;
 
     /**
-     * 終日予定を移動した時の処理
+     * 移動した時の処理
      */
     protected _onMove: (key: string, start: string, end: string) => void = null;
 
@@ -84,7 +94,7 @@ export default class Resizer {
      * @param root ルート要素。イベントを登録するための要素。
      * @param selector
      */
-    constructor(root: HTMLElement, selector: DateTimeSelector) {
+    constructor(root: HTMLElement, selector: Selector) {
         this._root = root;
         this._selector = selector;
     }
@@ -99,7 +109,7 @@ export default class Resizer {
     }
 
     /**
-     * 終日予定の移動を開始
+     * マウスダウンイベント
      * @param e {MouseEvent} イベント
      * @returns {boolean} 移動を開始したかどうか
      */
@@ -107,28 +117,30 @@ export default class Resizer {
         const el = this.pickEvent(e.target as Element)
         if (el) {
             // 終日予定の変形を設定
-            this._grabbedStart = this._grabbedEnd = true
+            this._isGrabbingHead = this._isGrabbingTail = true
             if (this.hitHead(e.target as Element)) { // 終日予定の先頭部分に当たった場合、終了日は固定
-                this._grabbedEnd = false
+                this._isGrabbingTail = false
             }
             if (this.hitTail(e.target as Element)) { // 終日予定の末尾部分に当たった場合、開始日は固定
-                this._grabbedStart = false
+                this._isGrabbingHead = false
             }
 
             // 掴んだ日付
-            this._grabbedDate = this._selector.pickDateTimeByPosition(e.x, e.y)
+            this._grabbed = this._selector.pickValueByPosition(e.x, e.y)
 
             // ドラッグ中のDOM要素
             this._dragging = el
+            this._draggingStart = this._dragging.dataset.start
+            this._draggingEnd = this._dragging.dataset.end
 
             // ドラッグ中の終日予定のクラスを設定（表示を消す）
             this.setDragging(this._dragging.dataset.key, true)
 
             // 現在の日付を記録
-            this._draggingPrevDate = null
+            this._draggingValue = null
 
             // ドラッグ中の終日予定のプレビューを表示
-            this.updatePreview(this._grabbedDate)
+            this.updatePreview(this._grabbed)
 
             // カーソルを設定
             this.updateCursor()
@@ -142,16 +154,16 @@ export default class Resizer {
     }
 
     /**
-     * 終日予定の移動を終了
+     * マウスムーブイベント
      * @param e {MouseEvent} イベント
      * @returns {boolean} 移動を終了したかどうか
      */
     protected _onMouseMove(e: MouseEvent): void {
         if (this._dragging) {
             // ドラッグ中の終日予定のプレビューを表示
-            const date = this._selector.pickDateTimeByPosition(e.x, e.y)
-            if (date) {
-                this.updatePreview(date)
+            const value = this._selector.pickValueByPosition(e.x, e.y)
+            if (value) {
+                this.updatePreview(value)
             }
 
             // マウスクリックイベントのために移動量を記録
@@ -163,16 +175,16 @@ export default class Resizer {
     }
 
     /**
-     * 終日予定の移動を終了
+     * マウスアップイベント
      * @param e {MouseEvent} イベント
      * @returns {boolean} 移動を終了したかどうか
      */
     protected _onMouseUp(e: MouseEvent): void {
         if (this._dragging) {
             const key = this._dragging.dataset.key
-            const date = this._selector.pickDateTimeByPosition(e.x, e.y)
-            if (date && this._grabbedDate !== date) {
-                const [start, end] = this.getChangedPeriod(date)
+            const value = this._selector.pickValueByPosition(e.x, e.y)
+            if (value && this._grabbed !== value) {
+                const [start, end] = this.drag(value)
                 if (this._onMove) {
                     this._onMove(key, start, end)
                 }
@@ -187,7 +199,7 @@ export default class Resizer {
                 this.setDragging(key, false)
             }
             this._dragging = null
-            this._grabbedStart = this._grabbedEnd = null
+            this._isGrabbingHead = this._isGrabbingTail = null
             this.updateCursor()
 
             // イベントが処理された
@@ -232,7 +244,7 @@ export default class Resizer {
     }
 
     /**
-     * 予定をクリックした時の処理を設定
+     * クリックした時の処理を設定
      * @param callback
      */
     public onEvent(callback: (key: string) => void): this {
@@ -241,7 +253,7 @@ export default class Resizer {
     }
 
     /**
-     * 予定を移動した時の処理を設定
+     * 移動した時の処理を設定
      * @param callback
      */
     public onMove(callback: (key: string, start: string, end: string) => void): this {
@@ -270,7 +282,7 @@ export default class Resizer {
      * 掴んだ日付を取得
      */
     public getGrabbedDate(): string {
-        return this._grabbedDate;
+        return this._grabbed;
     }
 
     /**
@@ -285,7 +297,7 @@ export default class Resizer {
     }
 
     /**
-     * 終日予定の先頭部分に当たったかどうか
+     * 先頭部分に当たったかどうか
      * @param el {HTMLElement} 判定する要素
      * @returns {boolean} 先頭部分に当たったかどうか
      */
@@ -294,7 +306,7 @@ export default class Resizer {
     }
 
     /**
-     * 終日予定の末尾部分に当たったかどうか
+     * 末尾部分に当たったかどうか
      * @param el {HTMLElement} 判定する要素
      * @returns {boolean} 末尾部分に当たったかどうか
      */
@@ -316,21 +328,59 @@ export default class Resizer {
     }
 
     /**
-     * 変更後の終日予定の期間を取得する
-     * @param date {string} マウスの位置の日付
-     * @returns {Array} 変更後の終日予定の期間
+     * 指定した値が数字のみで構成されているか？
      */
-    protected getChangedPeriod(date: string): Array<any> {
-        const diff = DateUtils.diffInMilliseconds(this._grabbedDate, date)
-        let start = DateUtils.toDateTimeString(Date.parse(this._dragging.dataset.start) + (this._grabbedStart ? diff : 0))
-        let end = DateUtils.toDateTimeString(Date.parse(this._dragging.dataset.end) + (this._grabbedEnd ? diff : 0))
-        start = start.substring(0, this._grabbedDate.length)
-        end = end.substring(0, this._grabbedDate.length)
+    protected isNumber(value: string): boolean {
+        return /^[0-9]+$/.test(value)
+    }
+
+    /**
+     * ドラッグ中の位置に対して、変更後の期間を取得する
+     * @param value {string} マウスの位置の値
+     * @returns {Array} 変更後の期間
+     */
+    protected drag(value: string): Array<any> {
+        return this.isNumber(value)
+            ? this.dragNumber(value)
+            : this.dragDateTime(value)
+    }
+
+    /**
+     * プロパティが日時の場合に、変更後の期間を取得する
+     * @param value {string} マウスの位置の日付
+     * @returns {Array} 変更後の期間
+     */
+    protected dragDateTime(value: string): Array<any> {
+        const diff = DateUtils.diffInMilliseconds(this._grabbed, value)
+        let start = DateUtils.toDateTimeString(Date.parse(this._draggingStart) + (this._isGrabbingHead ? diff : 0))
+        let end = DateUtils.toDateTimeString(Date.parse(this._draggingEnd) + (this._isGrabbingTail ? diff : 0))
+        start = start.substring(0, this._grabbed.length)
+        end = end.substring(0, this._grabbed.length)
         if (start > end) {
-            if (this._grabbedStart) {
+            if (this._isGrabbingHead) {
                 start = end
             }
-            if (this._grabbedEnd) {
+            if (this._isGrabbingTail) {
+                end = start
+            }
+        }
+        return [start, end]
+    }
+
+    /**
+     * プロパティが数字の場合に、変更後の期間を取得する
+     * @param value {string} マウスの位置の値
+     * @returns {Array} 変更後の終日予定の期間
+     */
+    protected dragNumber(value: string): Array<number> {
+        const diff = parseInt(value) - parseInt(this._grabbed)
+        let start = parseInt(this._draggingStart) + (this._isGrabbingHead ? diff : 0)
+        let end = parseInt(this._draggingEnd) + (this._isGrabbingTail ? diff : 0)
+        if (start > end) {
+            if (this._isGrabbingHead) {
+                start = end
+            }
+            if (this._isGrabbingTail) {
                 end = start
             }
         }
@@ -342,26 +392,26 @@ export default class Resizer {
      */
     protected updateCursor() {
         this._root.classList.remove(this._headCursor, this._tailCursor)
-        if (this._grabbedStart && this._grabbedEnd) {
+        if (this._isGrabbingHead && this._isGrabbingTail) {
             this._root.classList.add('gc-cursor-move')
-        } else if (this._grabbedStart) {
+        } else if (this._isGrabbingHead) {
             this._root.classList.add(this._headCursor)
-        } else if (this._grabbedEnd) {
+        } else if (this._isGrabbingTail) {
             this._root.classList.add(this._tailCursor)
         }
     }
 
     /**
      * ドラッグ中の終日予定のプレビューを更新する
-     * @param date {string} マウスの位置の日付
+     * @param value {string} マウスの位置の日付
      */
-    protected updatePreview(date: string): void {
-        if (this._draggingPrevDate !== date) {
-            const [start, end] = this.getChangedPeriod(date)
+    protected updatePreview(value: string): void {
+        if (this._draggingValue !== value) {
+            const [start, end] = this.drag(value)
             if (this._onPreview) {
                 this._onPreview(this._dragging, start, end)
             }
-            this._draggingPrevDate = date
+            this._draggingValue = value
         }
     }
 }
