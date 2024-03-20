@@ -7,7 +7,7 @@ use Closure;
 trait CanSelectDates
 {
     protected bool|Closure $selectableDates = true;
-    protected bool|Closure $multipleSelectableDates = false;
+    protected bool|Closure $multipleSelectableDates = true;
 
     /**
      * 日付の選択が可能かどうかを判定する

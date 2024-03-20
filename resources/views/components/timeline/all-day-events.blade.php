@@ -14,6 +14,7 @@
                 data-position="{{$event->position}}"
                 data-can-click="{{$calendar->canClickEvent($event) ? 'true' : 'false'}}"
                 data-can-move="{{$calendar->canMoveEvent($event) ? 'true' : 'false'}}"
+                data-can-resize="{{$calendar->canResizeEvent($event) ? 'true' : 'false'}}"
                 data-all-day="true"
             >
                 @php($color = $calendar->getColor($event) ?? 'primary')

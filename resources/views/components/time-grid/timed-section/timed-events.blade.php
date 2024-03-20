@@ -17,6 +17,7 @@
             data-resource-id="{{$event->resourceId}}"
             data-can-click="{{$calendar->canClickEvent($event) ? 'true' : 'false'}}"
             data-can-move="{{$calendar->canMoveEvent($event) ? 'true' : 'false'}}"
+            data-can-resize="{{$calendar->canResizeEvent($event) ? 'true' : 'false'}}"
         >
             @php($color = $calendar->getColor($event) ?? 'primary')
             <div

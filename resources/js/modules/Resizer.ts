@@ -121,10 +121,12 @@ export default class Resizer {
      * @returns {boolean} 移動を開始したかどうか
      */
     protected _onClick(e: MouseEvent): void {
-        const el = this.pickEvent(e.target as Element)
-        if (el && el.dataset.canClick === 'true' && el.dataset.canMove === 'false' && el.dataset.canMove === 'false') {
-            if (this._onEvent) {
-                this._onEvent(el.dataset.key);
+        const el = this.pickEvent(e.target as Element);
+        if (el) {
+            if (el.dataset.canClick === 'true' && el.dataset.canMove === 'false' && el.dataset.canResize === 'false') {
+                if (this._onEvent) {
+                    this._onEvent(el.dataset.key);
+                }
             }
             e.stopImmediatePropagation();
         }
@@ -136,42 +138,42 @@ export default class Resizer {
      * @returns {boolean} 移動を開始したかどうか
      */
     protected _onMouseDown(e: MouseEvent): void {
-        const el = this.pickEvent(e.target as Element)
+        const el = this.pickEvent(e.target as Element);
         if (el && (el.dataset.canMove === 'true' || el.dataset.canResize === 'true')) {
             // 終日予定の変形を設定
-            this._isGrabbingHead = this._isGrabbingTail = true
+            this._isGrabbingHead = this._isGrabbingTail = true;
             if (this.hitHead(e.target as Element)) { // 終日予定の先頭部分に当たった場合、終了日は固定
-                this._isGrabbingTail = false
+                this._isGrabbingTail = false;
             }
             if (this.hitTail(e.target as Element)) { // 終日予定の末尾部分に当たった場合、開始日は固定
-                this._isGrabbingHead = false
+                this._isGrabbingHead = false;
             }
 
             // 掴んだ日付
-            this._grabbed = this._selector.pickValueByPosition(e.x, e.y)
+            this._grabbed = this._selector.pickValueByPosition(e.x, e.y);
 
             // ドラッグ中のDOM要素
-            this._dragging = el
-            this._draggingStart = this._dragging.dataset.start
-            this._draggingEnd = this._dragging.dataset.end
+            this._dragging = el;
+            this._draggingStart = this._dragging.dataset.start;
+            this._draggingEnd = this._dragging.dataset.end;
 
             // ドラッグ中の終日予定のクラスを設定（表示を消す）
-            this.setDraggingClass(this._dragging.dataset.key, true)
+            this.setDraggingClass(this._dragging.dataset.key, true);
 
             // 現在の日付を記録
-            this._draggingValue = null
+            this._draggingValue = null;
 
             // ドラッグ中の終日予定のプレビューを表示
-            this.updatePreview(this._grabbed)
+            this.updatePreview(this._grabbed);
 
             // カーソルを設定
-            this.updateCursor()
+            this.updateCursor();
 
             // ドラッグ中の終日予定の移動量を初期化
-            this._draggingCount = 0
+            this._draggingCount = 0;
 
             // イベントが処理された
-            e.stopImmediatePropagation()
+            e.stopImmediatePropagation();
         }
     }
 
@@ -183,16 +185,16 @@ export default class Resizer {
     protected _onMouseMove(e: MouseEvent): void {
         if (this._dragging) {
             // ドラッグ中の終日予定のプレビューを表示
-            const value = this._selector.pickValueByPosition(e.x, e.y)
+            const value = this._selector.pickValueByPosition(e.x, e.y);
             if (value !== null) {
-                this.updatePreview(value)
+                this.updatePreview(value);
             }
 
             // マウスクリックイベントのために移動量を記録
-            this._draggingCount++
+            this._draggingCount++;
 
             // イベントが処理された
-            e.stopImmediatePropagation()
+            e.stopImmediatePropagation();
         }
     }
 
@@ -203,31 +205,31 @@ export default class Resizer {
      */
     protected _onMouseUp(e: MouseEvent): void {
         if (this._dragging) {
-            const key = this._dragging.dataset.key
-            const value = this._selector.pickValueByPosition(e.x, e.y)
+            const key = this._dragging.dataset.key;
+            const value = this._selector.pickValueByPosition(e.x, e.y);
             if (value !== null && this._grabbed !== value) {
-                const [start, end] = this.drag(value)
+                const [start, end] = this.drag(value);
                 if (this._onMove && start !== null && end !== null) {
-                    this._onMove(key, start, end)
+                    this._onMove(key, start, end);
                 }
             } else if (this._draggingCount < 3) {
                 if (this._dragging.dataset.canClick === 'true') {
                     if (this._onEvent) {
-                        this._onEvent(key)
+                        this._onEvent(key);
                     }
                 }
             } else {
                 if (this._onPreview) {
-                    this._onPreview(this._dragging, null, null)
+                    this._onPreview(this._dragging, null, null);
                 }
-                this.setDraggingClass(key, false)
+                this.setDraggingClass(key, false);
             }
-            this._dragging = null
-            this._isGrabbingHead = this._isGrabbingTail = null
-            this.updateCursor()
+            this._dragging = null;
+            this._isGrabbingHead = this._isGrabbingTail = null;
+            this.updateCursor();
 
             // イベントが処理された
-            e.stopImmediatePropagation()
+            e.stopImmediatePropagation();
         }
     }
 
