@@ -2,8 +2,13 @@
 <div ax-load
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('timeline', 'kobesoft/green-calendar') }}"
      x-data="timeline()"
-     class="gc-timeline"
      x-cloak
+     class="gc-timeline"
+     data-start-date="{{ $period->startDate->format('Y-m-d') }}"
+     data-end-date="{{ $period->endDate->format('Y-m-d') }}"
+     data-start-time="{{ $timeSlots->timeRange->start->format('H:i:s') }}"
+     data-end-time="{{ $timeSlots->timeRange->end->format('H:i:s') }}"
+     data-interval="{{ $timeSlots->interval->totalSeconds }}"
 >
     <div class="gc-header">
         <x-green-calendar::actions :calendar="$calendar"/>
@@ -20,7 +25,7 @@
                 :timeSlots="$timeSlots"
                 :period="$period"
             />
-            <div class="absolute top-0">
+            <div class="absolute top-0 z-10">
                 <x-green-calendar::timeline.time-slot-heading
                     :timeSlots="$timeSlots"
                     :period="$period"

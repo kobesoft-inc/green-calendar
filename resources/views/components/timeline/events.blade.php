@@ -7,11 +7,11 @@
             x-cloak
         >
             @php
-                $allDayEvents = $events
+                $events = $events
                     ->whereResource($resource->id)
-                    ->withTimeline($timeSlots, $period)
-                    ->getAllDayEvents();
-                $maxPosition = $allDayEvents->max('position') ?? -1;
+                    ->withTimeline($timeSlots, $period);
+                $allDayEvents = $events->getAllDayEvents();
+                $timedEvents = $events->getTimedEvents();
             @endphp
             <x-green-calendar::timeline.all-day-events
                 :calendar="$calendar"
@@ -19,7 +19,15 @@
                 :allDayEvents="$allDayEvents"
                 :timeSlots="$timeSlots"
                 :period="$period"
-                :maxPosition="$maxPosition"
+                :maxPosition="$allDayEvents->max('position') ?? -1"
+            />
+            <x-green-calendar::timeline.timed-events
+                :calendar="$calendar"
+                :resource="$resource"
+                :timedEvents="$timedEvents"
+                :timeSlots="$timeSlots"
+                :period="$period"
+                :maxPosition="$timedEvents->max('position') ?? -1"
             />
         </div>
     @endforeach

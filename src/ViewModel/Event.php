@@ -167,13 +167,15 @@ class Event
      *
      * @param TimeSlots $timeSlots 時間帯
      * @param CarbonPeriod $period 期間
+     * @param bool $limit 時間帯の表示を制限するかどうか
      * @return $this
      */
-    public function withTimeSlotLayout(TimeSlots $timeSlots, CarbonPeriod $period): static
+    public function withTimeSlotLayout(TimeSlots $timeSlots, CarbonPeriod $period, bool $limit = false): static
     {
-        $this->timeSlot = max(0, $timeSlots->indexOf(max($this->start, $period->start), $period));
-        $end = $timeSlots->indexOf(min($this->end, $period->end), $period);
-        $this->timeSlotSpan = max($end - $this->timeSlot, 1);
+        $start = $limit ? max($this->start, $period->start) : $this->start;
+        $end = $limit ? min($this->end, $period->end) : $this->end;
+        $this->timeSlot = $timeSlots->indexOf($start, $period);
+        $this->timeSlotSpan = max($timeSlots->indexOf($end->subSecond(), $period) - $this->timeSlot, 0) + 1;
         if ($timeSlots->interval->d == 1) {
             $this->timeSlotSpan++;
         }

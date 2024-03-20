@@ -13,6 +13,12 @@
   }
 }
 
+.gc-timeline {
+  .gc-entries {
+    @apply flex gap-1;
+  }
+}
+
 .gc-entries {
   .gc-color-entry {
     @apply flex h-4 items-center;

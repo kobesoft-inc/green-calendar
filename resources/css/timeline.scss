@@ -17,7 +17,7 @@
       }
 
       .gc-resource {
-        @apply flex items-center px-2 py-1 min-h-8;
+        @apply flex min-h-8 items-center px-2 py-1;
       }
     }
 
@@ -25,7 +25,7 @@
       @apply relative overflow-x-scroll bg-white dark:bg-gray-900;
 
       .gc-time-slot-lines {
-        @apply absolute flex h-full divide-x z-10;
+        @apply absolute z-10 flex h-full divide-x;
 
         .gc-month {
           @apply flex h-full divide-x;
@@ -100,22 +100,81 @@
       .gc-events {
         @apply divide-y;
         .gc-resource {
-          @apply min-h-8 relative z-30;
+          @apply relative z-30 min-h-8;
           .gc-spacer {
             @apply h-5;
           }
 
-          .gc-all-day-event-container {
+          .gc-all-day-event-position,
+          .gc-timed-event-position {
             @apply absolute;
           }
+
+          .gc-timed-event-container {
+            @apply w-full;
+          }
+
+          .gc-all-day-event-container.gc-dragging,
+          .gc-timed-event-container.gc-dragging {
+
+            .gc-all-day-event {
+              @apply shadow-lg ring-2 ring-gray-300 dark:ring-gray-600;
+            }
+          }
+
+          .gc-timed-events {
+            @apply w-full relative;
+
+            .gc-timed-event-position {
+              @apply absolute;
+
+              .gc-timed-event-container.gc-start {
+                .gc-timed-event .gc-head {
+                  @apply absolute left-0 h-4 w-2 cursor-w-resize;
+                }
+              }
+
+              .gc-timed-event-container.gc-end {
+                .gc-timed-event .gc-tail {
+                  @apply absolute right-0 h-full w-2 cursor-e-resize;
+                }
+              }
+
+              .gc-timed-event-container.gc-hover {
+                .gc-timed-event {
+                  @apply bg-custom-100;
+                }
+              }
+
+              .gc-timed-event-container {
+                @apply flex items-center h-5;
+                .gc-timed-event {
+                  @apply relative flex items-center z-10 w-full cursor-pointer overflow-hidden whitespace-nowrap bg-custom-200 px-2 shadow dark:bg-custom-800;
+                }
+              }
+
+              .gc-start {
+                .gc-timed-event {
+                  @apply rounded-l-sm pl-0.5;
+                }
+              }
+
+              .gc-end {
+                .gc-timed-event {
+                  @apply rounded-r-sm pr-0.5;
+                }
+              }
+            }
+          }
+
         }
       }
 
       .gc-selection-container {
-        @apply absolute top-0 left-0 w-full h-full;
+        @apply absolute left-0 top-0 h-full w-full;
 
         .gc-selection {
-          @apply relative h-full bg-amber-50 dark:bg-amber-800 top-0;
+          @apply relative top-0 h-full bg-amber-50 dark:bg-amber-800;
         }
       }
     }

@@ -25,17 +25,17 @@ export default class TimedGridTimedEvent {
     private _resizer: Resizer = null;
 
     /**
-     * ホバー中の終日予定の要素
+     * ホバー中の予定の要素
      */
     private _hover: string = null;
 
     /**
-     * 終日予定をクリックした時の処理
+     * 予定をクリックした時の処理
      */
     private _onEvent: (key: string) => void;
 
     /**
-     * 終日予定を移動した時の処理
+     * 予定を移動した時の処理
      */
     private _onMove: (key: string, start: string, end: string) => void;
 
@@ -130,7 +130,7 @@ export default class TimedGridTimedEvent {
     }
 
     /**
-     * 終日予定を取得
+     * 予定を取得
      * @param el {HTMLElement} DOM要素
      * @returns {null|HTMLElement} 予定のDOM要素またはnull
      */
@@ -141,8 +141,8 @@ export default class TimedGridTimedEvent {
     }
 
     /**
-     * 指定された終日予定のホバーを設定する
-     * @param key {string} 終日予定のキー
+     * 指定された予定のホバーを設定する
+     * @param key {string} 予定のキー
      * @param hover {boolean} ホバーするかどうか
      */
     private setHoverAllDayEvent(key: string, hover: boolean) {
@@ -159,7 +159,7 @@ export default class TimedGridTimedEvent {
     }
 
     /**
-     * ドラッグ中の終日予定のプレビューを表示
+     * ドラッグ中の予定のプレビューを表示
      * @param elEvent {HTMLElement} 予定のDOM要素
      * @param eventStart {string} 予定の開始日
      * @param eventEnd {string} 予定の終了日
@@ -208,7 +208,7 @@ export default class TimedGridTimedEvent {
     }
 
     /**
-     * ドラッグ中の終日予定をプレビューに合わせる
+     * ドラッグ中の予定をプレビューに合わせる
      * @param el {HTMLElement} 予定のDOM要素
      * @param timeSlotHeight {number} スロット数
      */
@@ -219,7 +219,7 @@ export default class TimedGridTimedEvent {
     }
 
     /**
-     * 終日予定のプレビューを削除
+     * 予定のプレビューを削除
      */
     private removePreview() {
         // @ts-ignore

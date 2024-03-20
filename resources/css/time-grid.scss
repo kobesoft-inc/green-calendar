@@ -89,19 +89,19 @@
       .gc-timed-event-preview {
         @apply relative h-full;
         .gc-timed-event-container {
-          @apply absolute top-0 p-0.5 z-10;
+          @apply absolute top-0 z-10 p-0.5;
           left: var(--gc-position);
           width: var(--gc-width);
           height: var(--gc-span);
 
           .gc-timed-event {
-            @apply h-full overflow-hidden rounded border-primary-400 bg-primary-200 p-1 cursor-pointer;
+            @apply h-full cursor-pointer overflow-hidden rounded border-custom-400 bg-custom-200 p-1 hover:bg-custom-100;
             .gc-head {
               @apply absolute top-0 h-2 w-full cursor-n-resize;
             }
 
             .gc-tail {
-              @apply absolute bottom-0 w-full h-2 cursor-s-resize;
+              @apply absolute bottom-0 h-2 w-full cursor-s-resize;
             }
           }
         }
@@ -111,17 +111,21 @@
         }
 
         .gc-timed-event-container.gc-hover {
-          .gc-all-day-event {
-            @apply bg-custom-500;
+          .gc-timed-event {
+            @apply bg-custom-100;
           }
         }
       }
 
       .gc-timed-event-preview {
-        @apply absolute top-0 w-full h-full;
+        @apply absolute top-0 h-full w-full;
         .gc-timed-event-container {
           @apply left-0 w-full;
           height: var(--gc-span);
+
+          .gc-timed-event {
+            @apply bg-custom-100 shadow-lg ring-2 ring-gray-300 dark:ring-gray-600;
+          }
         }
       }
     }

@@ -1,5 +1,4 @@
 @props(['calendar', 'resourceId', 'timedEvents'])
-<div class="gc-timed-event-preview"></div>
 <div class="gc-timed-events">
     @foreach($timedEvents as $event)
         @php
@@ -17,16 +16,15 @@
             data-end="{{$event->end->toDateTimeString()}}"
             data-resource-id="{{$event->resourceId}}"
         >
-            @php($color = $calendar->getColor($event))
+            @php($color = $calendar->getColor($event) ?? 'primary')
             <div
                 @class([
                     'gc-timed-event',
-                    'gc-timed-event-bg' => $color !== null,
                 ])
                 @style([
                     \Filament\Support\get_color_css_variables(
                         $color,
-                        shades: [50, 100, 800, 900],
+                        shades: [50, 100, 200, 400, 800, 900],
                     ),
                 ])
             >
@@ -37,3 +35,4 @@
         </div>
     @endforeach
 </div>
+<div class="gc-timed-event-preview"></div>

@@ -38,9 +38,9 @@ trait HasCurrentDate
      * @param CarbonPeriod $period
      * @return $this
      */
-    public function period(CarbonPeriod $period)
+    public function period(CarbonPeriod $period): static
     {
-        $this->period = $period;
+        $this->period = CarbonPeriod::between($period->start, $period->end->endOfDay());
         return $this;
     }
 

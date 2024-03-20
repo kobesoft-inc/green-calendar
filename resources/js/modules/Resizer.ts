@@ -75,6 +75,12 @@ export default class Resizer {
     protected _isGrabbingTail: boolean = false;
 
     /**
+     * 一日の時間間隔
+     * @protected
+     */
+    protected _unit: number = 1;
+
+    /**
      * クリックした時の処理
      */
     protected _onEvent: (key: string) => void = null;
@@ -134,7 +140,7 @@ export default class Resizer {
             this._draggingEnd = this._dragging.dataset.end
 
             // ドラッグ中の終日予定のクラスを設定（表示を消す）
-            this.setDragging(this._dragging.dataset.key, true)
+            this.setDraggingClass(this._dragging.dataset.key, true)
 
             // 現在の日付を記録
             this._draggingValue = null
@@ -162,7 +168,7 @@ export default class Resizer {
         if (this._dragging) {
             // ドラッグ中の終日予定のプレビューを表示
             const value = this._selector.pickValueByPosition(e.x, e.y)
-            if (value) {
+            if (value !== null) {
                 this.updatePreview(value)
             }
 
@@ -183,9 +189,9 @@ export default class Resizer {
         if (this._dragging) {
             const key = this._dragging.dataset.key
             const value = this._selector.pickValueByPosition(e.x, e.y)
-            if (value && this._grabbed !== value) {
+            if (value !== null && this._grabbed !== value) {
                 const [start, end] = this.drag(value)
-                if (this._onMove) {
+                if (this._onMove && start !== null && end !== null) {
                     this._onMove(key, start, end)
                 }
             } else if (this._draggingCount < 3) {
@@ -196,7 +202,7 @@ export default class Resizer {
                 if (this._onPreview) {
                     this._onPreview(this._dragging, null, null)
                 }
-                this.setDragging(key, false)
+                this.setDraggingClass(key, false)
             }
             this._dragging = null
             this._isGrabbingHead = this._isGrabbingTail = null
@@ -240,6 +246,15 @@ export default class Resizer {
      */
     public setTailCursor(cursor: string): this {
         this._tailCursor = cursor;
+        return this;
+    }
+
+    /**
+     * 一日の時間間隔を設定する
+     * @param unit {number} 一日の時間間隔
+     */
+    public setUnit(unit: number): this {
+        this._unit = unit;
         return this;
     }
 
@@ -317,7 +332,7 @@ export default class Resizer {
     /**
      * ドラッグ中のクラスを設定する
      */
-    protected setDragging(key: string, dragging: boolean) {
+    protected setDraggingClass(key: string, dragging: boolean) {
         this._root.querySelectorAll(this._eventSelector + '[data-key="' + key + '"]').forEach(el => {
             if (dragging) {
                 el.classList.add('gc-dragging')
@@ -328,34 +343,41 @@ export default class Resizer {
     }
 
     /**
-     * 指定した値が数字のみで構成されているか？
+     * 現在、ドラッグ中の予定は、終日予定かどうか
      */
-    protected isNumber(value: string): boolean {
-        return /^[0-9]+$/.test(value)
+    public isAllDayDragging(): boolean {
+        return this._dragging?.dataset.allDay === 'true';
     }
 
     /**
-     * ドラッグ中の位置に対して、変更後の期間を取得する
-     * @param value {string} マウスの位置の値
+     * 指定されたパラメータが整数値かどうか
+     */
+    protected isNumber(value: string): boolean {
+        return /^\d+$/.test(value);
+    }
+
+    /**
+     * 変更後の期間を取得する
+     * @param value {string} マウスの位置の日付
      * @returns {Array} 変更後の期間
      */
     protected drag(value: string): Array<any> {
         return this.isNumber(value)
             ? this.dragNumber(value)
-            : this.dragDateTime(value)
+            : this.dragDateTime(value);
     }
 
     /**
-     * プロパティが日時の場合に、変更後の期間を取得する
+     * 日時のパラメータに対して、変更後の期間を取得する
      * @param value {string} マウスの位置の日付
      * @returns {Array} 変更後の期間
      */
     protected dragDateTime(value: string): Array<any> {
-        const diff = DateUtils.diffInMilliseconds(this._grabbed, value)
-        let start = DateUtils.toDateTimeString(Date.parse(this._draggingStart) + (this._isGrabbingHead ? diff : 0))
-        let end = DateUtils.toDateTimeString(Date.parse(this._draggingEnd) + (this._isGrabbingTail ? diff : 0))
-        start = start.substring(0, this._grabbed.length)
-        end = end.substring(0, this._grabbed.length)
+        const diff = DateUtils.diffInMilliseconds(this._grabbed, value);
+        let start = DateUtils.toDateTimeString(Date.parse(this._draggingStart) + (this._isGrabbingHead ? diff : 0));
+        let end = DateUtils.toDateTimeString(Date.parse(this._draggingEnd) + (this._isGrabbingTail ? diff : 0));
+        start = start.substring(0, this._grabbed.length);
+        end = end.substring(0, this._grabbed.length);
         if (start > end) {
             if (this._isGrabbingHead) {
                 start = end
@@ -368,14 +390,18 @@ export default class Resizer {
     }
 
     /**
-     * プロパティが数字の場合に、変更後の期間を取得する
-     * @param value {string} マウスの位置の値
-     * @returns {Array} 変更後の終日予定の期間
+     * 整数値のパラメータに対して、変更後の期間を取得する
+     * @param value {string} マウスの位置の日付
+     * @returns {Array} 変更後の期間
      */
-    protected dragNumber(value: string): Array<number> {
-        const diff = parseInt(value) - parseInt(this._grabbed)
-        let start = parseInt(this._draggingStart) + (this._isGrabbingHead ? diff : 0)
-        let end = parseInt(this._draggingEnd) + (this._isGrabbingTail ? diff : 0)
+    protected dragNumber(value: string): Array<any> {
+        const diff = parseInt(value) - parseInt(this._grabbed);
+        let start = parseInt(this._draggingStart) + (this._isGrabbingHead ? diff : 0);
+        let end = parseInt(this._draggingEnd) + (this._isGrabbingTail ? diff : 0);
+        if (this.isAllDayDragging()) {
+            start = Math.floor(start / this._unit) * this._unit;
+            end = Math.floor(end / this._unit) * this._unit;
+        }
         if (start > end) {
             if (this._isGrabbingHead) {
                 start = end
@@ -413,5 +439,29 @@ export default class Resizer {
             }
             this._draggingValue = value
         }
+    }
+
+    /**
+     * 頭部分を掴んでいるかどうか
+     * @protected
+     */
+    protected isGrabbingHead(): boolean {
+        return this._isGrabbingHead;
+    }
+
+    /**
+     * 末尾部分を掴んでいるかどうか
+     * @protected
+     */
+    protected isGrabbingTail(): boolean {
+        return this._isGrabbingTail;
+    }
+
+    /**
+     * 頭部分と末尾部分を掴んでいるかどうか
+     * @protected
+     */
+    protected isGrabbingBody(): boolean {
+        return this._isGrabbingHead && this._isGrabbingTail;
     }
 }

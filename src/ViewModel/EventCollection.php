@@ -255,7 +255,9 @@ class EventCollection
     public function withTimeline(TimeSlots $timeSlots, CarbonPeriod $period): static
     {
         $this->allDayEvents = $this->assignPosition($this->getAllDayEventsBetween($period), $period);
-        $this->allDayEvents = $this->allDayEvents->map(fn(Event $event) => $event->withTimeSlotLayout($timeSlots, $period));
+        $this->allDayEvents = $this->allDayEvents->map(fn(Event $event) => $event->withTimeSlotLayout($timeSlots, $period, false));
+        $this->timedEvents = $this->assignPosition($this->getTimedEventsBetween($period), $period, $timeSlots->interval);
+        $this->timedEvents = $this->timedEvents->map(fn(Event $event) => $event->withTimeSlotLayout($timeSlots, $period, false));
         return $this;
     }
 }

@@ -1,10 +1,10 @@
-@props(['calendar', 'date', 'period', 'allDayEvents', 'maxPosition'])
-<div class="gc-all-day-events">
-    @foreach($allDayEvents as $event)
-        <div class="gc-all-day-event-position invisible" wire:ignore.self>
+@props(['calendar', 'date', 'period', 'timedEvents', 'maxPosition'])
+<div class="gc-timed-events">
+    @foreach($timedEvents as $event)
+        <div class="gc-timed-event-position invisible" wire:ignore.self>
             <div
                 @class([
-                    'gc-all-day-event-container',
+                    'gc-timed-event-container',
                     'gc-start' => $event->startsBetween($period),
                     'gc-end' => $event->endsBetween($period),
                 ])
@@ -12,14 +12,13 @@
                 data-start="{{$event->timeSlot}}"
                 data-end="{{$event->timeSlot + $event->timeSlotSpan}}"
                 data-position="{{$event->position}}"
-                data-all-day="true"
-                x-cloak
+                data-all-day="false"
             >
                 @php($color = $calendar->getColor($event) ?? 'primary')
-                <div class="gc-all-day-event" @style([
+                <div class="gc-timed-event" @style([
                     \Filament\Support\get_color_css_variables(
                         $color,
-                        shades: [300, 400, 500, 600, 700],
+                        shades: [100, 200, 300, 400, 500, 600, 700],
                     ),
                 ]) wire:ignore.self>
                     <div class="gc-head"></div>

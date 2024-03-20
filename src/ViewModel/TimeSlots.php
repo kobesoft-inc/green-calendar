@@ -220,15 +220,16 @@ class TimeSlots
         if ($this->interval->h > 0 || $this->interval->i > 0) {
             // 1日の開始時間、終了時間の分を取得
             $start = $this->timeRange->start->hour * 60 + $this->timeRange->start->minute;
-            $end = $this->timeRange->end->hour * 60 + $this->timeRange->end->minute;
+            $end = $this->timeRange->end->hour * 60 + $this->timeRange->end->minute - 1;
             // 時間帯のインデックスを求める
             $min = $time->hour * 60 + $time->minute;
             $min = max($start, min($end, $min)) - $start;
-            $timeIndex = (int)($min / ($this->interval->h * 60 + $this->interval->i));
+            $timeIndex = floor($min / ($this->interval->h * 60 + $this->interval->i));
         } else {
             $timeIndex = 0;
         }
-        return $timeIndex + $this->timeSlotsPerDay() * $time->diffInDays($period->start);
+        $days = $period->start->copy()->startOfDay()->diffInDays($time, false);
+        return $timeIndex + $this->timeSlotsPerDay() * $days;
     }
 
     /**

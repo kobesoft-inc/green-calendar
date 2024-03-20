@@ -180,10 +180,12 @@ export default class Selector {
      * @param e
      */
     private _mouseMove(e: MouseEvent): void {
-        const value = this.pickValueByPosition(e.x, e.y);
-        if (value) {
-            this.selectEnd(value);
-            e.stopImmediatePropagation();
+        if (this.isSelected()) {
+            const value = this.pickValueByPosition(e.x, e.y);
+            if (value) {
+                this.selectEnd(value);
+                e.stopImmediatePropagation();
+            }
         }
     }
 
@@ -197,6 +199,7 @@ export default class Selector {
             if (value) {
                 if (this._onSelect) {
                     const [start, end] = this.getSelection();
+                    console.log(start, end, this._resourceId)
                     this._onSelect(start, end, this._resourceId);
                 }
                 this.deselect();
@@ -242,7 +245,7 @@ export default class Selector {
                 const rect = el.getBoundingClientRect();
                 return rect.left <= x && x <= rect.right && rect.top <= y && y <= rect.bottom;
             })
-            .at(0)?.dataset[this._propertyName];
+            .at(0)?.dataset[this._propertyName] ?? null;
     }
 
     /**
@@ -261,10 +264,10 @@ export default class Selector {
      */
     private update() {
         if (this._onDraw) { // 描画をコールバックで行う
-            const [begin, end] = this.getSelection();
-            return this._onDraw(begin, end, this._resourceId);
+            const [start, end] = this.getSelection();
+            return this._onDraw(start, end, this._resourceId);
         }
-        let [begin, end] = this.getSelection();
+        let [start, end] = this.getSelection();
         this._root.querySelectorAll(
             this._containerSelector +
             (this._resourceId !== null ? ' [data-resource-id="' + this._resourceId + '"] ' : ' ') +
@@ -272,7 +275,7 @@ export default class Selector {
         ).forEach(el => {
             // @ts-ignore
             const value = el.dataset[this._propertyName]
-            if (begin <= value && value <= end) {
+            if (start <= value && value <= end) {
                 el.classList.add('gc-selected')
             } else {
                 el.classList.remove('gc-selected')

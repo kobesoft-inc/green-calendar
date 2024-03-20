@@ -29,7 +29,7 @@ export default class DateUtils {
      * @returns {number} 加算後の日付(ミリ秒)
      */
     public static addDays(date: string, days: number): number {
-        return Date.parse(date) + days * DateUtils.MILLISECONDS_PER_DAY
+        return Date.parse(date.substring(0, 10) + ' 00:00:00') + days * DateUtils.MILLISECONDS_PER_DAY
     }
 
     /**
@@ -72,8 +72,41 @@ export default class DateUtils {
 
     /**
      * 開始時間、時間、時間間隔を渡し、何番目かを返す
+     *
+     * @param start {string} 開始時間
+     * @param end {string} 終了時間
+     * @param interval {string} 時間間隔(秒数)
+     * @param time {string} 時間
+     * @returns {number} 何番目か
      */
     public static timeSlot(start: string, end: string, interval: string, time: string): number {
         return Math.floor((Date.parse(time > end ? end : time) - Date.parse(start)) / parseInt(interval) / 1000);
+    }
+
+    /**
+     * 日時の時間を変更する。
+     *
+     * @param dateTime {string} 日時
+     * @param time {string} 時間
+     * @returns {string} 日時
+     */
+    public static setTimeOfDateTime(dateTime: string, time: string): string {
+        return dateTime.substring(0, 10) + ' ' + time;
+    }
+
+    /**
+     * 時間を分数に変換する。
+     */
+    public static toMinutes(time: string): number {
+        const [hour, minute] = time.split(':')
+        return parseInt(hour) * 60 + parseInt(minute)
+    }
+
+    /**
+     * 時間を秒数に変換する
+     */
+    public static toSeconds(time: string): number {
+        const [h, i, s] = time.split(':');
+        return (parseInt(h) * 60 + parseInt(i)) * 60 + parseInt(s);
     }
 }
