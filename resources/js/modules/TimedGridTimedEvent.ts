@@ -195,7 +195,7 @@ export default class TimedGridTimedEvent {
         const start = DateUtils.timeSlot(dayStart, dayEnd, elDay.dataset.interval, eventStart);
         const end = DateUtils.timeSlot(dayStart, dayEnd, elDay.dataset.interval, eventEnd);
         const slots = elDay.querySelectorAll('.gc-slot') as NodeListOf<HTMLElement>;
-        return [slots[start], end - start];
+        return [slots[start], end - start + 1];
     }
 
     /**
