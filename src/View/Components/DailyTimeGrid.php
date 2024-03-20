@@ -88,6 +88,19 @@ class DailyTimeGrid extends Component implements CalendarView
     }
 
     /**
+     * Alpineコンポーネントのパラメータを取得する
+     *
+     * @return array
+     */
+    protected function componentParameters(): array
+    {
+        return [
+            'canSelectDates' => $this->calendar->canSelectDates(),
+            'canSelectMultipleDates' => $this->calendar->canSelectMultipleDates(),
+        ];
+    }
+
+    /**
      * コンポーネントを描画する
      *
      * @return View
@@ -104,6 +117,7 @@ class DailyTimeGrid extends Component implements CalendarView
             'columns' => $this->getColumns(),
             'timeSlots' => $this->getTimeSlots(),
             'events' => $this->calendar->getEvents(),
+            'componentParameters' => $this->componentParameters(),
         ]);
     }
 }

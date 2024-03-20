@@ -305,6 +305,29 @@ $calendar->formatShortMonthUsing('M月');
 $calendar->formatYearUsing('Y年');
 ```
 
+### 3.2.16. カレンダーの操作内容のカスタマイズ
+
+カレンダーの操作内容をカスタマイズします。
+標準では、日付のクリック、日付の複数選択、予定のクリック、予定のドラッグ、予定のリサイズが設定されています。
+それらの操作を無効化する事ができます。
+
+```php
+// 日付のクリックを無効化
+$calendar->selectableDates(false, false)
+
+// 日付は単一選択のみ
+$calendar->selectableDates(true, false)
+
+// 予定のクリックを無効化
+$calendar->clickableEvents(false)
+
+// 予定のドラッグを無効化
+$calendar->movableEvents(true)
+
+// 予定のリサイズを無効化
+$calendar->resizableEvents(true)
+```
+
 ### 3.3. カレンダーの表示項目のコンポーネント
 
 ### 3.3.1. カレンダーの表示項目には、Entryクラスを使って、下記のような項目を設定できます。
@@ -382,11 +405,6 @@ $calendar->color(function (Event $event) {
 - $type: イベントの種類
 - $resourceId: リソースカレンダー、タイムラインの場合にはリソースのID
 - $event: ViewModel/Eventクラスのインスタンス
-
-### 3.4. カレンダーの操作内容のカスタマイズ
-
-カレンダーは様々な機能があります。
-カレンダーの操作内容をカスタマイズする事ができます。
 
 ## 4. 利用について
 

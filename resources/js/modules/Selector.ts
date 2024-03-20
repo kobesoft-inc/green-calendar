@@ -47,6 +47,18 @@ export default class Selector {
     private _resourceId: string = null;
 
     /**
+     * 選択処理が有効かどうか
+     * @private
+     */
+    private _enabled: boolean = true;
+
+    /**
+     * 複数選択が有効かどうか
+     * @private
+     */
+    private _multiple: boolean = false;
+
+    /**
      * 選択範囲を描画するコールバック
      */
     private _onDraw: (begin: string, end: string, resourceId: string) => void = null;
@@ -69,6 +81,7 @@ export default class Selector {
      * コールバックを登録する
      */
     public registerCallbacks() {
+        this._root.addEventListener('click', this._click.bind(this));
         this._root.addEventListener('mousedown', this._mouseDown.bind(this));
         this._root.addEventListener('mousemove', this._mouseMove.bind(this));
         this._root.addEventListener('mouseup', this._mouseUp.bind(this));
@@ -98,6 +111,24 @@ export default class Selector {
      */
     public setPropertyName(propertyName: string): Selector {
         this._propertyName = propertyName;
+        return this;
+    }
+
+    /**
+     * 選択処理が有効かどうかを設定する。
+     * @param enabled
+     */
+    public setEnabled(enabled: boolean): Selector {
+        this._enabled = enabled;
+        return this;
+    }
+
+    /**
+     * 複数選択が有効かどうかを設定する。
+     * @param multiple
+     */
+    public setMultiple(multiple: boolean): Selector {
+        this._multiple = multiple;
         return this;
     }
 
@@ -163,10 +194,31 @@ export default class Selector {
     }
 
     /**
+     * クリックした時の処理
+     * @param e
+     */
+    private _click(e: MouseEvent): void {
+        if (!this._enabled) {
+            return;
+        }
+        const value = this.pickValueByPosition(e.x, e.y);
+        if (value) {
+            this._resourceId = this.pickResourceId(e.target as HTMLElement);
+            if (this._onSelect) {
+                this._onSelect(value, value, this._resourceId);
+            }
+            e.stopImmediatePropagation();
+        }
+    }
+
+    /**
      * マウスを押した時の処理
      * @param e
      */
     private _mouseDown(e: MouseEvent): void {
+        if (!this._enabled || !this._multiple) {
+            return;
+        }
         const value = this.pickValueByPosition(e.x, e.y);
         if (value) {
             this._resourceId = this.pickResourceId(e.target as HTMLElement);
@@ -199,7 +251,6 @@ export default class Selector {
             if (value) {
                 if (this._onSelect) {
                     const [start, end] = this.getSelection();
-                    console.log(start, end, this._resourceId)
                     this._onSelect(start, end, this._resourceId);
                 }
                 this.deselect();

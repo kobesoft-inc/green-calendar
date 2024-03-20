@@ -14,7 +14,10 @@ use Kobesoft\GreenCalendar\Contracts\HasCalendar;
 class Calendar extends ViewComponent
 {
     use Calendar\Concerns\BelongsToLivewire;
+    use Calendar\Concerns\CanClickEvents;
     use Calendar\Concerns\CanFormatDate;
+    use Calendar\Concerns\CanMoveEvents;
+    use Calendar\Concerns\CanSelectDates;
     use Calendar\Concerns\HasHeaderActions;
     use Calendar\Concerns\HasActions;
     use Calendar\Concerns\HasColor;

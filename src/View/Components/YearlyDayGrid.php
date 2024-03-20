@@ -89,6 +89,8 @@ class YearlyDayGrid extends Component implements CalendarView
     {
         return [
             'remaining' => __('green-calendar::messages.remaining'),
+            'canSelectDates' => $this->calendar->canSelectDates(),
+            'canSelectMultipleDates' => $this->calendar->canSelectMultipleDates(),
         ];
     }
 

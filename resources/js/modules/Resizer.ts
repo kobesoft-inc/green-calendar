@@ -112,6 +112,22 @@ export default class Resizer {
         this._root.addEventListener('mousedown', this._onMouseDown.bind(this));
         this._root.addEventListener('mousemove', this._onMouseMove.bind(this));
         this._root.addEventListener('mouseup', this._onMouseUp.bind(this));
+        this._root.addEventListener('click', this._onClick.bind(this));
+    }
+
+    /**
+     * クリックイベント
+     * @param e {MouseEvent} イベント
+     * @returns {boolean} 移動を開始したかどうか
+     */
+    protected _onClick(e: MouseEvent): void {
+        const el = this.pickEvent(e.target as Element)
+        if (el && el.dataset.canClick === 'true' && el.dataset.canMove === 'false' && el.dataset.canMove === 'false') {
+            if (this._onEvent) {
+                this._onEvent(el.dataset.key);
+            }
+            e.stopImmediatePropagation();
+        }
     }
 
     /**
@@ -121,7 +137,7 @@ export default class Resizer {
      */
     protected _onMouseDown(e: MouseEvent): void {
         const el = this.pickEvent(e.target as Element)
-        if (el) {
+        if (el && (el.dataset.canMove === 'true' || el.dataset.canResize === 'true')) {
             // 終日予定の変形を設定
             this._isGrabbingHead = this._isGrabbingTail = true
             if (this.hitHead(e.target as Element)) { // 終日予定の先頭部分に当たった場合、終了日は固定
@@ -195,8 +211,10 @@ export default class Resizer {
                     this._onMove(key, start, end)
                 }
             } else if (this._draggingCount < 3) {
-                if (this._onEvent) {
-                    this._onEvent(key)
+                if (this._dragging.dataset.canClick === 'true') {
+                    if (this._onEvent) {
+                        this._onEvent(key)
+                    }
                 }
             } else {
                 if (this._onPreview) {

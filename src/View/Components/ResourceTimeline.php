@@ -72,6 +72,19 @@ class ResourceTimeline extends Component implements CalendarView
     }
 
     /**
+     * Alpineコンポーネントのパラメータを取得する
+     *
+     * @return array
+     */
+    protected function componentParameters(): array
+    {
+        return [
+            'canSelectDates' => $this->calendar->canSelectDates(),
+            'canSelectMultipleDates' => $this->calendar->canSelectMultipleDates(),
+        ];
+    }
+
+    /**
      * コンポーネントを描画する
      *
      * @return View
@@ -85,6 +98,7 @@ class ResourceTimeline extends Component implements CalendarView
             'period' => $this->calendar->getPeriod(),
             'events' => $this->calendar->getEvents(),
             'resources' => $this->calendar->getResources(),
+            'componentParameters' => $this->componentParameters(),
         ]);
     }
 }

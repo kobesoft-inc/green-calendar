@@ -1,7 +1,7 @@
-@props(['calendar', 'period', 'columns', 'timeSlots', 'events'])
+@props(['calendar', 'period', 'columns', 'timeSlots', 'events', 'componentParameters'])
 <div ax-load
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('time-grid', 'kobesoft/green-calendar') }}"
-     x-data="timeGrid()"
+     x-data="timeGrid(@js($componentParameters))"
      class="gc-time-grid"
 >
     <div class="gc-header">

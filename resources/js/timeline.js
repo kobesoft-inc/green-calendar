@@ -4,7 +4,7 @@ import TimelineSelection from "./modules/TimelineSelection.js";
 import Resizer from "./modules/Resizer.js";
 import DateUtils from "./modules/DateUtils.js";
 
-export default function timeline() {
+export default function timeline(componentParameters) {
     return {
         /**
          * レイアウト
@@ -45,6 +45,8 @@ export default function timeline() {
                 .setContainerSelector('.gc-main')
                 .setElementSelector('.gc-time-slot')
                 .setPropertyName('index')
+                .setEnabled(componentParameters.canSelectDates)
+                .setMultiple(componentParameters.canSelectMultipleDates)
                 .onDraw((start, end, resourceId) => {
                     this.timelineSelection.draw(
                         this.selector.getElementByValue(start)?.dataset.index ?? null,

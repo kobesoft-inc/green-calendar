@@ -48,6 +48,8 @@ export default function dayGrid(componentParameters) {
                 .setContainerSelector('.gc-day-grid')
                 .setElementSelector('.gc-day')
                 .setPropertyName('date')
+                .setEnabled(componentParameters.canSelectDates)
+                .setMultiple(componentParameters.canSelectMultipleDates)
                 .onSelect((start, end, resourceId) => {
                     this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59', resourceId)
                 });

@@ -2,7 +2,7 @@ import Selector from "./modules/Selector.ts";
 import AllDayEvent from "./modules/AllDayEvent.js";
 import TimedGridTimedEvent from "./modules/TimedGridTimedEvent.js";
 
-export default function TimeGrid() {
+export default function TimeGrid(componentParameters) {
     return {
         /**
          * 日付のセレクター
@@ -32,6 +32,8 @@ export default function TimeGrid() {
                 .setContainerSelector('.gc-all-day-section')
                 .setElementSelector('.gc-day')
                 .setPropertyName('date')
+                .setEnabled(componentParameters.canSelectDates)
+                .setMultiple(componentParameters.canSelectMultipleDates)
                 .onSelect((start, end, resourceId) => {
                     this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59', resourceId)
                 });
@@ -39,6 +41,8 @@ export default function TimeGrid() {
                 .setContainerSelector('.gc-timed-section')
                 .setElementSelector('.gc-slot')
                 .setPropertyName('time')
+                .setEnabled(componentParameters.canSelectDates)
+                .setMultiple(componentParameters.canSelectMultipleDates)
                 .onSelect((start, end, resourceId) => {
                     this.$wire.onDate(start, this.timeSelector.getElementByValue(end).dataset.timeEnd, resourceId)
                 });

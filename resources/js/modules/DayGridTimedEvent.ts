@@ -86,13 +86,16 @@ export default class DayGridTimedEvent {
      * @returns {boolean} イベントが処理されたかどうか
      */
     private _onClick(e: MouseEvent): void {
-        const key = this.pickEvent(e.target as HTMLElement)?.dataset.key;
-        if (key) {
-            // 予定をクリックした場合
-            if (this._onEvent) {
-                this._onEvent(key);
+        const el = this.pickEvent(e.target as HTMLElement);
+        if (el?.dataset.canClick === 'true') {
+            const key = el?.dataset.key;
+            if (key) {
+                // 予定をクリックした場合
+                if (this._onEvent) {
+                    this._onEvent(key);
+                }
+                e.stopImmediatePropagation();
             }
-            e.stopImmediatePropagation();
         }
     }
 

@@ -11,6 +11,7 @@
              data-key="{{$event->model->getKey()}}"
              data-start="{{$event->start->toDateTimeString()}}"
              data-end="{{$event->end->toDateTimeString()}}"
+             data-can-click="{{$calendar->canClickEvent($event) ? 'true' : 'false'}}"
         >
             @php($color = $calendar->getColor($event))
             <div
@@ -24,7 +25,7 @@
                         shades: [50, 100, 800, 900],
                     ),
                 ])
-                draggable="true"
+                draggable="{{$calendar->canMoveEvent($event) ? 'true' : 'false'}}"
             >
                 <x-green-calendar::entries :calendar="$calendar" :event="$event"/>
             </div>

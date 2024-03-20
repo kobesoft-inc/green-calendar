@@ -1,7 +1,7 @@
-@props(['calendar', 'timeSlots', 'events', 'resources', 'period'])
+@props(['calendar', 'timeSlots', 'events', 'resources', 'period', 'componentParameters'])
 <div ax-load
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('timeline', 'kobesoft/green-calendar') }}"
-     x-data="timeline()"
+     x-data="timeline(@js($componentParameters))"
      x-cloak
      class="gc-timeline"
      data-start-date="{{ $period->startDate->format('Y-m-d') }}"
