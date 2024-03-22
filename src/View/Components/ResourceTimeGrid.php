@@ -97,8 +97,8 @@ class ResourceTimeGrid extends Component implements CalendarView
     protected function componentParameters(): array
     {
         return [
-            'canSelectDates' => $this->calendar->canSelectDates(),
-            'canSelectMultipleDates' => $this->calendar->canSelectMultipleDates(),
+            'canSelectDates' => $this->calendar->canSelect(),
+            'canSelectMultipleDates' => $this->calendar->canSelectMultiple(),
         ];
     }
 

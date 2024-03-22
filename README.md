@@ -313,19 +313,19 @@ $calendar->formatYearUsing('Y年');
 
 ```php
 // 日付のクリックを無効化
-$calendar->selectableDates(false, false)
+$calendar->selectable(false, multiple: false)
 
 // 日付は単一選択のみ
-$calendar->selectableDates(true, false)
+$calendar->selectable(true, multiple: false)
 
 // 予定のクリックを無効化
-$calendar->clickableEvents(false)
+$calendar->clickable(false)
 
 // 予定のドラッグを無効化
-$calendar->movableEvents(true)
+$calendar->movable(true)
 
 // 予定のリサイズを無効化
-$calendar->resizableEvents(true)
+$calendar->resizable(true)
 ```
 
 ### 3.3. カレンダーの表示項目のコンポーネント
