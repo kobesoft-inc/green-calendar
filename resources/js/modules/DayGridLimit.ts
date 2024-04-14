@@ -163,7 +163,7 @@ export default class DayGridLimit {
         if (this._eventHeight === null) {
             this._eventHeight = this.getElementHeight(DayGridLimit.ANY_EVENT_SELECTOR);
         }
-        return this._eventHeight;
+        return this._eventHeight ?? 1;
     }
 
     /**
@@ -198,7 +198,7 @@ export default class DayGridLimit {
      * 指定したセレクタの要素の高さを取得
      */
     private getElementHeight(selector: string): number {
-        return (this._root.querySelector(selector) as HTMLElement).offsetHeight;
+        return (this._root.querySelector(selector) as HTMLElement)?.offsetHeight;
     }
 
     /**
