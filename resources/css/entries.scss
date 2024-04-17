@@ -26,4 +26,11 @@
       @apply h-2 w-2 flex-shrink-0 rounded-full bg-custom-400 dark:bg-custom-500;
     }
   }
+
+  .gc-icon-entry {
+    @apply flex h-4 items-center;
+    .gc-icon {
+      @apply h-2 w-2 flex-shrink-0;
+    }
+  }
 }

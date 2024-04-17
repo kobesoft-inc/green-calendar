@@ -5,7 +5,9 @@
 @endphp
 <div
     {{
-        $attributes->merge($getExtraAttributes(), escape: false)
+        $attributes
+            ->merge($getExtraAttributes(), escape: false)
+            ->class(['gc-icon-entry'])
     }}
 >
     <x-filament::icon
