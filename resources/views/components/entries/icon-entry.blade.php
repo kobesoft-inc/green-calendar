@@ -1,6 +1,5 @@
 @php
     $state = $getState();
-    $formattedState = $formatState($state);
     $color = $getColor($state);
     $icon = $getIcon($state);
 @endphp
@@ -9,7 +8,6 @@
         $attributes->merge($getExtraAttributes(), escape: false)
     }}
 >
-    {{$formattedState}}
     <x-filament::icon
         :icon="$icon"
         @class([
