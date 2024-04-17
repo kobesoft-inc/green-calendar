@@ -12,9 +12,9 @@
                 data-start="{{$event->timeSlot}}"
                 data-end="{{$event->timeSlot + $event->timeSlotSpan}}"
                 data-position="{{$event->position}}"
-                data-can-click="{{$calendar->canClickEvent($event) ? 'true' : 'false'}}"
-                data-can-move="{{$calendar->canMoveEvent($event) ? 'true' : 'false'}}"
-                data-can-resize="{{$calendar->canResizeEvent($event) ? 'true' : 'false'}}"
+                data-can-click="{{$calendar->canClick($event) ? 'true' : 'false'}}"
+                data-can-move="{{$calendar->canMove($event) ? 'true' : 'false'}}"
+                data-can-resize="{{$calendar->canResize($event) ? 'true' : 'false'}}"
                 data-all-day="false"
             >
                 @php($color = $calendar->getColor($event) ?? 'primary')
@@ -24,7 +24,7 @@
                         shades: [100, 200, 300, 400, 500, 600, 700],
                     ),
                 ]) wire:ignore.self>
-                    @if($calendar->canResizeEvent($event))
+                    @if($calendar->canResize($event))
                         <div class="gc-head"></div>
                         <div class="gc-tail"></div>
                     @endif
