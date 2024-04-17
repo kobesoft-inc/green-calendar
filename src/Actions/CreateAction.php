@@ -15,7 +15,14 @@ class CreateAction extends \Filament\Actions\CreateAction
             fn(HasCalendar $livewire, Form $form) => $livewire->form($form),
         );
         $this->fillForm(
-            fn(array $arguments) => $arguments,
+            function (HasCalendar $livewire, array $arguments) {
+                $startAttribute = $livewire->getCalendar()->getRecordStartAttribute() ?? 'start';
+                $endAttribute = $livewire->getCalendar()->getRecordEndAttribute() ?? 'end';
+                return [
+                    $startAttribute => $arguments['start'],
+                    $endAttribute => $arguments['end'],
+                ];
+            }
         );
         $this->model(
             fn(HasCalendar $livewire) => $livewire->getModel(),
