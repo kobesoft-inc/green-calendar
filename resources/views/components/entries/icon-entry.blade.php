@@ -10,7 +10,7 @@
             ->class(['gc-icon-entry'])
     }}
 >
-    <div>
+    <div class="gc-icon">
         <x-filament::icon
             :icon="$icon"
             @class([
