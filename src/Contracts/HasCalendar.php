@@ -17,7 +17,5 @@ interface HasCalendar
 
     public function getCalendar(): Calendar;
 
-    public function form(Form $form): Form;
-
     public function refreshCalendar();
 }
