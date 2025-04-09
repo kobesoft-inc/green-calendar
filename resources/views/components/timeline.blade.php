@@ -4,8 +4,8 @@
      x-data="timeline(@js($componentParameters))"
      x-cloak
      class="gc-timeline"
-     data-start-date="{{ $period->startDate->format('Y-m-d') }}"
-     data-end-date="{{ $period->endDate->format('Y-m-d') }}"
+     data-start-date="{{ $period->getStartDate()->format('Y-m-d') }}"
+     data-end-date="{{ $period->getEndDate()->format('Y-m-d') }}"
      data-start-time="{{ $timeSlots->timeRange->start->format('H:i:s') }}"
      data-end-time="{{ $timeSlots->timeRange->end->format('H:i:s') }}"
      data-interval="{{ $timeSlots->interval->totalSeconds }}"

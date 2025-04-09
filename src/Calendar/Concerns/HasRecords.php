@@ -248,7 +248,11 @@ trait HasRecords
             $period = $this->getPeriod();
             return $this->cachedRecords = $this->evaluate(
                 $this->records,
-                namedInjections: ['period' => $period, 'start' => $period->start, 'end' => $period->end],
+                namedInjections: [
+                    'period' => $period,
+                    'start' => $period->getStartDate(),
+                    'end' => $period->getEndDate()
+                ],
                 typedInjections: [CarbonPeriod::class => $period],
             );
         } elseif ($this->query) {

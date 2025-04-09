@@ -6,8 +6,8 @@
             @php
                 $weekPeriod = \Carbon\CarbonPeriod::between($startOfWeek, $startOfWeek->copy()->addDays(6)->endOfDay());
                 $showPeriod = \Carbon\CarbonPeriod::between(
-                    max($weekPeriod->start, $period->start),
-                    min($weekPeriod->end, $period->end)
+                    max($weekPeriod->getStartDate(), $period->getStartDate()),
+                    min($weekPeriod->getEndDate(), $period->getEndDate())
                 );
                 $weekEvents = $events->between($showPeriod)->withAllDayEventPositions($showPeriod);
             @endphp

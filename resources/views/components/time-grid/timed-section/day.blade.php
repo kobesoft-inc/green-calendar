@@ -12,8 +12,8 @@
 <div
     class="gc-day"
     data-date="{{$date->toDateString()}}"
-    data-start="{{$period->start->format('Y-m-d H:i')}}"
-    data-end="{{$period->end->format('Y-m-d H:i')}}"
+    data-start="{{$period->getStartDate()->format('Y-m-d H:i')}}"
+    data-end="{{$period->getEndDate()->format('Y-m-d H:i')}}"
     data-interval="{{$timeSlots->getIntervalSeconds()}}"
     data-resource-id="{{$resourceId}}"
 >

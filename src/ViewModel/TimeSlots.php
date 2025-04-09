@@ -69,8 +69,8 @@ class TimeSlots
     {
         return collect(
             CarbonPeriod::between(
-                $calendarPeriod->start->copy()->startOfMonth(),
-                $calendarPeriod->end->copy()->endOfMonth()
+                $calendarPeriod->getStartDate()->copy()->startOfMonth(),
+                $calendarPeriod->getEndDate()->copy()->endOfMonth()
             )->months()
         )->map(fn(Carbon $startOfMonth) => [
             'month' => $startOfMonth,
@@ -112,11 +112,11 @@ class TimeSlots
     {
         $hours = collect();
         $time = $date
-            ? $date->copy()->setTimeFrom($this->timeRange->start)
-            : $this->timeRange->start->copy();
+            ? $date->copy()->setTimeFrom($this->timeRange->getStartDate())
+            : $this->timeRange->getStartDate()->copy();
         $end = $date
-            ? $date->copy()->setTimeFrom($this->timeRange->end)
-            : $this->timeRange->end->copy();
+            ? $date->copy()->setTimeFrom($this->timeRange->getEndDate())
+            : $this->timeRange->getEndDate()->copy();
         $intervalHours = max($this->interval->totalHours, 1);
         while ($time->lt($end)) {
             $hours->push(['hour' => $time->copy(), 'minutes' => $this->getMinutes($time)]);
@@ -219,8 +219,8 @@ class TimeSlots
     {
         if ($this->interval->h > 0 || $this->interval->i > 0) {
             // 1日の開始時間、終了時間の分を取得
-            $start = $this->timeRange->start->hour * 60 + $this->timeRange->start->minute;
-            $end = $this->timeRange->end->hour * 60 + $this->timeRange->end->minute - 1;
+            $start = $this->timeRange->getStartDate()->hour * 60 + $this->timeRange->getStartDate()->minute;
+            $end = $this->timeRange->getEndDate()->hour * 60 + $this->timeRange->getEndDate()->minute - 1;
             // 時間帯のインデックスを求める
             $min = $time->hour * 60 + $time->minute;
             $min = max($start, min($end, $min)) - $start;
@@ -228,7 +228,7 @@ class TimeSlots
         } else {
             $timeIndex = 0;
         }
-        $days = $period->start->copy()->startOfDay()->diffInDays($time, false);
+        $days = $period->getStartDate()->copy()->startOfDay()->diffInDays($time, false);
         return $timeIndex + $this->timeSlotsPerDay() * $days;
     }
 
@@ -239,7 +239,7 @@ class TimeSlots
      */
     public function timeSlotsPerDay(): int
     {
-        return ceil($this->timeRange->end->diffInMinutes($this->timeRange->start) / $this->interval->totalMinutes);
+        return ceil($this->timeRange->end->diffInMinutes($this->timeRange->getStartDate()) / $this->interval->totalMinutes);
     }
 
     /**
@@ -251,8 +251,8 @@ class TimeSlots
     public function periodOfDate(Carbon $date): CarbonPeriod
     {
         return CarbonPeriod::between(
-            $date->copy()->setTimeFrom($this->timeRange->start),
-            $date->copy()->setTimeFrom($this->timeRange->end)
+            $date->copy()->setTimeFrom($this->timeRange->getStartDate()),
+            $date->copy()->setTimeFrom($this->timeRange->getEndDate())
         );
     }
 }

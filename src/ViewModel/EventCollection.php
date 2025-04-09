@@ -181,7 +181,7 @@ class EventCollection
     protected function assignPosition(Collection $events, CarbonPeriod $period, ?CarbonInterval $precision = null): Collection
     {
         return $events->reduce(function (Collection $carry, Event $event) use ($period, $precision) {
-            $start = max($event->getRoundedStart($precision), $period->start);
+            $start = max($event->getRoundedStart($precision), $period->getStartDate());
             $usedPositions = $carry
                 ->filter(fn(Event $e) => $e->getRoundedEnd($precision) > $start)
                 ->pluck('position');

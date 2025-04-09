@@ -172,8 +172,8 @@ class Event
      */
     public function withTimeSlotLayout(TimeSlots $timeSlots, CarbonPeriod $period, bool $limit = false): static
     {
-        $start = $limit ? max($this->start, $period->start) : $this->start;
-        $end = $limit ? min($this->end, $period->end) : $this->end;
+        $start = $limit ? max($this->start, $period->getStartDate()) : $this->start;
+        $end = $limit ? min($this->end, $period->getEndDate()) : $this->end;
         $this->timeSlot = $timeSlots->indexOf($start, $period);
         $this->timeSlotSpan = max($timeSlots->indexOf($end->subSecond(), $period) - $this->timeSlot, 0) + 1;
         if ($timeSlots->interval->d == 1) {

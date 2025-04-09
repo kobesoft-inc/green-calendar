@@ -7,17 +7,6 @@ use Filament\Forms\Form;
 trait InteractsWithEvents
 {
     /**
-     * フォームのスキーマを取得する
-     *
-     * @param Form $form フォーム
-     * @return Form フォーム
-     */
-    public function form(Form $form): Form
-    {
-        return $form;
-    }
-
-    /**
      * 予定をクリックしたときのイベントを呼び出します。
      *
      * @param string $id

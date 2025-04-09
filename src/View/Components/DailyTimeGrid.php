@@ -11,7 +11,6 @@ use Iterator;
 use Kobesoft\GreenCalendar\Calendar;
 use Kobesoft\GreenCalendar\View\Components\Contracts\CalendarView;
 use Kobesoft\GreenCalendar\ViewModel\TimeGridColumn;
-use Kobesoft\GreenCalendar\ViewModel\TimeSlots;
 
 class DailyTimeGrid extends Component implements CalendarView
 {
