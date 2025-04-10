@@ -143,7 +143,7 @@ class TimeSlots
         while ($time->lt($end)) {
             $minutes->push(CarbonPeriod::between(
                 $time,
-                $time->copy()->addMinutes($intervalMinutes)->min($this->timeRange->end->copy()->setDateFrom($time))
+                $time->copy()->addMinutes($intervalMinutes)->min($this->timeRange->getEndDate()->copy()->setDateFrom($time))
             ));
             $time->addMinutes($intervalMinutes);
         }
