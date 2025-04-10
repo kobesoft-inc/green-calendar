@@ -6,8 +6,8 @@
      class="gc-timeline"
      data-start-date="{{ $period->getStartDate()->format('Y-m-d') }}"
      data-end-date="{{ $period->getEndDate()->format('Y-m-d') }}"
-     data-start-time="{{ $timeSlots->timeRange->start->format('H:i:s') }}"
-     data-end-time="{{ $timeSlots->timeRange->end->format('H:i:s') }}"
+     data-start-time="{{ $timeSlots->timeRange->getStartDate()->format('H:i:s') }}"
+     data-end-time="{{ $timeSlots->timeRange->getEndDate()->format('H:i:s') }}"
      data-interval="{{ $timeSlots->interval->totalSeconds }}"
 >
     <div class="gc-header">

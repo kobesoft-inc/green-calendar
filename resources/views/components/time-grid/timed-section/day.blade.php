@@ -22,8 +22,8 @@
             @foreach($hour['minutes'] as $minuteIndex => $timeSlot)
                 <div
                     class="gc-slot"
-                    data-time="{{$timeSlot->start->setDateFrom($date)->format('Y-m-d H:i')}}"
-                    data-time-end="{{$timeSlot->end->setDateFrom($date)->format('Y-m-d H:i')}}"
+                    data-time="{{$timeSlot->getStartDate()->setDateFrom($date)->format('Y-m-d H:i')}}"
+                    data-time-end="{{$timeSlot->getEndDate()->setDateFrom($date)->format('Y-m-d H:i')}}"
                 >
                     <div class="gc-slot-content">
                         <x-green-calendar::time-grid.timed-section.timed-events

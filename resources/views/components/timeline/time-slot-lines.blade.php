@@ -13,8 +13,8 @@
                                 <div
                                     class="gc-time-slot"
                                     data-index="{{ $timeSlotIndex++ }}"
-                                    data-time="{{ $countOfHours > 0 ? $minute->start->copy()->startOfDay() : $minute->start->format('Y-m-d H:i') }}"
-                                    data-time-end="{{ $countOfHours > 0 ? $minute->end->copy()->endOfDay() : $minute->end->format('Y-m-d H:i') }}"
+                                    data-time="{{ $countOfHours > 0 ? $minute->getStartDate()->copy()->startOfDay() : $minute->start->format('Y-m-d H:i') }}"
+                                    data-time-end="{{ $countOfHours > 0 ? $minute->getEndDate()->copy()->endOfDay() : $minute->end->format('Y-m-d H:i') }}"
                                 ></div>
                             @endforeach
                         </div>
