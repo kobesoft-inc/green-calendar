@@ -39,12 +39,13 @@ trait InteractsWithEvents
      *
      * @param string $start 開始日
      * @param string $end 終了日
+     * @param array|null $resources リソースの配列
      * @return void
      */
-    public function onDate(string $start, string $end): void
+    public function onDate(string $start, string $end, array|null $resources = null): void
     {
         if ($actionName = $this->getCalendar()->getDateAction()?->getName()) {
-            $this->mountAction($actionName, ['start' => $start, 'end' => $end]);
+            $this->mountAction($actionName, ['start' => $start, 'end' => $end, 'resources' => $resources]);
         }
     }
 
