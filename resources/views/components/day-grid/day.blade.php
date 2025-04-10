@@ -7,11 +7,16 @@
     }
 @endphp
 <div
-    @class([
-        'gc-day',
-        'gc-today' => $date->isToday(),
-        'gc-disabled' => $disabled,
-    ])
+    {{
+        \Filament\Support\prepare_inherited_attributes(new \Illuminate\View\ComponentAttributeBag())
+            ->class([
+                'gc-day',
+                'gc-today' => $date->isToday(),
+                'gc-disabled' => $disabled,
+            ])
+            ->merge($calendar->getCellExtraAttributes(['date' => $date->toDateString()])
+        )
+    }}
     data-date="{{$date->toDateString()}}"
 >
     <div class="gc-day-top">

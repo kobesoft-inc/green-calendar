@@ -81,7 +81,6 @@ export default class Selector {
      * コールバックを登録する
      */
     public registerCallbacks() {
-        this._root.addEventListener('click', this._click.bind(this));
         this._root.addEventListener('mousedown', this._mouseDown.bind(this));
         this._root.addEventListener('mousemove', this._mouseMove.bind(this));
         this._root.addEventListener('mouseup', this._mouseUp.bind(this));
@@ -191,24 +190,6 @@ export default class Selector {
      */
     public isSelected(): boolean {
         return this._selectionStart !== null && this._selectionEnd !== null;
-    }
-
-    /**
-     * クリックした時の処理
-     * @param e
-     */
-    private _click(e: MouseEvent): void {
-        if (!this._enabled) {
-            return;
-        }
-        const value = this.pickValueByPosition(e.x, e.y);
-        if (value) {
-            this._resourceId = this.pickResourceId(e.target as HTMLElement);
-            if (this._onSelect) {
-                this._onSelect(value, value, this._resourceId);
-            }
-            e.stopImmediatePropagation();
-        }
     }
 
     /**

@@ -2,9 +2,7 @@
 
 namespace Kobesoft\GreenCalendar\Calendar\Concerns;
 
-use Filament\Support\Contracts\TranslatableContentDriver;
 use Kobesoft\GreenCalendar\Contracts\HasCalendar;
-use Livewire\Component;
 
 trait BelongsToLivewire
 {

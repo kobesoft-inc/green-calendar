@@ -20,10 +20,21 @@
     @foreach($timeSlots->getHours() as $hourIndex => $hour)
         <div class="gc-hour">
             @foreach($hour['minutes'] as $minuteIndex => $timeSlot)
+                @php($time = $timeSlot->getStartDate()->setDateFrom($date)->format('Y-m-d H:i'))
+                @php($timeEnd = $timeSlot->getEndDate()->setDateFrom($date)->format('Y-m-d H:i'))
                 <div
-                    class="gc-slot"
-                    data-time="{{$timeSlot->getStartDate()->setDateFrom($date)->format('Y-m-d H:i')}}"
-                    data-time-end="{{$timeSlot->getEndDate()->setDateFrom($date)->format('Y-m-d H:i')}}"
+                    {{
+                        \Filament\Support\prepare_inherited_attributes(new \Illuminate\View\ComponentAttributeBag())
+                            ->class(['gc-slot'])
+                            ->merge($calendar->getCellExtraAttributes([
+                                'time' => $time,
+                                'resourceId' => $resourceId,
+                                'date' => $date->toDateString()
+                            ])
+                        )
+                    }}
+                    data-time="{{$time}}"
+                    data-time-end="{{$timeEnd}}"
                 >
                     <div class="gc-slot-content">
                         <x-green-calendar::time-grid.timed-section.timed-events

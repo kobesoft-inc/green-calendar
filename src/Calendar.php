@@ -20,6 +20,7 @@ class Calendar extends ViewComponent
     use Calendar\Concerns\CanSelectDates;
     use Calendar\Concerns\HasHeaderActions;
     use Calendar\Concerns\HasActions;
+    use Calendar\Concerns\HasCellExtraAttributes;
     use Calendar\Concerns\HasColor;
     use Calendar\Concerns\HasCurrentDate;
     use Calendar\Concerns\HasEntries;

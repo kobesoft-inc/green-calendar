@@ -60,9 +60,8 @@
         width: 5em;
 
         .gc-hour {
-          margin-bottom: 1px;
-
           .gc-slot {
+            margin-bottom: 1px;
             .gc-slot-content {
               @apply relative h-8 pr-1 text-right;
               top: -0.5lh;
