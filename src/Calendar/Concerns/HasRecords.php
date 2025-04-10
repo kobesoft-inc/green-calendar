@@ -242,9 +242,9 @@ trait HasRecords
      */
     public function getRecords(): Collection
     {
-        if ($this->cachedRecords) {
+        if ($this->cachedRecords !== null) {
             return $this->cachedRecords;
-        } elseif ($this->records) {
+        } elseif ($this->records !== null) {
             $period = $this->getPeriod();
             return $this->cachedRecords = $this->evaluate(
                 $this->records,
@@ -255,11 +255,11 @@ trait HasRecords
                 ],
                 typedInjections: [CarbonPeriod::class => $period],
             );
-        } elseif ($this->query) {
+        } elseif ($this->query !== null) {
             return $this->cachedRecords = $this->getQuery($this->getPeriod())->get();
+        } else {
+            return $this->cachedRecords = collect();
         }
-        $livewireClass = $this->getLivewire()::class;
-        throw new Exception("Calendar [{$livewireClass}] does not have a [records()] or [query()].");
     }
 
     /**

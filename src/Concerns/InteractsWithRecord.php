@@ -48,10 +48,7 @@ trait InteractsWithRecord
      */
     public function getModel(): string
     {
-        if (static::$model === null) {
-            $livewireClass = static::class;
-            throw new Exception("Calendar [{$livewireClass}] does not have a [static::model].");
-        }
-        return static::$model;
+        return static::$model
+            ?? throw new Exception('Calendar [' . static::class . '] does not have a [static::$model].');
     }
 }
