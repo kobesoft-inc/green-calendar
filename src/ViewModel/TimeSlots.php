@@ -202,8 +202,8 @@ class TimeSlots
         if (preg_match(self::$timePattern, $time, $matches)) {
             return Carbon::create()
                 ->addHours(intval($matches[1]))
-                ->addMinutes(intval($matches[2]))
-                ->addSeconds(intval($matches[3]));
+                ->addMinutes(intval($matches[2] ?? 0))
+                ->addSeconds(intval($matches[3] ?? 0));
         } else {
             throw new Exception('Invalid time format');
         }
