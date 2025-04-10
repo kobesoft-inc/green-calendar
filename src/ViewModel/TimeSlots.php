@@ -239,7 +239,7 @@ class TimeSlots
      */
     public function timeSlotsPerDay(): int
     {
-        return ceil($this->timeRange->end->diffInMinutes($this->timeRange->getStartDate()) / $this->interval->totalMinutes);
+        return ceil($this->timeRange->getEndDate()->diffInMinutes($this->timeRange->getStartDate()) / $this->interval->totalMinutes);
     }
 
     /**

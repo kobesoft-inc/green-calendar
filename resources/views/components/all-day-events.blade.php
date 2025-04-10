@@ -4,7 +4,7 @@
     @for($i = 0;$i <= $maxPosition;$i++)
         @php($event = $allDayEvents->get($i))
         @if($event && ($date->isSameDay($period->start) || $date->isSameDay($event->start)) && $period->contains($date))
-            @php($days = $date->diffInDays(min($event->end, $period->end)) + 1)
+            @php($days = $date->diffInDays(min($event->end, $period->getEndDate())) + 1)
             <div @class([
                 'gc-all-day-event-container',
                 'gc-' . $days . 'days',
