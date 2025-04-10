@@ -80,7 +80,8 @@ class ResourceTimeline extends Component implements CalendarView
     {
         return [
             'canSelectDates' => $this->calendar->canSelect(),
-            'canSelectMultipleDates' => $this->calendar->canSelectMultiple(),
+            'canSelectMultipleDates' => $this->calendar->canSelectMultipleDates(),
+            'canSelectMultipleResources' => $this->calendar->canSelectMultipleResources(),
         ];
     }
 

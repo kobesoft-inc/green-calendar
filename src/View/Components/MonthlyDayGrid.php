@@ -92,7 +92,8 @@ class MonthlyDayGrid extends Component implements CalendarView
         return [
             'remaining' => __('green-calendar::messages.remaining'),
             'canSelectDates' => $this->calendar->canSelect(),
-            'canSelectMultipleDates' => $this->calendar->canSelectMultiple(),
+            'canSelectMultipleDates' => $this->calendar->canSelectMultipleDates(),
+            'canSelectMultipleResources' => $this->calendar->canSelectMultipleResources(),
         ];
     }
 
