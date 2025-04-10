@@ -1,5 +1,5 @@
-type DrawCallback = (begin: string, end: string, resourceId: string) => void
-type SelectCallback = (begin: string, end: string, resourceId: string) => void
+type DrawCallback = (begin: string, end: string, resources: Array<string>) => void
+type SelectCallback = (begin: string, end: string, resources: Array<string>) => void
 
 /**
  * DateTimeSelector
@@ -298,8 +298,7 @@ export default class Selector {
         this.selectEnd(value, resourceId)
         if (this._onSelect) {
           const [start, end] = this.getDateSelection()
-          const resourceIds = this.getResourceSelection().join(',')
-          this._onSelect(start, end, resourceIds)
+          this._onSelect(start, end, this.getResourceSelection())
         }
         this.deselect()
       }
@@ -351,33 +350,41 @@ export default class Selector {
   }
 
   /**
-   * 日時の選択範囲の表示を更新する。
+   * 選択範囲の表示を更新する。
    */
   private update() {
     if (this._onDraw) {
       const [start, end] = this.getDateSelection()
-      this._onDraw(start, end, this._resourceSelectionStart)
+      this._onDraw(start, end, this.getResourceSelection())
     } else {
       this.highlightSelection()
     }
   }
 
+  /**
+   * 選択範囲を強調表示する。
+   */
   private highlightSelection() {
     const [start, end] = this.getDateSelection()
-    const selector =
-      this._containerSelector +
-      (this._resourceSelectionStart !== null
-        ? ` [data-resource-id="${this._resourceSelectionStart}"] `
-        : ' ') +
-      this._elementSelector
-
+    const resourceIds = this.getResourceSelection()
+    const selector = resourceIds.length
+      ? resourceIds
+          .map(
+            (id) =>
+              `${this._containerSelector} [data-resource-id="${id}"] ${this._elementSelector}`,
+          )
+          .join(',')
+      : `${this._containerSelector} ${this._elementSelector}`
+    this._root
+      .querySelectorAll(`${this._containerSelector} .gc-selected`)
+      .forEach((el) => {
+        el.classList.remove('gc-selected')
+      })
     this._root.querySelectorAll(selector).forEach((el) => {
       // @ts-ignore
       const value = el.dataset[this._propertyName]
       if (start <= value && value <= end) {
         el.classList.add('gc-selected')
-      } else {
-        el.classList.remove('gc-selected')
       }
     })
   }

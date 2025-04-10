@@ -44,8 +44,8 @@ export default function TimeGrid(componentParameters) {
           componentParameters.canSelectMultipleResources,
           resourceIds,
         )
-        .onSelect((start, end, resourceId) => {
-          this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59', resourceId)
+        .onSelect((start, end, resourceIds) => {
+          this.$wire.onDate(start + ' 00:00:00', end + ' 23:59:59', resourceIds)
         })
       this.timeSelector = new Selector(this.$el)
         .setContainerSelector('.gc-timed-section')
@@ -57,11 +57,11 @@ export default function TimeGrid(componentParameters) {
           componentParameters.canSelectMultipleResources,
           resourceIds,
         )
-        .onSelect((start, end, resourceId) => {
+        .onSelect((start, end, resourceIds) => {
           this.$wire.onDate(
             start,
             this.timeSelector.getElementByValue(end).dataset.timeEnd,
-            resourceId,
+            resourceIds,
           )
         })
       this.allDayEvent = new AllDayEvent(this.$el, this.dateSelector)
@@ -95,7 +95,9 @@ export default function TimeGrid(componentParameters) {
      */
     getResourceIds() {
       return Array.from(
-        this.$el.querySelectorAll('.gc-timed-section [data-resource-id]'),
+        this.$el.querySelectorAll(
+          '.gc-timed-section .gc-day[data-resource-id]',
+        ),
       ).map((el) => el.dataset.resourceId)
     },
   }

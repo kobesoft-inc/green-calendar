@@ -1,6 +1,6 @@
 <?php
 
-namespace Kobesoft\GreenCalendar\View\Components\Concerns;
+namespace Kobesoft\GreenCalendar\Calendar\Concerns;
 
 use Closure;
 

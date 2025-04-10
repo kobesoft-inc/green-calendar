@@ -15,6 +15,7 @@ class Calendar extends ViewComponent
     use Calendar\Concerns\BelongsToLivewire;
     use Calendar\Concerns\CanClick;
     use Calendar\Concerns\CanFormatDate;
+    use Calendar\Concerns\CanHideAllDayEvents;
     use Calendar\Concerns\CanMove;
     use Calendar\Concerns\CanSelectDates;
     use Calendar\Concerns\HasHeaderActions;

@@ -17,7 +17,6 @@ use Kobesoft\GreenCalendar\ViewModel\TimeSlots;
 class ResourceTimeGrid extends Component implements CalendarView
 {
     use Concerns\HasTimeSlots;
-    use Concerns\CanHideAllDayEvents;
 
     protected string $view = 'green-calendar::components.time-grid';
 
@@ -121,7 +120,6 @@ class ResourceTimeGrid extends Component implements CalendarView
             'columns' => $this->getColumns(),
             'timeSlots' => $this->getTimeSlots(),
             'events' => $this->calendar->getEvents(),
-            'allDayEventsVisible' => $this->isAllDayEventsVisible(),
             'componentParameters' => $this->componentParameters(),
         ]);
     }
