@@ -2,7 +2,7 @@
 
 .gc-time-grid {
   .gc-body {
-    @apply select-none divide-y rounded-lg border bg-white text-sm dark:bg-gray-900;
+    @apply select-none divide-y rounded-lg border bg-white text-sm dark:bg-gray-900 overflow-x-scroll;
 
     .gc-time-slots-column {
       width: 5em;
@@ -13,7 +13,7 @@
       width: calc(100% - 5em);
 
       .gc-day {
-        @apply flex-1;
+        @apply flex-1 min-w-20;
       }
     }
 

@@ -66,7 +66,7 @@ class MonthlyDayGrid extends Component implements CalendarView
         $start = $this->getMonth()
             ->startOfWeek($this->calendar->getFirstDayOfWeek());
         $end = $start->copy()
-            ->addWeeks(self::$numberOfWeeks - 1)
+            ->addWeeks(static::$numberOfWeeks - 1)
             ->endOfWeek($this->calendar->getLastDayOfWeek())
             ->endOfDay();
         return CarbonPeriod::between($start, $end);

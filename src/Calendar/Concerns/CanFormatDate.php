@@ -96,7 +96,7 @@ trait CanFormatDate
     public function formatTime(CarbonInterface $date): string
     {
         $format = $this->formatTime ?? __('green-calendar::messages.formats.time');
-        return self::formatWithStringOrClosure($date, $format);
+        return static::formatWithStringOrClosure($date, $format);
     }
 
     /**
@@ -108,7 +108,7 @@ trait CanFormatDate
     public function formatDate(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.date');
-        return self::formatWithStringOrClosure($date, $format);
+        return static::formatWithStringOrClosure($date, $format);
     }
 
     /**
@@ -120,7 +120,7 @@ trait CanFormatDate
     public function formatShortDate(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.short_date');
-        return self::formatWithStringOrClosure($date, $format);
+        return static::formatWithStringOrClosure($date, $format);
     }
 
     /**
@@ -132,7 +132,7 @@ trait CanFormatDate
     public function formatMonth(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.month');
-        return self::formatWithStringOrClosure($date, $format);
+        return static::formatWithStringOrClosure($date, $format);
     }
 
     /**
@@ -144,7 +144,7 @@ trait CanFormatDate
     public function formatShortMonth(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.short_month');
-        return self::formatWithStringOrClosure($date, $format);
+        return static::formatWithStringOrClosure($date, $format);
     }
 
     /**
@@ -156,7 +156,7 @@ trait CanFormatDate
     public function formatYear(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.year');
-        return self::formatWithStringOrClosure($date, $format);
+        return static::formatWithStringOrClosure($date, $format);
     }
 
     /**

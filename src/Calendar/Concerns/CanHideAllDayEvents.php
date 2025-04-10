@@ -6,15 +6,15 @@ use Closure;
 
 trait CanHideAllDayEvents
 {
-    protected bool $isAllDayEventsHidden = false;
+    protected bool|Closure $isAllDayEventsHidden = false;
 
     /**
      * 全日イベントを非表示にする
      *
-     * @param bool|Closure $condition 全日イベントが非表示になる条件。またはクロージャ。
+     * @param bool|Closure $condition 全日イベントを非表示にするか？
      * @return $this
      */
-    public function hideAllDayEvents(bool $condition = true): static
+    public function hideAllDayEvents(bool|Closure $condition = true): static
     {
         $this->isAllDayEventsHidden = $condition;
         return $this;
@@ -27,7 +27,7 @@ trait CanHideAllDayEvents
      */
     public function isAllDayEventsHidden(): bool
     {
-        return $this->isAllDayEventsHidden;
+        return $this->evaluate($this->isAllDayEventsHidden);
     }
 
     /**

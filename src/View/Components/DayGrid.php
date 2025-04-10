@@ -51,7 +51,7 @@ class DayGrid extends Component
         $start = $this->month->copy()
             ->startOfWeek($this->calendar->getFirstDayOfWeek());
         $end = $start->copy()
-            ->addWeeks(self::$numberOfWeeks - 1)
+            ->addWeeks(static::$numberOfWeeks - 1)
             ->endOfWeek($this->calendar->getLastDayOfWeek());
         return CarbonPeriod::between($start, $end);
     }

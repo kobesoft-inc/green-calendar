@@ -123,7 +123,7 @@ class Event
     public function getRoundedStart(?CarbonInterval $precision = null): Carbon
     {
         return $precision
-            ? self::roundCarbon($this->start, $precision, false)
+            ? static::roundCarbon($this->start, $precision, false)
             : $this->start;
     }
 
@@ -136,7 +136,7 @@ class Event
     public function getRoundedEnd(?CarbonInterval $precision = null): Carbon
     {
         return $precision
-            ? self::roundCarbon($this->end, $precision, true)
+            ? static::roundCarbon($this->end, $precision, true)
             : $this->end;
     }
 

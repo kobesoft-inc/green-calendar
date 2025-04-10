@@ -4,16 +4,18 @@
      x-data="dayGrid(@js($componentParameters))"
      class="gc-monthly-day-grid"
 >
-    <div class="gc-header">
-        <x-green-calendar::actions :calendar="$calendar"/>
-    </div>
+    @if($calendar->isHeaderVisible())
+        <div class="gc-header">
+            <x-green-calendar::actions :calendar="$calendar" />
+        </div>
+    @endif
     <div class="gc-body">
         <x-green-calendar::day-grid
-            :calendar="$calendar"
-            :month="$month"
-            :events="$events"
-            :showNonCurrentDates="true"
+                :calendar="$calendar"
+                :month="$month"
+                :events="$events"
+                :showNonCurrentDates="true"
         />
     </div>
-    <x-green-calendar::day-grid.popup/>
+    <x-green-calendar::day-grid.popup />
 </div>

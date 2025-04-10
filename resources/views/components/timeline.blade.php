@@ -10,32 +10,34 @@
      data-end-time="{{ $timeSlots->timeRange->getEndDate()->format('H:i:s') }}"
      data-interval="{{ $timeSlots->interval->totalSeconds }}"
 >
-    <div class="gc-header">
-        <x-green-calendar::actions :calendar="$calendar"/>
-    </div>
+    @if($calendar->isHeaderVisible())
+        <div class="gc-header">
+            <x-green-calendar::actions :calendar="$calendar" />
+        </div>
+    @endif
     <div class="gc-body">
         <x-green-calendar::timeline.resources
-            :timeSlots="$timeSlots"
-            :period="$period"
-            :resources="$resources"
+                :timeSlots="$timeSlots"
+                :period="$period"
+                :resources="$resources"
         />
         <div style="width:calc(100% - 20em);" class="gc-main">
             <div class="gc-selection-container"></div>
             <x-green-calendar::timeline.time-slot-lines
-                :timeSlots="$timeSlots"
-                :period="$period"
+                    :timeSlots="$timeSlots"
+                    :period="$period"
             />
             <div class="absolute top-0 z-10">
                 <x-green-calendar::timeline.time-slot-heading
-                    :timeSlots="$timeSlots"
-                    :period="$period"
+                        :timeSlots="$timeSlots"
+                        :period="$period"
                 />
                 <x-green-calendar::timeline.events
-                    :calendar="$calendar"
-                    :resources="$resources"
-                    :timeSlots="$timeSlots"
-                    :period="$period"
-                    :events="$events"
+                        :calendar="$calendar"
+                        :resources="$resources"
+                        :timeSlots="$timeSlots"
+                        :period="$period"
+                        :events="$events"
                 />
             </div>
         </div>

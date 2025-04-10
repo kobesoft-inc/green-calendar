@@ -2,8 +2,6 @@
 
 namespace Kobesoft\GreenCalendar\Concerns;
 
-use Filament\Forms\Form;
-
 trait InteractsWithEvents
 {
     /**

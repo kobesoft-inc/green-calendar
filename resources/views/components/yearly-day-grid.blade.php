@@ -4,9 +4,11 @@
      x-data="dayGrid(@js($componentParameters))"
      class="gc-yearly-day-grid"
 >
-    <div class="gc-header">
-        <x-green-calendar::actions :calendar="$calendar"/>
-    </div>
+    @if($calendar->isHeaderVisible())
+        <div class="gc-header">
+            <x-green-calendar::actions :calendar="$calendar" />
+        </div>
+    @endif
     <div class="gc-body">
         @foreach($period->months() as $startOfMonth)
             @php
@@ -21,13 +23,13 @@
                     {{$calendar->formatShortMonth($startOfMonth)}}
                 </div>
                 <x-green-calendar::day-grid
-                    :calendar="$calendar"
-                    :month="$startOfMonth"
-                    :events="$monthEvents"
-                    :showNonCurrentDates="false"
+                        :calendar="$calendar"
+                        :month="$startOfMonth"
+                        :events="$monthEvents"
+                        :showNonCurrentDates="false"
                 />
             </div>
         @endforeach
     </div>
-    <x-green-calendar::day-grid.popup/>
+    <x-green-calendar::day-grid.popup />
 </div>

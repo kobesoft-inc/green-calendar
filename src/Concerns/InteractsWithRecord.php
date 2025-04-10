@@ -49,7 +49,7 @@ trait InteractsWithRecord
     public function getModel(): string
     {
         if (static::$model === null) {
-            $livewireClass = self::class;
+            $livewireClass = static::class;
             throw new Exception("Calendar [{$livewireClass}] does not have a [static::model].");
         }
         return static::$model;

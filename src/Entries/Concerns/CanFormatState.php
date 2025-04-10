@@ -181,7 +181,7 @@ trait CanFormatState
     public function date(?string $format = null, ?string $timezone = null): static
     {
         $this->isDate = true;
-        $format ??= self::$defaultDateDisplayFormat;
+        $format ??= static::$defaultDateDisplayFormat;
         $this->formatStateUsing(function (mixed $state) use ($format, $timezone): ?string {
             if (blank($state)) {
                 return null;
@@ -203,7 +203,7 @@ trait CanFormatState
     public function dateTime(?string $format = null, ?string $timezone = null): static
     {
         $this->isDateTime = true;
-        $format ??= self::$defaultDateTimeDisplayFormat;
+        $format ??= static::$defaultDateTimeDisplayFormat;
         $this->date($format, $timezone);
         return $this;
     }
@@ -218,7 +218,7 @@ trait CanFormatState
     public function time(?string $format = null, ?string $timezone = null): static
     {
         $this->isTime = true;
-        $format ??= self::$defaultTimeDisplayFormat;
+        $format ??= static::$defaultTimeDisplayFormat;
         $this->date($format, $timezone);
         return $this;
     }

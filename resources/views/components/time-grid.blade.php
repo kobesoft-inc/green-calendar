@@ -4,9 +4,11 @@
      x-data="timeGrid(@js($componentParameters))"
      class="gc-time-grid"
 >
-    <div class="gc-header">
-        <x-green-calendar::actions :calendar="$calendar" />
-    </div>
+    @if($calendar->isHeaderVisible())
+        <div class="gc-header">
+            <x-green-calendar::actions :calendar="$calendar" />
+        </div>
+    @endif
     <div class="gc-body">
         @if($columns->count()> 0)
             <x-green-calendar::time-grid.column-headings

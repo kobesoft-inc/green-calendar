@@ -31,11 +31,11 @@ class TimeSlots
     )
     {
         $this->timeRange = CarbonPeriod::between(
-            self::parseTimeSlotTime($start ?? '00:00:00'),
-            self::parseTimeSlotTime($end ?? '23:59:59'),
+            static::parseTimeSlotTime($start ?? '00:00:00'),
+            static::parseTimeSlotTime($end ?? '23:59:59'),
         );
         $this->interval = CarbonInterval::make($interval);
-        if (!self::isValidInterval($this->interval)) {
+        if (!static::isValidInterval($this->interval)) {
             throw new Exception('Invalid interval ' . $this->interval->forHumans());
         }
         return $this;
@@ -157,7 +157,7 @@ class TimeSlots
      */
     public function getIntervalSeconds(): int
     {
-        return self::intervalToMinutes($this->interval) * 60;
+        return static::intervalToMinutes($this->interval) * 60;
     }
 
     /**
@@ -199,7 +199,7 @@ class TimeSlots
      */
     protected static function parseTimeSlotTime(string $time): Carbon
     {
-        if (preg_match(self::$timePattern, $time, $matches)) {
+        if (preg_match(static::$timePattern, $time, $matches)) {
             return Carbon::create()
                 ->addHours(intval($matches[1]))
                 ->addMinutes(intval($matches[2] ?? 0))
