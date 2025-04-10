@@ -73,7 +73,8 @@ class WeeklyTimeGrid extends Component implements CalendarView
      */
     public function getDefaultHeading(): string
     {
-        return 'Daily Time Grid';
+        $period = $this->getPeriod();
+        return $this->calendar->formatDate($period->getStartDate()) . ' - ' . $this->calendar->formatDate($period->getEndDate());
     }
 
     /**

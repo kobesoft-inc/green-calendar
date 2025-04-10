@@ -7,11 +7,11 @@
             x-cloak
         >
             @php
-                $events = $events
+                $resourceEvents = $events
                     ->whereResource($resource->id)
                     ->withTimeline($timeSlots, $period);
-                $allDayEvents = $events->getAllDayEvents();
-                $timedEvents = $events->getTimedEvents();
+                $allDayEvents = $resourceEvents->getAllDayEvents();
+                $timedEvents = $resourceEvents->getTimedEvents();
             @endphp
             <x-green-calendar::timeline.all-day-events
                 :calendar="$calendar"

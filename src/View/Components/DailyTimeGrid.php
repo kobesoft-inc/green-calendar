@@ -71,7 +71,7 @@ class DailyTimeGrid extends Component implements CalendarView
      */
     public function getDefaultHeading(): string
     {
-        return 'Daily Time Grid';
+        return $this->calendar->formatDate($this->calendar->getCurrentDate());
     }
 
     /**

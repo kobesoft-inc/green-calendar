@@ -3,6 +3,7 @@
 namespace Kobesoft\GreenCalendar\Calendar\Concerns;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Closure;
 
 trait CanFormatDate
@@ -92,7 +93,7 @@ trait CanFormatDate
      * @param Carbon $date 日付
      * @return string
      */
-    public function formatTime(Carbon $date): string
+    public function formatTime(CarbonInterface $date): string
     {
         $format = $this->formatTime ?? __('green-calendar::messages.formats.time');
         return self::formatWithStringOrClosure($date, $format);
@@ -104,7 +105,7 @@ trait CanFormatDate
      * @param Carbon $date 日付
      * @return string
      */
-    public function formatDate(Carbon $date): string
+    public function formatDate(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.date');
         return self::formatWithStringOrClosure($date, $format);
@@ -116,7 +117,7 @@ trait CanFormatDate
      * @param Carbon $date 日付
      * @return string
      */
-    public function formatShortDate(Carbon $date): string
+    public function formatShortDate(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.short_date');
         return self::formatWithStringOrClosure($date, $format);
@@ -128,7 +129,7 @@ trait CanFormatDate
      * @param Carbon $date 日付
      * @return string
      */
-    public function formatMonth(Carbon $date): string
+    public function formatMonth(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.month');
         return self::formatWithStringOrClosure($date, $format);
@@ -140,7 +141,7 @@ trait CanFormatDate
      * @param Carbon $date 日付
      * @return string
      */
-    public function formatShortMonth(Carbon $date): string
+    public function formatShortMonth(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.short_month');
         return self::formatWithStringOrClosure($date, $format);
@@ -152,7 +153,7 @@ trait CanFormatDate
      * @param Carbon $date 日付
      * @return string
      */
-    public function formatYear(Carbon $date): string
+    public function formatYear(CarbonInterface $date): string
     {
         $format = $this->formatDate ?? __('green-calendar::messages.formats.year');
         return self::formatWithStringOrClosure($date, $format);
@@ -165,7 +166,7 @@ trait CanFormatDate
      * @param string|Closure|null $format フォーマット
      * @return string
      */
-    protected function formatWithStringOrClosure(Carbon $date, string|Closure|null $format): string
+    protected function formatWithStringOrClosure(CarbonInterface $date, string|Closure|null $format): string
     {
         if ($format instanceof Closure) {
             return ($format)($date);
