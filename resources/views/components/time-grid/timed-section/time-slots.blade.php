@@ -7,7 +7,7 @@
                     <div class="gc-slot">
                         <div class="gc-slot-content">
                             @if ($hourIndex && !$minuteIndex)
-                                {{$timeSlot->start->hour}}
+                                {{$timeSlot->getStartDate()->hour}}
                             @endif
                         </div>
                     </div>
