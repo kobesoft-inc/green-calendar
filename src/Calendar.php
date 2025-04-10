@@ -5,7 +5,6 @@ namespace Kobesoft\GreenCalendar;
 use Carbon\Carbon;
 use Filament\Support\Components\ViewComponent;
 use Filament\Support\Enums\Alignment;
-use GuzzleHttp\Promise\Create;
 use Kobesoft\GreenCalendar\Actions\CreateAction;
 use Kobesoft\GreenCalendar\Actions\EditAction;
 use Kobesoft\GreenCalendar\Actions\MoveAction;

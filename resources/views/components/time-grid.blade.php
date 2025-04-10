@@ -1,4 +1,4 @@
-@props(['calendar', 'period', 'columns', 'timeSlots', 'events', 'componentParameters'])
+@props(['calendar', 'period', 'columns', 'timeSlots', 'events', 'allDayEventsVisible', 'componentParameters'])
 <div ax-load
      ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('time-grid', 'kobesoft/green-calendar') }}"
      x-data="timeGrid(@js($componentParameters))"
@@ -13,12 +13,14 @@
                 :calendar="$calendar"
                 :columns="$columns"
             />
-            <x-green-calendar::time-grid.all-day-section
-                :calendar="$calendar"
-                :period="$period"
-                :columns="$columns"
-                :events="$events"
-            />
+            @if($allDayEventsVisible)
+                <x-green-calendar::time-grid.all-day-section
+                    :calendar="$calendar"
+                    :period="$period"
+                    :columns="$columns"
+                    :events="$events"
+                />
+            @endif
             <x-green-calendar::time-grid.timed-section
                 :calendar="$calendar"
                 :columns="$columns"
