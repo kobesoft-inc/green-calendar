@@ -328,6 +328,25 @@ $calendar->movable(true)
 $calendar->resizable(true)
 ```
 
+### 3.2.17. カレンダーのセルの追加属性
+
+カレンダーのセルに追加属性を設定します。
+クロージャの引数には、下記のような情報が渡されます。
+- $date: 日付のCarbonインスタンス
+- $time: TimeGridの場合には、時間のCarbonインスタンス
+- $resourceId: リソースカレンダー、タイムラインの場合にはリソースのID
+
+```php
+// 日曜日の場合には赤にする
+$calendar->cellAttributes(function($date) {
+    if ($date->dayOfWeek === Carbon::SUNDAY) {
+        return [
+            'class' => 'bg-red-500',
+        ];
+    }
+});
+```
+
 ### 3.3. カレンダーの表示項目のコンポーネント
 
 ### 3.3.1. カレンダーの表示項目には、Entryクラスを使って、下記のような項目を設定できます。
