@@ -228,7 +228,7 @@ class TimeSlots
         } else {
             $timeIndex = 0;
         }
-        $days = $period->getStartDate()->copy()->startOfDay()->diffInDays($time, false);
+        $days = floor($period->getStartDate()->copy()->startOfDay()->diffInDays($time));
         return $timeIndex + $this->timeSlotsPerDay() * $days;
     }
 

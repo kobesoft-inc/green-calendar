@@ -61,7 +61,7 @@ class ResourceTimeGrid extends Component implements CalendarView
      */
     public function getPeriod(): CarbonPeriod
     {
-        $start = $this->calendar->getCurrentDate();
+        $start = $this->calendar->getCurrentDate()->startOfDay();
         $end = $start->copy()->endOfDay();
         return CarbonPeriod::between($start, $end);
     }
