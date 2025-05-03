@@ -124,9 +124,10 @@ export default class Resizer {
     const el = this.pickEvent(e.target as Element)
     if (el) {
       // 終日予定の変形を設定
-      this._isGrabbingHead = this._isGrabbingTail =
-        el.dataset.canMove === 'true' || el.dataset.canResize === 'true'
-      if (el.dataset.canResize === 'true') {
+      const canMove = el.dataset.canMove === 'true'
+      const canResize = el.dataset.canResize === 'true'
+      this._isGrabbingHead = this._isGrabbingTail = canMove || canResize
+      if (canResize) {
         if (this.hitHead(e.target as Element)) {
           // 終日予定の先頭部分に当たった場合、終了日は固定
           this._isGrabbingTail = false
@@ -145,17 +146,19 @@ export default class Resizer {
       this._draggingStart = this._dragging.dataset.start
       this._draggingEnd = this._dragging.dataset.end
 
-      // ドラッグ中の終日予定のクラスを設定（表示を消す）
-      this.setDraggingClass(this._dragging.dataset.key, true)
-
       // 現在の日付を記録
       this._draggingValue = null
 
-      // ドラッグ中の終日予定のプレビューを表示
-      this.updatePreview(this._grabbed)
+      if (this.isResizing()) {
+        // ドラッグ中の終日予定のクラスを設定（表示を消す）
+        this.setDraggingClass(this._dragging.dataset.key, true)
 
-      // カーソルを設定
-      this.updateCursor()
+        // ドラッグ中の終日予定のプレビューを表示
+        this.updatePreview(this._grabbed)
+
+        // カーソルを設定
+        this.updateCursor()
+      }
 
       // ドラッグ中の終日予定の移動量を初期化
       this._draggingCount = 0
@@ -173,9 +176,11 @@ export default class Resizer {
   protected _onMouseMove(e: MouseEvent): void {
     if (this._dragging) {
       // ドラッグ中の終日予定のプレビューを表示
-      const value = this._selector.pickValueByPosition(e.x, e.y)
-      if (value !== null) {
-        this.updatePreview(value)
+      if (this.isResizing()) {
+        const value = this._selector.pickValueByPosition(e.x, e.y)
+        if (value !== null) {
+          this.updatePreview(value)
+        }
       }
 
       // マウスクリックイベントのために移動量を記録
@@ -195,12 +200,12 @@ export default class Resizer {
     if (this._dragging) {
       const key = this._dragging.dataset.key
       const value = this._selector.pickValueByPosition(e.x, e.y)
-      if (value !== null && this._grabbed !== value) {
+      if (value !== null && this._grabbed !== value && this.isResizing()) {
         const [start, end] = this.drag(value)
         if (this._onMove && start !== null && end !== null) {
           this._onMove(key, start, end)
         }
-      } else if (this._draggingCount < 3) {
+      } else if (this._draggingCount < 3 || !this.isResizing()) {
         if (this._dragging.dataset.canClick === 'true') {
           if (this._onEvent) {
             this._onEvent(key)
@@ -303,6 +308,14 @@ export default class Resizer {
    */
   public isDragging(): boolean {
     return this._dragging !== null
+  }
+
+  /**
+   * 移動・リサイズ中かどうか
+   * @returns {boolean} 移動・リサイズ中かどうか
+   */
+  public isResizing(): boolean {
+    return this._isGrabbingHead || this._isGrabbingTail
   }
 
   /**
